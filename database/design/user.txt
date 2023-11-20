@@ -1,5 +1,5 @@
 users_public
-	user_id - uuid - auth.uid() - pk
+	user_id - uuid, fk to auth.user - auth.uid() - pk
 	wallet_address - text - nullable
 	total_earned_trading_fees - numeric - 0
 	display_name - text - nullable
