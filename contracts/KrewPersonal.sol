@@ -21,6 +21,7 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     mapping(address => mapping(address => uint256)) public keysBalance;
     mapping(address => uint256) public keysSupply;
+    mapping(address => uint256) public accumulatedFees;
 
     event SetProtocolFeeDestination(address indexed destination);
     event SetProtocolFeePercent(uint256 percent);
@@ -38,6 +39,7 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 krewOwnerFee,
         uint256 supply
     );
+    event ClaimKrewFee(address indexed krew, uint256 fee);
 
     function initialize(
         address payable _protocolFeeDestination,
@@ -135,8 +137,8 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             keysBalance[krew][msg.sender] += amount;
             supply += amount;
             keysSupply[krew] = supply;
+            accumulatedFees[krew] += krewOwnerFee + additionalFee;
             protocolFeeDestination.sendValue(protocolFee);
-            payable(krew).sendValue(krewOwnerFee + additionalFee);
             if (msg.value > price + protocolFee + krewOwnerFee + additionalFee) {
                 uint256 refund = msg.value - price - protocolFee - krewOwnerFee - additionalFee;
                 payable(msg.sender).sendValue(refund);
@@ -147,9 +149,9 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             supply -= amount;
             keysSupply[krew] = supply;
             uint256 netAmount = price - protocolFee - krewOwnerFee - additionalFee;
+            accumulatedFees[krew] += krewOwnerFee + additionalFee;
             payable(msg.sender).sendValue(netAmount);
             protocolFeeDestination.sendValue(protocolFee);
-            payable(krew).sendValue(krewOwnerFee + additionalFee);
         }
 
         emit Trade(msg.sender, krew, isBuy, amount, price, protocolFee, krewOwnerFee + additionalFee, supply);
@@ -163,5 +165,14 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     function sellKeys(address krew, uint256 amount) public {
         uint256 price = getSellPrice(krew, amount);
         executeTrade(krew, amount, price, false);
+    }
+
+    function claimKrewFee() external nonReentrant {
+        uint256 fee = accumulatedFees[msg.sender];
+        accumulatedFees[msg.sender] = 0;
+
+        payable(msg.sender).sendValue(fee);
+
+        emit ClaimKrewFee(msg.sender, fee);
     }
 }
