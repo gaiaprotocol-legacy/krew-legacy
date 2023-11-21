@@ -1,0 +1,72 @@
+.post-display.sofi-component {
+    display: flex;
+    gap    : 10px;
+    cursor : pointer;
+    padding: 20px;
+
+    @media @phone {
+        gap: 6px;
+    }
+
+    .author-profile-image {
+        .profile-image();
+        cursor: pointer;
+    }
+
+    .author {
+        padding-top: 4px;
+        display    : flex;
+        gap        : 4px;
+
+        >.name {
+            font-weight: 700;
+            cursor     : pointer;
+        }
+
+        >.x-username {
+            color : #595959;
+            cursor: pointer;
+        }
+    }
+
+    button.owner-menu {
+        cursor: pointer;
+
+        &:active {}
+    }
+
+    .message {
+        margin-top: 6px;
+    }
+
+    .rich-display {
+        margin-top: 20px;
+    }
+
+    .date {
+        margin-top: 20px;
+        color     : #595959;
+        font-size : 12px;
+    }
+
+    .actions {
+        margin-top: 20px;
+        display   : flex;
+        gap       : 30px;
+
+        >button {
+            display    : flex;
+            gap        : 16px;
+            cursor     : pointer;
+            align-items: center;
+
+            &:hover {
+                &.comment {}
+
+                &.repost {}
+
+                &.like {}
+            }
+        }
+    }
+}

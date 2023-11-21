@@ -1,0 +1,191 @@
+/*!**********************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./public/style/lib/reset.css ***!
+  \**********************************************************************************************************/
+/***
+    The new CSS reset - version 1.8.4 (last updated 14.2.2023)
+    GitHub page: https://github.com/elad2412/the-new-css-reset
+***/
+
+/*
+    Remove all the styles of the "User-Agent-Stylesheet", except for the 'display' property
+    - The "symbol *" part is to solve Firefox SVG sprite bug
+ */
+ *:where(:not(html, iframe, canvas, img, svg, video, audio, summary):not(svg *, symbol *)) {
+    all: unset;
+    display: revert;
+}
+
+/* Preferred box-sizing value */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Reapply the pointer cursor for anchor tags */
+a, button {
+    cursor: revert;
+}
+
+/* Remove list styles (bullets/numbers) */
+ol, ul, menu {
+    list-style: none;
+}
+
+/* For images to not be able to exceed their container */
+img {
+    max-inline-size: 100%;
+    max-block-size: 100%;
+}
+
+/* removes spacing between cells in tables */
+table {
+    border-collapse: collapse;
+}
+
+/* Safari - solving issue when using user-select:none on the <body> text input doesn't working */
+input, textarea {
+    -webkit-user-select: auto;
+}
+
+/* revert the 'white-space' property for textarea elements on Safari */
+textarea {
+    white-space: revert;
+}
+
+/* minimum style to allow to style meter element */
+meter {
+    -webkit-appearance: revert;
+    appearance: revert;
+}
+
+/* preformatted text - use only for this feature */
+:where(pre) {
+    all: revert;
+}
+
+/* reset default text opacity of input placeholder */
+::placeholder {
+    color: unset;
+}
+
+/* remove default dot (•) sign */
+::marker {
+    content: initial;
+}
+
+/* fix the feature of 'hidden' attribute.
+   display:revert; revert to element instead of attribute */
+:where([hidden]) {
+    display: none;
+}
+
+/* revert for bug in Chromium browsers
+   - fix for the content editable attribute will work properly.
+   - webkit-user-select: auto; added for Safari in case of using user-select:none on wrapper element*/
+:where([contenteditable]:not([contenteditable="false"])) {
+    -moz-user-modify: read-write;
+    -webkit-user-modify: read-write;
+    overflow-wrap: break-word;
+    -webkit-line-break: after-white-space;
+    -webkit-user-select: auto;
+}
+
+/* apply back the draggable feature - exist only in Chromium and Safari */
+:where([draggable="true"]) {
+    -webkit-user-drag: element;
+}
+
+/* Revert Modal native behavior */
+:where(dialog:modal) {
+    all: revert;
+}
+/*!*********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
+  \*********************************************************************************************************************************************/
+.post-display.sofi-component {
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+  padding: 20px;
+}
+@media only screen and (max-width: 859px) {
+  .post-display.sofi-component {
+    gap: 6px;
+  }
+}
+.post-display.sofi-component .author-profile-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  cursor: pointer;
+}
+@media only screen and (max-width: 859px) {
+  .post-display.sofi-component .author-profile-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.post-display.sofi-component .author {
+  padding-top: 4px;
+  display: flex;
+  gap: 4px;
+}
+.post-display.sofi-component .author > .name {
+  font-weight: 700;
+  cursor: pointer;
+}
+.post-display.sofi-component .author > .x-username {
+  color: #595959;
+  cursor: pointer;
+}
+.post-display.sofi-component button.owner-menu {
+  cursor: pointer;
+}
+.post-display.sofi-component .message {
+  margin-top: 6px;
+}
+.post-display.sofi-component .rich-display {
+  margin-top: 20px;
+}
+.post-display.sofi-component .date {
+  margin-top: 20px;
+  color: #595959;
+  font-size: 12px;
+}
+.post-display.sofi-component .actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 30px;
+}
+.post-display.sofi-component .actions > button {
+  display: flex;
+  gap: 16px;
+  cursor: pointer;
+  align-items: center;
+}
+.post-thread.sofi-component > .post-display,
+.post-thread.sofi-component > .post-form {
+  border-bottom: 1px solid #242424;
+}
+:root {
+  background-color: #171821;
+  color: #fff;
+}
+.profile-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+}
+@media only screen and (max-width: 859px) {
+  .profile-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+
