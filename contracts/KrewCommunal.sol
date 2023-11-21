@@ -16,7 +16,7 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     uint256 public protocolFeePercent;
     uint256 public holderFeePercent;
 
-    struct Topic {
+    struct Krew {
         uint256 supply;
         uint256 accFeePerUnit;
     }
@@ -26,16 +26,18 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         int256 feeDebt;
     }
 
-    mapping(uint256 => Topic) public topics;
+    uint256 public nextKrewId;
+    mapping(uint256 => Krew) public krews;
     mapping(uint256 => mapping(address => Holder)) public holders;
 
     event SetProtocolFeeDestination(address indexed destination);
     event SetProtocolFeePercent(uint256 percent);
     event SetHolderFeePercent(uint256 percent);
 
+    event KrewCreated(uint256 indexed krewId, address indexed creator);
     event Trade(
         address indexed trader,
-        uint256 indexed topic,
+        uint256 indexed krew,
         bool indexed isBuy,
         uint256 amount,
         uint256 price,
@@ -43,8 +45,7 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 holderFee,
         uint256 supply
     );
-
-    event ClaimHolderFee(address indexed holder, uint256 indexed topic, uint256 fee);
+    event ClaimHolderFee(address indexed holder, uint256 indexed krew, uint256 fee);
 
     function initialize(
         address payable _protocolFeeDestination,
@@ -78,6 +79,17 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         emit SetHolderFeePercent(_feePercent);
     }
 
+    function createKrew() external {
+        uint256 krewId = nextKrewId++;
+        krews[krewId].supply = 1;
+        holders[krewId][msg.sender].balance = 1;
+        emit KrewCreated(krewId, msg.sender);
+    }
+
+    function existsKrew(uint256 krewId) public view returns (bool) {
+        return krews[krewId].supply > 0;
+    }
+
     function getPrice(uint256 supply, uint256 amount) public pure returns (uint256) {
         uint256 sum1 = supply == 0 ? 0 : ((supply - 1) * (supply) * (2 * (supply - 1) + 1)) / 6;
         uint256 sum2 = supply == 0 && amount == 1
@@ -87,44 +99,46 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         return (summation * 1 ether) / BASE_DIVIDER;
     }
 
-    function getBuyPrice(uint256 topic, uint256 amount) public view returns (uint256) {
-        return getPrice(topics[topic].supply, amount);
+    function getBuyPrice(uint256 krew, uint256 amount) public view returns (uint256) {
+        return getPrice(krews[krew].supply, amount);
     }
 
-    function getSellPrice(uint256 topic, uint256 amount) public view returns (uint256) {
-        return getPrice(topics[topic].supply - amount, amount);
+    function getSellPrice(uint256 krew, uint256 amount) public view returns (uint256) {
+        return getPrice(krews[krew].supply - amount, amount);
     }
 
-    function getBuyPriceAfterFee(uint256 topic, uint256 amount) external view returns (uint256) {
-        uint256 price = getBuyPrice(topic, amount);
+    function getBuyPriceAfterFee(uint256 krew, uint256 amount) external view returns (uint256) {
+        uint256 price = getBuyPrice(krew, amount);
         uint256 protocolFee = (price * protocolFeePercent) / 1 ether;
         uint256 holderFee = (price * holderFeePercent) / 1 ether;
         return price + protocolFee + holderFee;
     }
 
-    function getSellPriceAfterFee(uint256 topic, uint256 amount) external view returns (uint256) {
-        uint256 price = getSellPrice(topic, amount);
+    function getSellPriceAfterFee(uint256 krew, uint256 amount) external view returns (uint256) {
+        uint256 price = getSellPrice(krew, amount);
         uint256 protocolFee = (price * protocolFeePercent) / 1 ether;
         uint256 holderFee = (price * holderFeePercent) / 1 ether;
         return price - protocolFee - holderFee;
     }
 
-    function buyToken(uint256 topic, uint256 amount) external payable nonReentrant {
-        uint256 price = getBuyPrice(topic, amount);
+    function buyToken(uint256 krew, uint256 amount) external payable nonReentrant {
+        require(existsKrew(krew), "KrewCommunal: Krew does not exist");
+
+        uint256 price = getBuyPrice(krew, amount);
         uint256 protocolFee = (price * protocolFeePercent) / 1 ether;
         uint256 holderFee = (price * holderFeePercent) / 1 ether;
 
         require(msg.value >= price + protocolFee + holderFee, "KrewCommunal: insufficient payment");
 
-        Topic memory t = topics[topic];
-        Holder storage holder = holders[topic][msg.sender];
+        Krew memory k = krews[krew];
+        Holder storage holder = holders[krew][msg.sender];
 
         holder.balance += amount;
-        holder.feeDebt += int256((amount * t.accFeePerUnit) / ACC_FEE_PRECISION);
+        holder.feeDebt += int256((amount * k.accFeePerUnit) / ACC_FEE_PRECISION);
 
-        t.supply += amount;
-        t.accFeePerUnit += (holderFee * ACC_FEE_PRECISION) / t.supply;
-        topics[topic] = t;
+        k.supply += amount;
+        k.accFeePerUnit += (holderFee * ACC_FEE_PRECISION) / k.supply;
+        krews[krew] = k;
 
         protocolFeeDestination.sendValue(protocolFee);
         if (msg.value > price + protocolFee + holderFee) {
@@ -132,51 +146,53 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             payable(msg.sender).sendValue(refund);
         }
 
-        emit Trade(msg.sender, topic, true, amount, price, protocolFee, holderFee, t.supply);
+        emit Trade(msg.sender, krew, true, amount, price, protocolFee, holderFee, k.supply);
     }
 
-    function sellToken(uint256 topic, uint256 amount) external nonReentrant {
-        uint256 price = getSellPrice(topic, amount);
+    function sellToken(uint256 krew, uint256 amount) external nonReentrant {
+        require(existsKrew(krew), "KrewCommunal: Krew does not exist");
+
+        uint256 price = getSellPrice(krew, amount);
         uint256 protocolFee = (price * protocolFeePercent) / 1 ether;
         uint256 holderFee = (price * holderFeePercent) / 1 ether;
 
-        Topic memory t = topics[topic];
-        Holder storage holder = holders[topic][msg.sender];
+        Krew memory k = krews[krew];
+        Holder storage holder = holders[krew][msg.sender];
 
-        t.accFeePerUnit += (holderFee * ACC_FEE_PRECISION) / t.supply;
-        t.supply -= amount;
-        topics[topic] = t;
+        k.accFeePerUnit += (holderFee * ACC_FEE_PRECISION) / k.supply;
+        k.supply -= amount;
+        krews[krew] = k;
 
         require(holder.balance >= amount, "KrewCommunal: insufficient balance");
         holder.balance -= amount;
-        holder.feeDebt -= int256((amount * t.accFeePerUnit) / ACC_FEE_PRECISION);
+        holder.feeDebt -= int256((amount * k.accFeePerUnit) / ACC_FEE_PRECISION);
 
         uint256 netAmount = price - protocolFee - holderFee;
         payable(msg.sender).sendValue(netAmount);
         protocolFeeDestination.sendValue(protocolFee);
 
-        emit Trade(msg.sender, topic, false, amount, price, protocolFee, holderFee, t.supply);
+        emit Trade(msg.sender, krew, false, amount, price, protocolFee, holderFee, k.supply);
     }
 
-    function claimableHolderFee(uint256 topic, address holder) external view returns (uint256 claimableFee) {
-        Topic memory t = topics[topic];
-        Holder memory h = holders[topic][holder];
+    function claimableHolderFee(uint256 krew, address holder) external view returns (uint256 claimableFee) {
+        Krew memory k = krews[krew];
+        Holder memory h = holders[krew][holder];
 
-        int256 accumulatedFee = int256((h.balance * t.accFeePerUnit) / ACC_FEE_PRECISION);
+        int256 accumulatedFee = int256((h.balance * k.accFeePerUnit) / ACC_FEE_PRECISION);
         claimableFee = uint256(accumulatedFee - h.feeDebt);
     }
 
-    function claimHolderFee(uint256 topic) external nonReentrant {
-        Topic memory t = topics[topic];
-        Holder storage holder = holders[topic][msg.sender];
+    function claimHolderFee(uint256 krew) external nonReentrant {
+        Krew memory k = krews[krew];
+        Holder storage holder = holders[krew][msg.sender];
 
-        int256 accumulatedFee = int256((holder.balance * t.accFeePerUnit) / ACC_FEE_PRECISION);
+        int256 accumulatedFee = int256((holder.balance * k.accFeePerUnit) / ACC_FEE_PRECISION);
         uint256 claimableFee = uint256(accumulatedFee - holder.feeDebt);
 
         holder.feeDebt = accumulatedFee;
 
         payable(msg.sender).sendValue(claimableFee);
 
-        emit ClaimHolderFee(msg.sender, topic, claimableFee);
+        emit ClaimHolderFee(msg.sender, krew, claimableFee);
     }
 }

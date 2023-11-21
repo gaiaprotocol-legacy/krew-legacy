@@ -12,7 +12,7 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     address payable public protocolFeeDestination;
     uint256 public protocolFeePercent;
-    uint256 public subjectFeePercent;
+    uint256 public krewOwnerFeePercent;
 
     IERC20 public membershipToken;
     uint256 public membershipWeight;
@@ -24,36 +24,36 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     event SetProtocolFeeDestination(address indexed destination);
     event SetProtocolFeePercent(uint256 percent);
-    event SetSubjectFeePercent(uint256 percent);
+    event SetKrewOwnerFeePercent(uint256 percent);
     event SetMembershipToken(address indexed token);
     event SetMembershipWeight(uint256 weight);
 
     event Trade(
         address indexed trader,
-        address indexed subject,
+        address indexed krew,
         bool indexed isBuy,
         uint256 amount,
         uint256 price,
         uint256 protocolFee,
-        uint256 subjectFee,
+        uint256 krewOwnerFee,
         uint256 supply
     );
 
     function initialize(
         address payable _protocolFeeDestination,
         uint256 _protocolFeePercent,
-        uint256 _subjectFeePercent
+        uint256 _krewOwnerFeePercent
     ) public initializer {
         __Ownable_init();
         __ReentrancyGuard_init();
 
         protocolFeeDestination = _protocolFeeDestination;
         protocolFeePercent = _protocolFeePercent;
-        subjectFeePercent = _subjectFeePercent;
+        krewOwnerFeePercent = _krewOwnerFeePercent;
 
         emit SetProtocolFeeDestination(_protocolFeeDestination);
         emit SetProtocolFeePercent(_protocolFeePercent);
-        emit SetSubjectFeePercent(_subjectFeePercent);
+        emit SetKrewOwnerFeePercent(_krewOwnerFeePercent);
     }
 
     function setProtocolFeeDestination(address payable _feeDestination) public onlyOwner {
@@ -66,9 +66,9 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         emit SetProtocolFeePercent(_feePercent);
     }
 
-    function setSubjectFeePercent(uint256 _feePercent) public onlyOwner {
-        subjectFeePercent = _feePercent;
-        emit SetSubjectFeePercent(_feePercent);
+    function setKrewOwnerFeePercent(uint256 _feePercent) public onlyOwner {
+        krewOwnerFeePercent = _feePercent;
+        emit SetKrewOwnerFeePercent(_feePercent);
     }
 
     function setMembershipToken(address _token) public onlyOwner {
@@ -82,12 +82,12 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         emit SetMembershipWeight(_weight);
     }
 
-    function calculateAdditionalFee(uint256 price, address subject) public view returns (uint256) {
+    function calculateAdditionalFee(uint256 price, address krewOwner) public view returns (uint256) {
         if (address(membershipToken) == address(0)) {
             return 0;
         }
 
-        uint256 memberBalance = membershipToken.balanceOf(subject);
+        uint256 memberBalance = membershipToken.balanceOf(krewOwner);
         uint256 feeIncrease = (((price * membershipWeight) / 1 ether) * memberBalance) / 1 ether;
         uint256 maxAdditionalFee = (price * protocolFeePercent) / 1 ether;
 
@@ -101,67 +101,67 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         return (summation * 1 ether) / BASE_DIVIDER;
     }
 
-    function getBuyPrice(address subject, uint256 amount) public view returns (uint256) {
-        return getPrice(keysSupply[subject], amount);
+    function getBuyPrice(address krew, uint256 amount) public view returns (uint256) {
+        return getPrice(keysSupply[krew], amount);
     }
 
-    function getSellPrice(address subject, uint256 amount) public view returns (uint256) {
-        return getPrice(keysSupply[subject] - amount, amount);
+    function getSellPrice(address krew, uint256 amount) public view returns (uint256) {
+        return getPrice(keysSupply[krew] - amount, amount);
     }
 
-    function getBuyPriceAfterFee(address subject, uint256 amount) public view returns (uint256) {
-        uint256 price = getBuyPrice(subject, amount);
+    function getBuyPriceAfterFee(address krew, uint256 amount) public view returns (uint256) {
+        uint256 price = getBuyPrice(krew, amount);
         uint256 protocolFee = (price * protocolFeePercent) / 1 ether;
-        uint256 subjectFee = (price * subjectFeePercent) / 1 ether;
-        return price + protocolFee + subjectFee;
+        uint256 krewOwnerFee = (price * krewOwnerFeePercent) / 1 ether;
+        return price + protocolFee + krewOwnerFee;
     }
 
-    function getSellPriceAfterFee(address subject, uint256 amount) public view returns (uint256) {
-        uint256 price = getSellPrice(subject, amount);
+    function getSellPriceAfterFee(address krew, uint256 amount) public view returns (uint256) {
+        uint256 price = getSellPrice(krew, amount);
         uint256 protocolFee = (price * protocolFeePercent) / 1 ether;
-        uint256 subjectFee = (price * subjectFeePercent) / 1 ether;
-        return price - protocolFee - subjectFee;
+        uint256 krewOwnerFee = (price * krewOwnerFeePercent) / 1 ether;
+        return price - protocolFee - krewOwnerFee;
     }
 
-    function executeTrade(address subject, uint256 amount, uint256 price, bool isBuy) private nonReentrant {
-        uint256 subjectFee = (price * subjectFeePercent) / 1 ether;
-        uint256 additionalFee = calculateAdditionalFee(price, subject);
+    function executeTrade(address krew, uint256 amount, uint256 price, bool isBuy) private nonReentrant {
+        uint256 krewOwnerFee = (price * krewOwnerFeePercent) / 1 ether;
+        uint256 additionalFee = calculateAdditionalFee(price, krew);
         uint256 protocolFee = (price * protocolFeePercent) / 1 ether - additionalFee;
 
-        uint256 supply = keysSupply[subject];
+        uint256 supply = keysSupply[krew];
 
         if (isBuy) {
-            require(msg.value >= price + protocolFee + subjectFee + additionalFee, "Insufficient payment");
-            keysBalance[subject][msg.sender] += amount;
+            require(msg.value >= price + protocolFee + krewOwnerFee + additionalFee, "Insufficient payment");
+            keysBalance[krew][msg.sender] += amount;
             supply += amount;
-            keysSupply[subject] = supply;
+            keysSupply[krew] = supply;
             protocolFeeDestination.sendValue(protocolFee);
-            payable(subject).sendValue(subjectFee + additionalFee);
-            if (msg.value > price + protocolFee + subjectFee + additionalFee) {
-                uint256 refund = msg.value - price - protocolFee - subjectFee - additionalFee;
+            payable(krew).sendValue(krewOwnerFee + additionalFee);
+            if (msg.value > price + protocolFee + krewOwnerFee + additionalFee) {
+                uint256 refund = msg.value - price - protocolFee - krewOwnerFee - additionalFee;
                 payable(msg.sender).sendValue(refund);
             }
         } else {
-            require(keysBalance[subject][msg.sender] >= amount, "Insufficient keys");
-            keysBalance[subject][msg.sender] -= amount;
+            require(keysBalance[krew][msg.sender] >= amount, "Insufficient keys");
+            keysBalance[krew][msg.sender] -= amount;
             supply -= amount;
-            keysSupply[subject] = supply;
-            uint256 netAmount = price - protocolFee - subjectFee - additionalFee;
+            keysSupply[krew] = supply;
+            uint256 netAmount = price - protocolFee - krewOwnerFee - additionalFee;
             payable(msg.sender).sendValue(netAmount);
             protocolFeeDestination.sendValue(protocolFee);
-            payable(subject).sendValue(subjectFee + additionalFee);
+            payable(krew).sendValue(krewOwnerFee + additionalFee);
         }
 
-        emit Trade(msg.sender, subject, isBuy, amount, price, protocolFee, subjectFee + additionalFee, supply);
+        emit Trade(msg.sender, krew, isBuy, amount, price, protocolFee, krewOwnerFee + additionalFee, supply);
     }
 
-    function buyKeys(address subject, uint256 amount) public payable {
-        uint256 price = getBuyPrice(subject, amount);
-        executeTrade(subject, amount, price, true);
+    function buyKeys(address krew, uint256 amount) public payable {
+        uint256 price = getBuyPrice(krew, amount);
+        executeTrade(krew, amount, price, true);
     }
 
-    function sellKeys(address subject, uint256 amount) public {
-        uint256 price = getSellPrice(subject, amount);
-        executeTrade(subject, amount, price, false);
+    function sellKeys(address krew, uint256 amount) public {
+        uint256 price = getSellPrice(krew, amount);
+        executeTrade(krew, amount, price, false);
     }
 }
