@@ -5,9 +5,11 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
 
 contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     using AddressUpgradeable for address payable;
+    using ECDSAUpgradeable for bytes32;
 
     uint256 private constant BASE_DIVIDER = 16000;
     uint256 private constant ACC_FEE_PRECISION = 1e4;
@@ -15,6 +17,8 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     address payable public protocolFeeDestination;
     uint256 public protocolFeePercent;
     uint256 public holderFeePercent;
+
+    address public oracleAddress;
 
     struct Krew {
         uint256 supply;
@@ -33,6 +37,7 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     event SetProtocolFeeDestination(address indexed destination);
     event SetProtocolFeePercent(uint256 percent);
     event SetHolderFeePercent(uint256 percent);
+    event SetOracleAddress(address indexed oracle);
 
     event KrewCreated(uint256 indexed krewId, address indexed creator);
     event Trade(
@@ -43,6 +48,7 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 price,
         uint256 protocolFee,
         uint256 holderFee,
+        uint256 additionalFee,
         uint256 supply
     );
     event ClaimHolderFee(address indexed holder, uint256 indexed krew, uint256 fee);
@@ -77,6 +83,41 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     function setHolderFeePercent(uint256 _feePercent) external onlyOwner {
         holderFeePercent = _feePercent;
         emit SetHolderFeePercent(_feePercent);
+    }
+
+    function setOracleAddress(address _oracle) public onlyOwner {
+        oracleAddress = _oracle;
+        emit SetOracleAddress(_oracle);
+    }
+
+    function splitSignatureData(bytes memory signature) internal pure returns (uint256 feeRatio, bytes32 originalHash) {
+        require(signature.length == 96, "KrewCommunal: Invalid signature length");
+
+        // Split the signature into two parts: the feeRatio and the original signed hash
+        bytes32 feeRatioBytes;
+        assembly {
+            feeRatioBytes := mload(add(signature, 32))
+            originalHash := mload(add(signature, 64))
+        }
+
+        feeRatio = uint256(feeRatioBytes);
+        require(feeRatio <= 1 ether, "KrewCommunal: Fee ratio out of bounds");
+        return (feeRatio, originalHash);
+    }
+
+    function calculateAdditionalTokenOwnerFee(
+        uint256 price,
+        bytes memory oracleSignature
+    ) public view returns (uint256) {
+        // Extract the fee ratio from the oracle's signed message
+        (uint256 feeRatio, bytes32 originalHash) = splitSignatureData(oracleSignature);
+        bytes32 hash = keccak256(abi.encodePacked(price, feeRatio)).toEthSignedMessageHash();
+
+        require(originalHash == hash, "KrewCommunal: Invalid data provided");
+        address signer = hash.recover(oracleSignature);
+        require(signer == oracleAddress, "KrewCommunal: Invalid oracle signature");
+
+        return (price * feeRatio) / 1 ether;
     }
 
     function createKrew() external {
@@ -121,14 +162,15 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         return price - protocolFee - holderFee;
     }
 
-    function buyKey(uint256 krew, uint256 amount) external payable nonReentrant {
+    function buyKey(uint256 krew, uint256 amount, bytes memory oracleSignature) external payable nonReentrant {
         require(existsKrew(krew), "KrewCommunal: Krew does not exist");
 
         uint256 price = getBuyPrice(krew, amount);
-        uint256 protocolFee = (price * protocolFeePercent) / 1 ether;
-        uint256 holderFee = (price * holderFeePercent) / 1 ether;
+        uint256 additionalFee = calculateAdditionalTokenOwnerFee(price, oracleSignature);
+        uint256 protocolFee = (price * protocolFeePercent) / 1 ether - additionalFee;
+        uint256 holderFee = (price * holderFeePercent) / 1 ether + additionalFee;
 
-        require(msg.value >= price + protocolFee + holderFee, "KrewCommunal: insufficient payment");
+        require(msg.value >= price + protocolFee + holderFee, "KrewCommunal: Insufficient payment");
 
         Krew memory k = krews[krew];
         Holder storage holder = holders[krew][msg.sender];
@@ -146,15 +188,16 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             payable(msg.sender).sendValue(refund);
         }
 
-        emit Trade(msg.sender, krew, true, amount, price, protocolFee, holderFee, k.supply);
+        emit Trade(msg.sender, krew, true, amount, price, protocolFee, holderFee, additionalFee, k.supply);
     }
 
-    function sellKey(uint256 krew, uint256 amount) external nonReentrant {
+    function sellKey(uint256 krew, uint256 amount, bytes memory oracleSignature) external nonReentrant {
         require(existsKrew(krew), "KrewCommunal: Krew does not exist");
 
         uint256 price = getSellPrice(krew, amount);
-        uint256 protocolFee = (price * protocolFeePercent) / 1 ether;
-        uint256 holderFee = (price * holderFeePercent) / 1 ether;
+        uint256 additionalFee = calculateAdditionalTokenOwnerFee(price, oracleSignature);
+        uint256 protocolFee = (price * protocolFeePercent) / 1 ether - additionalFee;
+        uint256 holderFee = (price * holderFeePercent) / 1 ether + additionalFee;
 
         Krew memory k = krews[krew];
         Holder storage holder = holders[krew][msg.sender];
@@ -163,7 +206,7 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         k.supply -= amount;
         krews[krew] = k;
 
-        require(holder.balance >= amount, "KrewCommunal: insufficient balance");
+        require(holder.balance >= amount, "KrewCommunal: Insufficient balance");
         holder.balance -= amount;
         holder.feeDebt -= int256((amount * k.accFeePerUnit) / ACC_FEE_PRECISION);
 
@@ -171,7 +214,7 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         payable(msg.sender).sendValue(netAmount);
         protocolFeeDestination.sendValue(protocolFee);
 
-        emit Trade(msg.sender, krew, false, amount, price, protocolFee, holderFee, k.supply);
+        emit Trade(msg.sender, krew, false, amount, price, protocolFee, holderFee, additionalFee, k.supply);
     }
 
     function claimableHolderFee(uint256 krew, address holder) external view returns (uint256 claimableFee) {
