@@ -162,7 +162,7 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         return price - protocolFee - holderFee;
     }
 
-    function buyKey(uint256 krew, uint256 amount, bytes memory oracleSignature) external payable nonReentrant {
+    function buyKeys(uint256 krew, uint256 amount, bytes memory oracleSignature) external payable nonReentrant {
         require(existsKrew(krew), "KrewCommunal: Krew does not exist");
 
         uint256 price = getBuyPrice(krew, amount);
@@ -191,7 +191,7 @@ contract KrewCommunal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         emit Trade(msg.sender, krew, true, amount, price, protocolFee, holderFee, additionalFee, k.supply);
     }
 
-    function sellKey(uint256 krew, uint256 amount, bytes memory oracleSignature) external nonReentrant {
+    function sellKeys(uint256 krew, uint256 amount, bytes memory oracleSignature) external nonReentrant {
         require(existsKrew(krew), "KrewCommunal: Krew does not exist");
 
         uint256 price = getSellPrice(krew, amount);
