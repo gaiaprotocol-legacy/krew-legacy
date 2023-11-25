@@ -15,7 +15,7 @@ export default class TitleBar extends DomNode {
       ...KrewSignedUserManager.signed
         ? [
           el("button.noti", new MaterialIcon("notifications")),
-          new TitleBarUserDisplay(),
+          new TitleBarUserDisplay(KrewSignedUserManager.user!),
         ]
         : [
           new Button({

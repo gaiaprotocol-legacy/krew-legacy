@@ -24,3 +24,5 @@ ALTER TABLE "public"."users_public" ENABLE ROW LEVEL SECURITY;
 GRANT ALL ON TABLE "public"."users_public" TO "anon";
 GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
 GRANT ALL ON TABLE "public"."users_public" TO "service_role";
+
+CREATE POLICY "view everyone" ON "public"."users_public" FOR SELECT USING (true);

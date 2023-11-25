@@ -152,6 +152,7 @@ button.component.contained {
   height: 50px;
   border-radius: 50%;
   background-color: #252525;
+  background-size: cover;
   cursor: pointer;
 }
 @media only screen and (max-width: 859px) {
@@ -237,6 +238,7 @@ body {
   height: 50px;
   border-radius: 50%;
   background-color: #252525;
+  background-size: cover;
 }
 @media only screen and (max-width: 859px) {
   .profile-image {
@@ -359,6 +361,7 @@ body {
   border-bottom: 1px solid #393636;
   display: flex;
   align-items: center;
+  gap: 24px;
 }
 .title-bar > h1 {
   flex-shrink: 0;
@@ -381,7 +384,17 @@ body {
 .title-bar > .title-bar-search-form {
   height: 100%;
   flex-grow: 1;
-  margin-left: 55px;
+  margin-left: 30px;
+}
+.title-bar > button.noti {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #474B54;
+}
+.title-bar > button.noti > .icon {
+  font-size: 30px;
 }
 .title-bar > button.sign-in {
   width: 120px;
@@ -405,5 +418,21 @@ body {
   color: #474B54;
   font-size: 12px;
   font-style: italic;
+}
+.title-bar-user-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.title-bar-user-display > .profile-image {
+  width: 30px;
+  height: 30px;
+}
+.title-bar-user-display > .name {
+  font-size: 12px;
+}
+.title-bar-user-display > button.dropdown {
+  margin-bottom: -2px;
 }
 

@@ -95,6 +95,8 @@ ALTER TABLE ONLY "public"."users_public"
 
 ALTER TABLE "public"."users_public" ENABLE ROW LEVEL SECURITY;
 
+CREATE POLICY "view everyone" ON "public"."users_public" FOR SELECT USING (true);
+
 GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
