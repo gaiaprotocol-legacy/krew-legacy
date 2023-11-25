@@ -1,0 +1,23 @@
+button.component {
+    cursor         : pointer;
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+
+    &.disabled {
+        cursor: not-allowed;
+    }
+
+    &.contained {
+        border-radius: 6px;
+        border       : 1px solid #25D366;
+        background   : rgba(37, 211, 102, 0.12);
+        color        : #25D366;
+
+        &:active {}
+    }
+
+    &.text {
+        &:active {}
+    }
+}

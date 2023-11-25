@@ -1,15 +1,30 @@
 import {
   AppInitializer,
+  el,
   MaterialIconSystem,
   msg,
   Router,
   SplashLoader,
 } from "common-app-module";
 import { TestChatView, TestPostListView, TestPostView } from "sofi-module";
+import messages_en from "../locales/en.yml";
+import messages_ja from "../locales/ja.yml";
+import messages_zh from "../locales/zh.yml";
+import messages_zh_HK from "../locales/zh_HK.yml";
+import messages_zh_TW from "../locales/zh_TW.yml";
 import Config from "./Config.js";
+import EnvironmentManager from "./EnvironmentManager.js";
 import Layout from "./layout/Layout.js";
+import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
+import WalletManager from "./wallet/WalletManager.js";
 
-msg.setMessages({});
+msg.setMessages({
+  en: messages_en,
+  zh: messages_zh,
+  "zh-tw": messages_zh_TW,
+  "zh-hk": messages_zh_HK,
+  ja: messages_ja,
+});
 
 MaterialIconSystem.launch();
 
@@ -20,7 +35,13 @@ export default async function initialize(config: Config) {
     config.dev,
   );
 
-  await SplashLoader.load("Loading...", []);
+  EnvironmentManager.messageForWalletLinking = config.messageForWalletLinking;
+
+  WalletManager.init(config.walletConnectProjectId);
+
+  await SplashLoader.load(el("img", { src: "/images/logo.png" }), [
+    KrewSignedUserManager.fetchUserOnInit(),
+  ]);
 
   Router.route("**", Layout, ["test/**"]);
 

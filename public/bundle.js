@@ -1246,7 +1246,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ MaterialIcon)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n\nclass MaterialIcon extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    constructor(iconName) {\n        super(\"span.material-icon.material-symbols-outlined\");\n        this.text = iconName;\n    }\n}\n\n\n//# sourceURL=webpack:///./app/MaterialIcon.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ MaterialIcon)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n\nclass MaterialIcon extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    constructor(iconName) {\n        super(\"span.icon.material-icon.material-symbols-outlined\");\n        this.text = iconName;\n    }\n}\n\n\n//# sourceURL=webpack:///./app/MaterialIcon.ts?");
 
 /***/ }),
 
@@ -1257,7 +1257,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _initialize_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./initialize.js */ \"./app/initialize.ts\");\n\nawait (0,_initialize_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n    dev: true,\n    supabaseUrl: \"https://sfwnwiuxgehxbyystchq.supabase.co\",\n    supabaseAnonKey: \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmd253aXV4Z2VoeGJ5eXN0Y2hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDAyMTA5OTYsImV4cCI6MjAxNTc4Njk5Nn0.iQ9aIdYmqKOdeAXonb6LFy9DLSVMlWycxleueEIOZes\",\n});\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } }, 1);\n\n//# sourceURL=webpack:///./app/dev.ts?");
+eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _initialize_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./initialize.js */ \"./app/initialize.ts\");\n\nawait (0,_initialize_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n    dev: true,\n    supabaseUrl: \"https://sfwnwiuxgehxbyystchq.supabase.co\",\n    supabaseAnonKey: \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmd253aXV4Z2VoeGJ5eXN0Y2hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDAyMTA5OTYsImV4cCI6MjAxNTc4Njk5Nn0.iQ9aIdYmqKOdeAXonb6LFy9DLSVMlWycxleueEIOZes\",\n    walletConnectProjectId: \"9ef2b6a581d3644cd09342a5f0ff5318\",\n    messageForWalletLinking: \"Link Wallet to Krew\",\n});\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } }, 1);\n\n//# sourceURL=webpack:///./app/dev.ts?");
 
 /***/ }),
 
@@ -1268,7 +1268,7 @@ eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ initialize)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var sofi_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sofi-module */ \"../sofi-module/lib/index.js\");\n/* harmony import */ var _layout_Layout_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./layout/Layout.js */ \"./app/layout/Layout.ts\");\n\n\n\ncommon_app_module__WEBPACK_IMPORTED_MODULE_0__.msg.setMessages({});\ncommon_app_module__WEBPACK_IMPORTED_MODULE_0__.MaterialIconSystem.launch();\nasync function initialize(config) {\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.AppInitializer.initialize(config.supabaseUrl, config.supabaseAnonKey, config.dev);\n    await common_app_module__WEBPACK_IMPORTED_MODULE_0__.SplashLoader.load(\"Loading...\", []);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"**\", _layout_Layout_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"], [\"test/**\"]);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/chat\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestChatView);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/posts\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestPostListView);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/post\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestPostView);\n}\n\n\n//# sourceURL=webpack:///./app/initialize.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ initialize)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var sofi_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sofi-module */ \"../sofi-module/lib/index.js\");\n/* harmony import */ var _locales_en_yml__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../locales/en.yml */ \"./locales/en.yml\");\n/* harmony import */ var _locales_ja_yml__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../locales/ja.yml */ \"./locales/ja.yml\");\n/* harmony import */ var _locales_zh_yml__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../locales/zh.yml */ \"./locales/zh.yml\");\n/* harmony import */ var _locales_zh_HK_yml__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../locales/zh_HK.yml */ \"./locales/zh_HK.yml\");\n/* harmony import */ var _locales_zh_TW_yml__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../locales/zh_TW.yml */ \"./locales/zh_TW.yml\");\n/* harmony import */ var _EnvironmentManager_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./EnvironmentManager.js */ \"./app/EnvironmentManager.ts\");\n/* harmony import */ var _layout_Layout_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./layout/Layout.js */ \"./app/layout/Layout.ts\");\n/* harmony import */ var _user_KrewSignedUserManager_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./user/KrewSignedUserManager.js */ \"./app/user/KrewSignedUserManager.ts\");\n/* harmony import */ var _wallet_WalletManager_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./wallet/WalletManager.js */ \"./app/wallet/WalletManager.ts\");\n\n\n\n\n\n\n\n\n\n\n\ncommon_app_module__WEBPACK_IMPORTED_MODULE_0__.msg.setMessages({\n    en: _locales_en_yml__WEBPACK_IMPORTED_MODULE_2__[\"default\"],\n    zh: _locales_zh_yml__WEBPACK_IMPORTED_MODULE_4__[\"default\"],\n    \"zh-tw\": _locales_zh_TW_yml__WEBPACK_IMPORTED_MODULE_6__[\"default\"],\n    \"zh-hk\": _locales_zh_HK_yml__WEBPACK_IMPORTED_MODULE_5__[\"default\"],\n    ja: _locales_ja_yml__WEBPACK_IMPORTED_MODULE_3__[\"default\"],\n});\ncommon_app_module__WEBPACK_IMPORTED_MODULE_0__.MaterialIconSystem.launch();\nasync function initialize(config) {\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.AppInitializer.initialize(config.supabaseUrl, config.supabaseAnonKey, config.dev);\n    _EnvironmentManager_js__WEBPACK_IMPORTED_MODULE_7__[\"default\"].messageForWalletLinking = config.messageForWalletLinking;\n    _wallet_WalletManager_js__WEBPACK_IMPORTED_MODULE_10__[\"default\"].init(config.walletConnectProjectId);\n    await common_app_module__WEBPACK_IMPORTED_MODULE_0__.SplashLoader.load((0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"img\", { src: \"/images/logo.png\" }), [\n        _user_KrewSignedUserManager_js__WEBPACK_IMPORTED_MODULE_9__[\"default\"].fetchUserOnInit(),\n    ]);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"**\", _layout_Layout_js__WEBPACK_IMPORTED_MODULE_8__[\"default\"], [\"test/**\"]);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/chat\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestChatView);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/posts\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestPostListView);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/post\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestPostView);\n}\n\n\n//# sourceURL=webpack:///./app/initialize.ts?");
 
 /***/ }),
 
@@ -1312,7 +1312,29 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ TitleBar)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var _user_KrewSignedUserManager_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../user/KrewSignedUserManager.js */ \"./app/user/KrewSignedUserManager.ts\");\n\n\nclass TitleBar extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    constructor() {\n        super(\".title-bar\");\n        this.append((0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"h1\", (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"img\", { src: \"/images/logo.png\" }), {\n            click: () => common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.go(\"/\"),\n        }), _user_KrewSignedUserManager_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].signed ? (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"\") : (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"\"));\n    }\n}\n\n\n//# sourceURL=webpack:///./app/layout/TitleBar.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ TitleBar)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../MaterialIcon.js */ \"./app/MaterialIcon.ts\");\n/* harmony import */ var _user_KrewSignedUserManager_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../user/KrewSignedUserManager.js */ \"./app/user/KrewSignedUserManager.ts\");\n/* harmony import */ var _title_bar_TitleBarSearchForm_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./title-bar/TitleBarSearchForm.js */ \"./app/layout/title-bar/TitleBarSearchForm.ts\");\n/* harmony import */ var _title_bar_TitleBarUserDisplay_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./title-bar/TitleBarUserDisplay.js */ \"./app/layout/title-bar/TitleBarUserDisplay.ts\");\n\n\n\n\n\nclass TitleBar extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    constructor() {\n        super(\".title-bar\");\n        this.append((0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"h1\", (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"img\", { src: \"/images/logo.png\" }), {\n            click: () => common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.go(\"/\"),\n        }), new _title_bar_TitleBarSearchForm_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"](), ..._user_KrewSignedUserManager_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"].signed\n            ? [\n                (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"button.noti\", new _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"](\"notifications\")),\n                new _title_bar_TitleBarUserDisplay_js__WEBPACK_IMPORTED_MODULE_4__[\"default\"](),\n            ]\n            : [\n                new common_app_module__WEBPACK_IMPORTED_MODULE_0__.Button({\n                    tag: \".sign-in\",\n                    title: (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.msg)(\"title-bar-sign-in-button\"),\n                    click: () => _user_KrewSignedUserManager_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"].signIn(),\n                }),\n            ]);\n    }\n}\n\n\n//# sourceURL=webpack:///./app/layout/TitleBar.ts?");
+
+/***/ }),
+
+/***/ "./app/layout/title-bar/TitleBarSearchForm.ts":
+/*!****************************************************!*\
+  !*** ./app/layout/title-bar/TitleBarSearchForm.ts ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ TitleBarSearchForm)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../MaterialIcon.js */ \"./app/MaterialIcon.ts\");\n\n\nclass TitleBarSearchForm extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    input;\n    constructor() {\n        super(\"form.title-bar-search-form\");\n        this.append((0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"label\", new _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"](\"search\"), this.input = (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"input\", {\n            placeholder: (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.msg)(\"title-bar-search-form-placeholder\"),\n        })));\n        this.onDom(\"submit\", (event) => {\n            event.preventDefault();\n            common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.go(`/search?q=${this.input.domElement.value}`);\n        });\n    }\n}\n\n\n//# sourceURL=webpack:///./app/layout/title-bar/TitleBarSearchForm.ts?");
+
+/***/ }),
+
+/***/ "./app/layout/title-bar/TitleBarUserDisplay.ts":
+/*!*****************************************************!*\
+  !*** ./app/layout/title-bar/TitleBarUserDisplay.ts ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ TitleBarUserDisplay)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n\nclass TitleBarUserDisplay extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    constructor() {\n        super(\".title-bar-user-display\");\n    }\n}\n\n\n//# sourceURL=webpack:///./app/layout/title-bar/TitleBarUserDisplay.ts?");
 
 /***/ }),
 
@@ -1500,6 +1522,61 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({'confirm-button':'確認'});\n\n//# sourceURL=webpack:///../common-app-module/locales/zh_TW.yml?");
+
+/***/ }),
+
+/***/ "./locales/en.yml":
+/*!************************!*\
+  !*** ./locales/en.yml ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({'title-bar-sign-in-button':'Sign In','title-bar-search-form-placeholder':'Search for krews'});\n\n//# sourceURL=webpack:///./locales/en.yml?");
+
+/***/ }),
+
+/***/ "./locales/ja.yml":
+/*!************************!*\
+  !*** ./locales/ja.yml ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);\n\n//# sourceURL=webpack:///./locales/ja.yml?");
+
+/***/ }),
+
+/***/ "./locales/zh.yml":
+/*!************************!*\
+  !*** ./locales/zh.yml ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);\n\n//# sourceURL=webpack:///./locales/zh.yml?");
+
+/***/ }),
+
+/***/ "./locales/zh_HK.yml":
+/*!***************************!*\
+  !*** ./locales/zh_HK.yml ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);\n\n//# sourceURL=webpack:///./locales/zh_HK.yml?");
+
+/***/ }),
+
+/***/ "./locales/zh_TW.yml":
+/*!***************************!*\
+  !*** ./locales/zh_TW.yml ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);\n\n//# sourceURL=webpack:///./locales/zh_TW.yml?");
 
 /***/ }),
 

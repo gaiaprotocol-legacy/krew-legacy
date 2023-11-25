@@ -24,6 +24,46 @@ CREATE EXTENSION IF NOT EXISTS "supabase_vault" WITH SCHEMA "vault";
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
+CREATE OR REPLACE FUNCTION "public"."set_user_metadata_to_public"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+begin
+  if strpos(new.raw_user_meta_data ->> 'iss', 'twitter') > 0 then
+    insert into public.users_public (user_id, display_name, profile_image, profile_image_thumbnail, profile_image_stored, x_username)
+    values (
+      new.id,
+      new.raw_user_meta_data ->> 'full_name',
+      new.raw_user_meta_data ->> 'avatar_url',
+      false,
+      new.raw_user_meta_data ->> 'user_name'
+    ) on conflict (user_id) do update
+    set
+      display_name = new.raw_user_meta_data ->> 'full_name',
+      profile_image = new.raw_user_meta_data ->> 'avatar_url',
+      profile_image_thumbnail = new.raw_user_meta_data ->> 'avatar_url',
+      profile_image_stored = false,
+      x_username = new.raw_user_meta_data ->> 'user_name';
+  else
+    insert into public.users_public (user_id, display_name, profile_image, profile_image_thumbnail, profile_image_stored)
+    values (
+      new.id,
+      new.raw_user_meta_data ->> 'full_name',
+      new.raw_user_meta_data ->> 'avatar_url',
+      false
+    ) on conflict (user_id) do update
+    set
+      display_name = new.raw_user_meta_data ->> 'full_name',
+      profile_image = new.raw_user_meta_data ->> 'avatar_url',
+      profile_image_thumbnail = new.raw_user_meta_data ->> 'avatar_url',
+      profile_image_stored = false;
+  end if;
+  return new;
+end;
+$$;
+
+ALTER FUNCTION "public"."set_user_metadata_to_public"() OWNER TO "postgres";
+
 SET default_tablespace = '';
 
 SET default_table_access_method = "heap";
@@ -59,6 +99,10 @@ GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
 GRANT USAGE ON SCHEMA "public" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "anon";
+GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "service_role";
 
 GRANT ALL ON TABLE "public"."users_public" TO "anon";
 GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
