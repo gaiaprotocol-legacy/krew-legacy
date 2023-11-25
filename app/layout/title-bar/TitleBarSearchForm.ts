@@ -12,6 +12,7 @@ export default class TitleBarSearchForm extends DomNode {
         new MaterialIcon("search"),
         this.input = el("input", {
           placeholder: msg("title-bar-search-form-placeholder"),
+          value: new URLSearchParams(location.search).get("q") ?? "",
         }),
       ),
     );
@@ -19,5 +20,9 @@ export default class TitleBarSearchForm extends DomNode {
       event.preventDefault();
       Router.go(`/search?q=${this.input.domElement.value}`);
     });
+  }
+
+  public clear() {
+    this.input.domElement.value = "";
   }
 }

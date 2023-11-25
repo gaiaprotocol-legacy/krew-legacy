@@ -10,6 +10,7 @@ export default class Layout extends View {
     Layout.current.content.append(node);
   }
 
+  private titleBar: TitleBar;
   private navBar: NavBar;
   private content: DomNode;
 
@@ -20,7 +21,7 @@ export default class Layout extends View {
     BodyNode.append(
       this.container = el(
         ".layout",
-        new TitleBar(),
+        this.titleBar = new TitleBar(),
         el(
           "main",
           this.navBar = new NavBar(),
@@ -44,5 +45,6 @@ export default class Layout extends View {
         uri.indexOf("/") === -1 ? uri.length : uri.indexOf("/"),
       ),
     );
+    if (uri !== "search") this.titleBar.clearSearchForm();
   }
 }
