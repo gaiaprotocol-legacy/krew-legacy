@@ -10,8 +10,20 @@ export default class NavBar extends DomNode {
       el("h1", el("img", { src: "/images/logo.png" }), {
         click: () => Router.go("/"),
       }),
-      el("button.home.active", new MaterialIcon("home"), {
+      el("button.posts", new MaterialIcon("globe"), {
         click: () => Router.go("/"),
+      }),
+      el("button.chats", new MaterialIcon("chat"), {
+        click: () => Router.go("/chats"),
+      }),
+      el("button.keys", new MaterialIcon("key"), {
+        click: () => Router.go("/keys"),
+      }),
+      el("button.explore", new MaterialIcon("search"), {
+        click: () => Router.go("/explore"),
+      }),
+      el("button.add", new MaterialIcon("add"), {
+        //TODO:
       }),
     );
   }

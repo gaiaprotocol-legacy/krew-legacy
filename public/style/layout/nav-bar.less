@@ -2,11 +2,12 @@
     width         : 90px;
     display       : flex;
     flex-direction: column;
-    gap           : 50px;
+    gap           : 26px;
     overflow-y    : auto;
     position      : sticky;
     top           : 0;
     z-index       : 1;
+    border-right  : 1px solid #393636;
 
     @media @phone {
         position       : fixed;
@@ -20,9 +21,17 @@
         overflow       : hidden;
         justify-content: space-between;
         gap            : 0;
+        border-right   : none;
+        border-top     : 1px solid #393636;
+
+        &::before,
+        &::after {
+            content: '';
+        }
     }
 
     >h1 {
+        flex-shrink    : 0;
         display        : flex;
         justify-content: center;
         align-items    : center;
@@ -47,8 +56,13 @@
         align-items    : center;
         cursor         : pointer;
 
+        @media @phone {
+            width : 70px;
+            height: auto;
+        }
+
         >.material-icon {
-            font-size: 50px;
+            font-size: 46px;
             color    : #B5BFD6;
         }
 
@@ -60,6 +74,17 @@
             >.material-icon {
                 color: #fff;
             }
+        }
+    }
+
+    >button.add {
+        >.material-icon {
+            border       : 1px dashed #B5BFD6;
+            border-radius: 50%;
+        }
+
+        @media @phone {
+            display: none;
         }
     }
 }

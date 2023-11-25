@@ -1,4 +1,4 @@
-import { BodyNode, DomNode, el, View } from "common-app-module";
+import { BodyNode, DomNode, el, View, ViewParams } from "common-app-module";
 import NavBar from "./NavBar.js";
 
 export default class Layout extends View {
@@ -11,7 +11,7 @@ export default class Layout extends View {
   private navBar: NavBar;
   private content: DomNode;
 
-  constructor() {
+  constructor(params: ViewParams, uri: string) {
     super();
     Layout.current = this;
 
@@ -20,6 +20,21 @@ export default class Layout extends View {
         ".layout",
         this.navBar = new NavBar(),
         this.content = el("main"),
+      ),
+    );
+
+    this.changeUri(uri);
+  }
+
+  public changeParams(params: ViewParams, uri: string): void {
+    this.changeUri(uri);
+  }
+
+  private changeUri(uri: string): void {
+    this.navBar.activeButton(
+      uri === "" ? "posts" : uri.substring(
+        0,
+        uri.indexOf("/") === -1 ? uri.length : uri.indexOf("/"),
       ),
     );
   }
