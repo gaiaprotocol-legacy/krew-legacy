@@ -192,6 +192,15 @@ CREATE TABLE IF NOT EXISTS "public"."users_public" (
 
 ALTER TABLE "public"."users_public" OWNER TO "postgres";
 
+CREATE TABLE IF NOT EXISTS "public"."wallet_linking_nonces" (
+    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "wallet_address" "text" NOT NULL,
+    "nonce" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+ALTER TABLE "public"."wallet_linking_nonces" OWNER TO "postgres";
+
 ALTER TABLE ONLY "public"."topic_chat_messages"
     ADD CONSTRAINT "chat_messages_pkey" PRIMARY KEY ("id");
 
@@ -213,6 +222,9 @@ ALTER TABLE ONLY "public"."posts"
 ALTER TABLE ONLY "public"."users_public"
     ADD CONSTRAINT "users_public_pkey" PRIMARY KEY ("user_id");
 
+ALTER TABLE ONLY "public"."wallet_linking_nonces"
+    ADD CONSTRAINT "wallet_linking_nonces_pkey" PRIMARY KEY ("user_id");
+
 ALTER TABLE ONLY "public"."follows"
     ADD CONSTRAINT "follows_followee_id_fkey" FOREIGN KEY ("followee_id") REFERENCES "public"."users_public"("user_id");
 
@@ -230,6 +242,9 @@ ALTER TABLE ONLY "public"."topic_chat_messages"
 
 ALTER TABLE ONLY "public"."users_public"
     ADD CONSTRAINT "users_public_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id");
+
+ALTER TABLE ONLY "public"."wallet_linking_nonces"
+    ADD CONSTRAINT "wallet_linking_nonces_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_public"("user_id");
 
 CREATE POLICY "can delete only authed" ON "public"."posts" FOR DELETE TO "authenticated" USING (("author" = "auth"."uid"()));
 
@@ -303,6 +318,8 @@ CREATE POLICY "view everyone or only keyholders" ON "public"."posts" FOR SELECT 
                    FROM "public"."users_public"
                   WHERE ("users_public"."user_id" = "auth"."uid"()))))))))))));
 
+ALTER TABLE "public"."wallet_linking_nonces" ENABLE ROW LEVEL SECURITY;
+
 GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
@@ -351,6 +368,10 @@ GRANT ALL ON SEQUENCE "public"."posts_id_seq" TO "service_role";
 GRANT ALL ON TABLE "public"."users_public" TO "anon";
 GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
 GRANT ALL ON TABLE "public"."users_public" TO "service_role";
+
+GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "anon";
+GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "authenticated";
+GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "service_role";
 
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "postgres";
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "anon";
