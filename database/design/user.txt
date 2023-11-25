@@ -18,3 +18,9 @@ follows
 	follower_id - uuid - auth.uid() - pk
 	followee_id - uuid - pk
 	followed_at - timestampz - now()
+
+total_key_balances
+	wallet_address - text - pk
+	total_key_balance - int8 - 0
+	created_at - timestampz - now()
+	updated_at - timestampz - nullable

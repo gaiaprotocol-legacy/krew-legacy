@@ -1,4 +1,4 @@
-chat_messages
+topic_chat_messages
 	id - int8 - pk
 	topic - text - not null
 	author - uuid, fk to users_public.user_id - auth.uid()
@@ -6,4 +6,12 @@ chat_messages
 	translated - jsonb - nullbale
 	rich - jsonb - nullable
 	created_at - timestampz - now()
-	updated_at - timestampz - nullable
+
+krew_chat_messages
+	id - int8 - pk
+	krew - text - not null
+	author - uuid, fk to users_public.user_id - auth.uid()
+	message - text - nullable
+	translated - jsonb - nullbale
+	rich - jsonb - nullable
+	created_at - timestampz - now()
