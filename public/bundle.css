@@ -203,6 +203,7 @@ body {
   margin: auto;
   overflow-x: hidden;
   display: flex;
+  flex-direction: column;
 }
 @media only screen and (max-width: 859px) {
   .layout {
@@ -211,15 +212,22 @@ body {
     padding-bottom: calc(90px + env(safe-area-inset-bottom));
   }
 }
-.layout > .nav-bar {
+.layout > .title-bar {
   flex-shrink: 0;
 }
 .layout > main {
+  display: flex;
+  flex-grow: 1;
+}
+.layout > main > .nav-bar {
+  flex-shrink: 0;
+}
+.layout > main > .content {
   flex-grow: 1;
   overflow-y: auto;
 }
 @media only screen and (max-width: 859px) {
-  .layout > main {
+  .layout > main > .content {
     overflow-y: visible;
   }
 }
@@ -250,27 +258,10 @@ body {
     border-right: none;
     border-top: 1px solid #393636;
   }
-  .nav-bar::before,
-  .nav-bar::after {
-    content: '';
-  }
 }
-.nav-bar > h1 {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  height: 65px;
-  border-bottom: 1px solid #393636;
-}
-.nav-bar > h1 > img {
-  width: 55px;
-}
-@media only screen and (max-width: 859px) {
-  .nav-bar > h1 {
-    display: none;
-  }
+.nav-bar::before,
+.nav-bar::after {
+  content: '';
 }
 .nav-bar > button {
   height: 70px;
@@ -298,12 +289,43 @@ body {
 .nav-bar > button.active > .material-icon {
   color: #fff;
 }
+@media only screen and (max-width: 859px) {
+  .nav-bar > button.active {
+    border-left: none;
+    border-right: none;
+    border-top: 2px solid var(--bg-color);
+    border-bottom: 2px solid #25D366;
+    background: linear-gradient(0deg, rgba(37, 211, 102, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+}
 .nav-bar > button.add > .material-icon {
   border: 1px dashed #B5BFD6;
   border-radius: 50%;
 }
 @media only screen and (max-width: 859px) {
   .nav-bar > button.add {
+    display: none;
+  }
+}
+.title-bar {
+  height: 65px;
+  border-bottom: 1px solid #393636;
+  display: flex;
+}
+.title-bar > h1 {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 90px;
+  border-right: 1px solid #393636;
+}
+.title-bar > h1 > img {
+  width: 55px;
+}
+@media only screen and (max-width: 859px) {
+  .title-bar > h1 {
     display: none;
   }
 }

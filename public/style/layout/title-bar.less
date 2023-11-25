@@ -1,0 +1,23 @@
+.title-bar {
+    height       : 65px;
+    border-bottom: 1px solid #393636;
+    display      : flex;
+
+    >h1 {
+        flex-shrink    : 0;
+        display        : flex;
+        justify-content: center;
+        align-items    : center;
+        cursor         : pointer;
+        width          : 90px;
+        border-right   : 1px solid #393636;
+
+        >img {
+            width: 55px;
+        }
+
+        @media @phone {
+            display: none;
+        }
+    }
+}

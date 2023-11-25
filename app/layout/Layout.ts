@@ -1,5 +1,7 @@
 import { BodyNode, DomNode, el, View, ViewParams } from "common-app-module";
 import NavBar from "./NavBar.js";
+import Sidebar from "./Sidebar.js";
+import TitleBar from "./TitleBar.js";
 
 export default class Layout extends View {
   private static current: Layout;
@@ -18,8 +20,13 @@ export default class Layout extends View {
     BodyNode.append(
       this.container = el(
         ".layout",
-        this.navBar = new NavBar(),
-        this.content = el("main"),
+        new TitleBar(),
+        el(
+          "main",
+          this.navBar = new NavBar(),
+          this.content = el("section.content"),
+          new Sidebar(),
+        ),
       ),
     );
 

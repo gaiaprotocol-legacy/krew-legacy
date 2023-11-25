@@ -1,9 +1,10 @@
 .layout {
-    position  : relative;
-    height    : 100%;
-    margin    : auto;
-    overflow-x: hidden;
-    display   : flex;
+    position      : relative;
+    height        : 100%;
+    margin        : auto;
+    overflow-x    : hidden;
+    display       : flex;
+    flex-direction: column;
 
     @media @phone {
         height        : auto;
@@ -11,16 +12,25 @@
         padding-bottom: calc(90px + env(safe-area-inset-bottom));
     }
 
-    >.nav-bar {
-        flex-shrink : 0;
+    >.title-bar {
+        flex-shrink: 0;
     }
 
     >main {
-        flex-grow : 1;
-        overflow-y: auto;
+        display  : flex;
+        flex-grow: 1;
 
-        @media @phone {
-            overflow-y: visible;
+        >.nav-bar {
+            flex-shrink: 0;
+        }
+
+        >.content {
+            flex-grow : 1;
+            overflow-y: auto;
+
+            @media @phone {
+                overflow-y: visible;
+            }
         }
     }
 }

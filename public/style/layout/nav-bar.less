@@ -23,29 +23,11 @@
         gap            : 0;
         border-right   : none;
         border-top     : 1px solid #393636;
-
-        &::before,
-        &::after {
-            content: '';
-        }
     }
 
-    >h1 {
-        flex-shrink    : 0;
-        display        : flex;
-        justify-content: center;
-        align-items    : center;
-        cursor         : pointer;
-        height         : 65px;
-        border-bottom  : 1px solid #393636;
-
-        >img {
-            width: 55px;
-        }
-
-        @media @phone {
-            display: none;
-        }
+    &::before,
+    &::after {
+        content: '';
     }
 
     >button {
@@ -73,6 +55,14 @@
 
             >.material-icon {
                 color: #fff;
+            }
+
+            @media @phone {
+                border-left  : none;
+                border-right : none;
+                border-top   : 2px solid var(--bg-color);
+                border-bottom: 2px solid #25D366;
+                background   : linear-gradient(0deg, rgba(37, 211, 102, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
             }
         }
     }
