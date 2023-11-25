@@ -146,6 +146,14 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
 
 ALTER TABLE "public"."krews" OWNER TO "postgres";
 
+CREATE TABLE IF NOT EXISTS "public"."post_likes" (
+    "post_id" bigint NOT NULL,
+    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+ALTER TABLE "public"."post_likes" OWNER TO "postgres";
+
 CREATE TABLE IF NOT EXISTS "public"."posts" (
     "id" bigint NOT NULL,
     "target" smallint,
@@ -233,6 +241,9 @@ ALTER TABLE ONLY "public"."krew_key_holders"
 ALTER TABLE ONLY "public"."krews"
     ADD CONSTRAINT "krews_pkey" PRIMARY KEY ("id");
 
+ALTER TABLE ONLY "public"."post_likes"
+    ADD CONSTRAINT "post_likes_pkey" PRIMARY KEY ("post_id", "user_id");
+
 ALTER TABLE ONLY "public"."posts"
     ADD CONSTRAINT "posts_pkey" PRIMARY KEY ("id");
 
@@ -257,6 +268,9 @@ ALTER TABLE ONLY "public"."follows"
 ALTER TABLE ONLY "public"."krew_chat_messages"
     ADD CONSTRAINT "krew_chat_messages_author_fkey" FOREIGN KEY ("author") REFERENCES "public"."users_public"("user_id");
 
+ALTER TABLE ONLY "public"."post_likes"
+    ADD CONSTRAINT "post_likes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_public"("user_id");
+
 ALTER TABLE ONLY "public"."posts"
     ADD CONSTRAINT "posts_author_fkey" FOREIGN KEY ("author") REFERENCES "public"."users_public"("user_id");
 
@@ -276,9 +290,13 @@ CREATE POLICY "can delete only authed" ON "public"."posts" FOR DELETE TO "authen
 
 CREATE POLICY "can follow only follower" ON "public"."follows" FOR INSERT TO "authenticated" WITH CHECK ((("follower_id" = "auth"."uid"()) AND ("follower_id" <> "followee_id")));
 
+CREATE POLICY "can like only authed" ON "public"."post_likes" FOR INSERT TO "authenticated" WITH CHECK (("user_id" = "auth"."uid"()));
+
 CREATE POLICY "can repost only authed" ON "public"."reposts" FOR INSERT TO "authenticated" WITH CHECK (("user_id" = "auth"."uid"()));
 
 CREATE POLICY "can unfollow only follower" ON "public"."follows" FOR DELETE TO "authenticated" USING (("follower_id" = "auth"."uid"()));
+
+CREATE POLICY "can unlike only authed" ON "public"."post_likes" FOR DELETE TO "authenticated" USING (("user_id" = "auth"."uid"()));
 
 CREATE POLICY "can unrepost only authed" ON "public"."reposts" FOR DELETE TO "authenticated" USING (("user_id" = "auth"."uid"()));
 
@@ -322,6 +340,8 @@ ALTER TABLE "public"."krew_key_holders" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE "public"."krews" ENABLE ROW LEVEL SECURITY;
 
+ALTER TABLE "public"."post_likes" ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE "public"."posts" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE "public"."reposts" ENABLE ROW LEVEL SECURITY;
@@ -337,6 +357,8 @@ CREATE POLICY "view everyone" ON "public"."follows" FOR SELECT USING (true);
 CREATE POLICY "view everyone" ON "public"."krew_key_holders" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."krews" FOR SELECT USING (true);
+
+CREATE POLICY "view everyone" ON "public"."post_likes" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."reposts" FOR SELECT USING (true);
 
@@ -394,6 +416,10 @@ GRANT ALL ON TABLE "public"."krew_key_holders" TO "service_role";
 GRANT ALL ON TABLE "public"."krews" TO "anon";
 GRANT ALL ON TABLE "public"."krews" TO "authenticated";
 GRANT ALL ON TABLE "public"."krews" TO "service_role";
+
+GRANT ALL ON TABLE "public"."post_likes" TO "anon";
+GRANT ALL ON TABLE "public"."post_likes" TO "authenticated";
+GRANT ALL ON TABLE "public"."post_likes" TO "service_role";
 
 GRANT ALL ON TABLE "public"."posts" TO "anon";
 GRANT ALL ON TABLE "public"."posts" TO "authenticated";
