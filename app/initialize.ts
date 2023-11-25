@@ -15,6 +15,7 @@ import messages_zh_TW from "../locales/zh_TW.yml";
 import Config from "./Config.js";
 import EnvironmentManager from "./EnvironmentManager.js";
 import Layout from "./layout/Layout.js";
+import PostsView from "./post/PostsView.js";
 import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
 import WalletManager from "./wallet/WalletManager.js";
 
@@ -44,6 +45,7 @@ export default async function initialize(config: Config) {
   ]);
 
   Router.route("**", Layout, ["test/**"]);
+  Router.route("", PostsView);
 
   Router.route("test/chat", TestChatView);
   Router.route("test/posts", TestPostListView);

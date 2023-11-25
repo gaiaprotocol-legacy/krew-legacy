@@ -287,7 +287,7 @@ body {
 }
 .layout > main {
   display: flex;
-  flex-grow: 1;
+  height: calc(100% - 65px);
 }
 .layout > main > .nav-bar {
   flex-shrink: 0;
@@ -300,6 +300,9 @@ body {
   .layout > main > .content {
     overflow-y: visible;
   }
+}
+.layout > main > .sidebar {
+  flex-shrink: 0;
 }
 .nav-bar {
   width: 90px;
@@ -455,5 +458,55 @@ body {
 }
 .title-bar-user-display > button.dropdown {
   margin-bottom: -2px;
+}
+.sidebar {
+  width: 320px;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-left: 1px solid #393636;
+}
+.posts-view {
+  position: relative;
+  height: 100%;
+}
+@media only screen and (max-width: 859px) {
+  .posts-view {
+    height: auto;
+  }
+}
+.posts-view > button.post {
+  position: absolute;
+  bottom: 30px;
+  right: 31px;
+  z-index: 999997;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #25D366;
+  color: #171821;
+  opacity: 0.8;
+}
+@media only screen and (max-width: 859px) {
+  .posts-view > button.post {
+    position: fixed;
+    bottom: calc(110px + env(safe-area-inset-bottom));
+    right: 20px;
+  }
+}
+.posts-view > button.post > .icon {
+  font-size: 30px;
+}
+.posts-view > button.post:hover {
+  opacity: 1;
+}
+.posts-view > button.post:active {
+  opacity: 1;
 }
 
