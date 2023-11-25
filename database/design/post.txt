@@ -1,7 +1,8 @@
 posts
 	id - int8 - pk
-	target - int2 - nullbale
-	author - uuid - auth.uid() - fk users_public.user_id
+	target - int2 - not null
+	krew - text - nullable
+	author - uuid, fk to users_public.user_id - auth.uid()
 	message - text - not null
 	translated - jsonb - nullbale
 	rich - jsonb - nullable

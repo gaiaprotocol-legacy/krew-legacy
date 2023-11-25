@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS "public"."krews" (
     "id" "text" NOT NULL,
+    "type" smallint NOT NULL,
     "owner" "text",
     "last_fetched_key_price" numeric DEFAULT '10000000000000000'::numeric NOT NULL,
     "total_trading_key_volume" numeric DEFAULT '0'::numeric NOT NULL,

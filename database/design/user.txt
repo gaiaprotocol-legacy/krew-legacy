@@ -14,8 +14,14 @@ users_public
 	created_at - timestampz - now()
 	updated_at - timestampz - nullable
 
+wallet_linking_nonces
+	user_id - uuid, fk to auth.user - auth.uid() - pk
+	wallet_address - text - not null
+	nonce - uuid - gen_random_uuid()
+	created_at - timestampz - now()
+
 follows
-	follower_id - uuid - auth.uid() - pk
+	follower_id - uuid, fk to auth.user - auth.uid() - pk
 	followee_id - uuid - pk
 	followed_at - timestampz - now()
 
