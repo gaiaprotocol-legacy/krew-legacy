@@ -119,6 +119,27 @@ button.component.contained {
   background: rgba(37, 211, 102, 0.12);
   color: #25D366;
 }
+.dropdown-menu.component {
+  position: fixed;
+  z-index: 999998;
+  width: 160px;
+  border-radius: 15px;
+  border: 1px solid rgba(181, 191, 214, 0.2);
+  background: #1C1D26;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.dropdown-menu.component > li > button {
+  cursor: pointer;
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+}
+.dropdown-menu.component > li > button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
 .splash-screen.component {
   position: fixed;
   top: 0;

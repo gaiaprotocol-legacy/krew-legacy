@@ -1316,6 +1316,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./app/layout/title-bar/TitleBarDropdownMenu.ts":
+/*!******************************************************!*\
+  !*** ./app/layout/title-bar/TitleBarDropdownMenu.ts ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ TitleBarDropdownMenu)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var _user_KrewSignedUserManager_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../user/KrewSignedUserManager.js */ \"./app/user/KrewSignedUserManager.ts\");\n\n\nclass TitleBarDropdownMenu extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DropdownMenu {\n    constructor(options) {\n        super({\n            left: options.left,\n            top: options.top,\n            items: [{\n                    title: (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.msg)(\"title-bar-dropdown-menu-profile-button\"),\n                    click: () => common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.go(\"/profile\"),\n                }, {\n                    title: (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.msg)(\"title-bar-dropdown-menu-settings-button\"),\n                    click: () => common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.go(\"/settings\"),\n                }, {\n                    title: (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.msg)(\"title-bar-dropdown-menu-logout-button\"),\n                    click: () => _user_KrewSignedUserManager_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].signOut(),\n                }],\n        });\n    }\n}\n\n\n//# sourceURL=webpack:///./app/layout/title-bar/TitleBarDropdownMenu.ts?");
+
+/***/ }),
+
 /***/ "./app/layout/title-bar/TitleBarSearchForm.ts":
 /*!****************************************************!*\
   !*** ./app/layout/title-bar/TitleBarSearchForm.ts ***!
@@ -1334,7 +1345,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ TitleBarUserDisplay)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../MaterialIcon.js */ \"./app/MaterialIcon.ts\");\n\n\nclass TitleBarUserDisplay extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    constructor(user) {\n        super(\".title-bar-user-display\");\n        this.append((0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\".profile-image\", {\n            style: { backgroundImage: `url(${user.profile_image_thumbnail})` },\n        }), (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\".name\", user.display_name), (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"button.dropdown\", new _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"](\"arrow_drop_down\")));\n    }\n}\n\n\n//# sourceURL=webpack:///./app/layout/title-bar/TitleBarUserDisplay.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ TitleBarUserDisplay)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../MaterialIcon.js */ \"./app/MaterialIcon.ts\");\n/* harmony import */ var _TitleBarDropdownMenu_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TitleBarDropdownMenu.js */ \"./app/layout/title-bar/TitleBarDropdownMenu.ts\");\n\n\n\nclass TitleBarUserDisplay extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    constructor(user) {\n        super(\".title-bar-user-display\");\n        this.append((0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\".profile-image\", {\n            style: { backgroundImage: `url(${user.profile_image_thumbnail})` },\n        }), (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\".name\", user.display_name), (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"button.dropdown\", new _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"](\"arrow_drop_down\")));\n        this.onDom(\"click\", (event) => {\n            event.stopPropagation();\n            const rect = this.rect;\n            new _TitleBarDropdownMenu_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"]({ left: rect.right - 160, top: rect.bottom + 10 });\n        });\n    }\n}\n\n\n//# sourceURL=webpack:///./app/layout/title-bar/TitleBarUserDisplay.ts?");
 
 /***/ }),
 
@@ -1532,7 +1543,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({'title-bar-sign-in-button':'Sign In','title-bar-search-form-placeholder':'Search for krews'});\n\n//# sourceURL=webpack:///./locales/en.yml?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({'title-bar-sign-in-button':'Sign In','title-bar-search-form-placeholder':'Search for krews','title-bar-dropdown-menu-profile-button':'Profile','title-bar-dropdown-menu-settings-button':'Settings','title-bar-dropdown-menu-logout-button':'Logout'});\n\n//# sourceURL=webpack:///./locales/en.yml?");
 
 /***/ }),
 
