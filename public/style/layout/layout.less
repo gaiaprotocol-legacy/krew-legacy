@@ -1,0 +1,27 @@
+.layout {
+    position  : relative;
+    height    : 100%;
+    margin    : auto;
+    overflow-x: hidden;
+    display   : flex;
+
+    @media @phone {
+        height        : auto;
+        display       : block;
+        padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    }
+
+    >.nav-bar {
+        flex-shrink : 0;
+        border-right: 1px solid #393636;
+    }
+
+    >main {
+        flex-grow : 1;
+        overflow-y: auto;
+
+        @media @phone {
+            overflow-y: visible;
+        }
+    }
+}

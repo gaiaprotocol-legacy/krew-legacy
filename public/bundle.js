@@ -746,6 +746,17 @@ eval("module.exports = __webpack_require__(/*! ../package.json */ \"../common-ap
 
 /***/ }),
 
+/***/ "./app/MaterialIcon.ts":
+/*!*****************************!*\
+  !*** ./app/MaterialIcon.ts ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ MaterialIcon)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n\nclass MaterialIcon extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    constructor(iconName) {\n        super(\"span.material-icon.material-symbols-outlined\");\n        this.text = iconName;\n    }\n}\n\n\n//# sourceURL=webpack:///./app/MaterialIcon.ts?");
+
+/***/ }),
+
 /***/ "./app/dev.ts":
 /*!********************!*\
   !*** ./app/dev.ts ***!
@@ -764,7 +775,29 @@ eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ initialize)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var sofi_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sofi-module */ \"../sofi-module/lib/index.js\");\n\n\ncommon_app_module__WEBPACK_IMPORTED_MODULE_0__.msg.setMessages({});\ncommon_app_module__WEBPACK_IMPORTED_MODULE_0__.MaterialIconSystem.launch();\nasync function initialize(config) {\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.AppInitializer.initialize(config.supabaseUrl, config.supabaseAnonKey, config.dev);\n    await common_app_module__WEBPACK_IMPORTED_MODULE_0__.SplashLoader.load(\"Loading...\", []);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/chat\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestChatView);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/posts\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestPostListView);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/post\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestPostView);\n}\n\n\n//# sourceURL=webpack:///./app/initialize.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ initialize)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var sofi_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sofi-module */ \"../sofi-module/lib/index.js\");\n/* harmony import */ var _layout_Layout_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./layout/Layout.js */ \"./app/layout/Layout.ts\");\n\n\n\ncommon_app_module__WEBPACK_IMPORTED_MODULE_0__.msg.setMessages({});\ncommon_app_module__WEBPACK_IMPORTED_MODULE_0__.MaterialIconSystem.launch();\nasync function initialize(config) {\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.AppInitializer.initialize(config.supabaseUrl, config.supabaseAnonKey, config.dev);\n    await common_app_module__WEBPACK_IMPORTED_MODULE_0__.SplashLoader.load(\"Loading...\", []);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"**\", _layout_Layout_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"], [\"test/**\"]);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/chat\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestChatView);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/posts\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestPostListView);\n    common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.route(\"test/post\", sofi_module__WEBPACK_IMPORTED_MODULE_1__.TestPostView);\n}\n\n\n//# sourceURL=webpack:///./app/initialize.ts?");
+
+/***/ }),
+
+/***/ "./app/layout/Layout.ts":
+/*!******************************!*\
+  !*** ./app/layout/Layout.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Layout)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var _NavBar_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NavBar.js */ \"./app/layout/NavBar.ts\");\n\n\nclass Layout extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.View {\n    static current;\n    static append(node) {\n        Layout.current.content.append(node);\n    }\n    navBar;\n    content;\n    constructor() {\n        super();\n        Layout.current = this;\n        common_app_module__WEBPACK_IMPORTED_MODULE_0__.BodyNode.append(this.container = (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\".layout\", this.navBar = new _NavBar_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"](), this.content = (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"main\")));\n    }\n}\n\n\n//# sourceURL=webpack:///./app/layout/Layout.ts?");
+
+/***/ }),
+
+/***/ "./app/layout/NavBar.ts":
+/*!******************************!*\
+  !*** ./app/layout/NavBar.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ NavBar)\n/* harmony export */ });\n/* harmony import */ var common_app_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! common-app-module */ \"../common-app-module/lib/index.js\");\n/* harmony import */ var _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../MaterialIcon.js */ \"./app/MaterialIcon.ts\");\n\n\nclass NavBar extends common_app_module__WEBPACK_IMPORTED_MODULE_0__.DomNode {\n    activatedButton;\n    constructor() {\n        super(\".nav-bar\");\n        this.append((0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"h1\", (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"img\", { src: \"/images/logo.png\" }), {\n            click: () => common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.go(\"/\"),\n        }), (0,common_app_module__WEBPACK_IMPORTED_MODULE_0__.el)(\"button.home.active\", new _MaterialIcon_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"](\"home\"), {\n            click: () => common_app_module__WEBPACK_IMPORTED_MODULE_0__.Router.go(\"/\"),\n        }));\n    }\n    activeButton(buttonName) {\n        this.activatedButton?.deleteClass(\"active\");\n        this.activatedButton = this.children.find((child) => child.hasClass(buttonName))?.addClass(\"active\");\n    }\n}\n\n\n//# sourceURL=webpack:///./app/layout/NavBar.ts?");
 
 /***/ }),
 
