@@ -15,14 +15,14 @@ users_public
 	updated_at - timestampz - nullable
 
 wallet_linking_nonces
-	user_id - uuid, fk to auth.user - auth.uid() - pk
+	user_id - uuid, fk to users_public.user_id - auth.uid() - pk
 	wallet_address - text - not null
 	nonce - uuid - gen_random_uuid()
 	created_at - timestampz - now()
 
 follows
-	follower_id - uuid, fk to auth.user - auth.uid() - pk
-	followee_id - uuid - pk
+	follower_id - uuid, fk to users_public.user_id - auth.uid() - pk
+	followee_id - uuid, fk to users_public.user_id - pk
 	followed_at - timestampz - now()
 
 total_key_balances
