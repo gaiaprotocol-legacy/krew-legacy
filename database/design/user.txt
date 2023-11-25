@@ -13,3 +13,8 @@ users_public
 	blocked - bool - false
 	created_at - timestampz - now()
 	updated_at - timestampz - nullable
+
+follows
+	follower_id - uuid - auth.uid() - pk
+	followee_id - uuid - pk
+	followed_at - timestampz - now()

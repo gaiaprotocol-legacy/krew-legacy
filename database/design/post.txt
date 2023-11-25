@@ -1,0 +1,23 @@
+posts
+	id - int8 - pk
+	target - int2 - nullbale
+	author - uuid - auth.uid() - fk users_public.user_id
+	message - text - not null
+	translated - jsonb - nullbale
+	rich - jsonb - nullable
+	post_ref - int8 - nullable
+	comment_count - int4 - 0
+	repost_count - int4 - 0
+	like_count - int4 - 0
+	created_at - timestampz - now()
+	updated_at - timestampz - nullable
+
+reposts
+	post_id - int8 - pk
+	user_id - uuid - auth.uid() - pk
+	created_at - timestampz - now()
+
+post_likes
+	post_id - int8 - pk
+	user_id - uuid - auth.uid() - pk
+	created_at - timestampz - now()
