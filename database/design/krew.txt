@@ -1,5 +1,6 @@
 krews
 	id - text - pk
+	owner - text - nullable
 	last_fetched_key_price - numeric - 10000000000000000
 	total_trading_key_volume - numeric - 0
 	total_earned_trading_fees - numeric - 0
