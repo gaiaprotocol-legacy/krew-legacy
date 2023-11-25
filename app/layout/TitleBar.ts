@@ -1,4 +1,5 @@
 import { DomNode, el, Router } from "common-app-module";
+import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
 export default class TitleBar extends DomNode {
   constructor() {
@@ -7,6 +8,7 @@ export default class TitleBar extends DomNode {
       el("h1", el("img", { src: "/images/logo.png" }), {
         click: () => Router.go("/"),
       }),
+      KrewSignedUserManager.signed ? el("") : el(""),
     );
   }
 }
