@@ -110,6 +110,7 @@ button.component {
   justify-content: center;
   align-items: center;
   padding: 6px 0;
+  color: #25D366;
 }
 button.component.disabled {
   cursor: not-allowed;
@@ -118,7 +119,6 @@ button.component.contained {
   border-radius: 6px;
   border: 1px solid #25D366;
   background: rgba(37, 211, 102, 0.12);
-  color: #25D366;
 }
 .dropdown-menu.component {
   position: fixed;
@@ -156,6 +156,35 @@ button.component.contained {
 .splash-screen.component > img {
   width: 120px;
   height: 120px;
+}
+.chat-message-form {
+  border-top: 1px solid var(--line-color);
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+}
+.chat-message-form > main {
+  flex-grow: 1;
+  display: flex;
+}
+.chat-message-form > main > section.rich {
+  display: flex;
+  padding: 0 16px;
+}
+.chat-message-form > main > form {
+  flex-grow: 1;
+  display: flex;
+}
+.chat-message-form > main > form > .input-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: text;
+}
+.chat-message-form > main > form > button.send {
+  border-left: 1px solid var(--line-color);
+  padding: 0 30px;
 }
 .post-display.sofi-component {
   display: flex;
@@ -572,7 +601,11 @@ p {
   overflow-y: scroll;
 }
 .chat-room-list-item {
-  padding: 20px 27px;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 27px;
   cursor: pointer;
   border-bottom: 1px solid var(--line-color);
   background-color: var(--bg2-color);
@@ -590,6 +623,18 @@ p {
   overflow: hidden;
   width: 0;
   flex-grow: 1;
+}
+.topic-chat-room-header {
+  height: 90px;
+  border-bottom: 1px solid var(--line-color);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+.topic-chat-room-header > h1 {
+  font-size: 22px;
+  font-weight: 500;
+  text-transform: capitalize;
 }
 .topic-chat-room-list-item > h3 {
   color: #FFF;
