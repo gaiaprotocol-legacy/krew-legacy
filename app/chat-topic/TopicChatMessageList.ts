@@ -31,6 +31,7 @@ export default class TopicChatMessageList extends ChatMessageList {
           table: "topic_chat_messages",
           filter: "topic=eq." + topic,
         },
+        // The response indicating that a message has been sent arrives before the real-time message itself.
         (payload: any) => {
           console.log(payload);
         },

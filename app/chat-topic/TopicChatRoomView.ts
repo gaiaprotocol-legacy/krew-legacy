@@ -8,11 +8,11 @@ import TopicChatRoomHeader from "./TopicChatRoomHeader.js";
 export default class TopicChatRoomView extends ChatRoomView {
   constructor(params: ViewParams) {
     super(".topic-chat-room-view");
-    this.render(params.topic!);
+    this.render(params.topic ?? "general");
   }
 
   public changeParams(params: ViewParams): void {
-    this.render(params.topic!);
+    this.render(params.topic ?? "general");
   }
 
   private async render(topic: string) {

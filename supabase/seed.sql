@@ -354,7 +354,7 @@ CREATE POLICY "can write only authed" ON "public"."posts" FOR INSERT TO "authent
                    FROM "public"."users_public"
                   WHERE ("users_public"."user_id" = "auth"."uid"()))))))))))))));
 
-CREATE POLICY "can write only authed" ON "public"."topic_chat_messages" FOR INSERT TO "authenticated" WITH CHECK ((((("message" <> ''::"text") AND ("length"("message") <= 1000)) OR ("rich" IS NOT NULL)) AND ("author" = "auth"."uid"())));
+CREATE POLICY "can write only authed" ON "public"."topic_chat_messages" FOR INSERT TO "authenticated" WITH CHECK ((((("message" IS NOT NULL) AND ("message" <> ''::"text") AND ("length"("message") <= 1000)) OR (("message" IS NULL) AND ("rich" IS NOT NULL))) AND ("author" = "auth"."uid"())));
 
 CREATE POLICY "can write only holder or owner" ON "public"."krew_chat_messages" FOR INSERT TO "authenticated" WITH CHECK ((((("message" <> ''::"text") AND ("length"("message") < 1000)) OR ("rich" IS NOT NULL)) AND ("author" = "auth"."uid"()) AND ((( SELECT "krews"."owner"
    FROM "public"."krews"
@@ -398,7 +398,7 @@ CREATE POLICY "view everyone" ON "public"."post_likes" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."reposts" FOR SELECT USING (true);
 
-CREATE POLICY "view everyone" ON "public"."topic_chat_messages" FOR INSERT WITH CHECK (true);
+CREATE POLICY "view everyone" ON "public"."topic_chat_messages" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."topics" FOR SELECT USING (true);
 
