@@ -543,10 +543,10 @@ body {
 }
 .chat-room-view {
   position: absolute;
-  left: 510px;
-  top: 20px;
-  width: calc(100% - 530px);
-  height: calc(100% - 40px);
+  left: 500px;
+  top: 65px;
+  width: calc(100% - 820px);
+  height: calc(100% - 65px);
   display: flex;
   flex-direction: column;
 }
