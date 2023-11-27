@@ -1,12 +1,14 @@
 .chats-view {
-    width     : 410px;
-    height    : 100%;
-    overflow-y: scroll;
+    width       : 410px;
+    height      : 100%;
+    overflow-y  : scroll;
+    border-right: 1px solid var(--line-color);
 
     @media @phone {
-        width     : 100%;
-        height    : auto;
-        overflow-y: visible;
+        width       : 100%;
+        height      : auto;
+        overflow-y  : visible;
+        border-right: none;
     }
 
     >main {

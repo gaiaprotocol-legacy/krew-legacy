@@ -244,6 +244,7 @@ button.component.contained {
 :root {
   --bg-color: #171821;
   --text-color: #B5BFD6;
+  --line-color: #393636;
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: 'Inter', sans-serif;
@@ -322,7 +323,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 1;
-  border-right: 1px solid #393636;
+  border-right: 1px solid var(--line-color);
 }
 @media only screen and (max-width: 859px) {
   .nav-bar {
@@ -338,7 +339,7 @@ body {
     justify-content: space-between;
     gap: 0;
     border-right: none;
-    border-top: 1px solid #393636;
+    border-top: 1px solid var(--line-color);
   }
 }
 .nav-bar::before,
@@ -391,7 +392,7 @@ body {
 .title-bar {
   height: 65px;
   padding-right: 55px;
-  border-bottom: 1px solid #393636;
+  border-bottom: 1px solid var(--line-color);
   display: flex;
   align-items: center;
   gap: 24px;
@@ -404,7 +405,7 @@ body {
   cursor: pointer;
   width: 90px;
   height: 100%;
-  border-right: 1px solid #393636;
+  border-right: 1px solid var(--line-color);
 }
 .title-bar > h1 > img {
   width: 55px;
@@ -474,7 +475,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 1;
-  border-left: 1px solid #393636;
+  border-left: 1px solid var(--line-color);
 }
 .posts-view {
   position: relative;
@@ -522,12 +523,14 @@ body {
   width: 410px;
   height: 100%;
   overflow-y: scroll;
+  border-right: 1px solid var(--line-color);
 }
 @media only screen and (max-width: 859px) {
   .chats-view {
     width: 100%;
     height: auto;
     overflow-y: visible;
+    border-right: none;
   }
 }
 .chats-view > main {
@@ -566,5 +569,30 @@ body {
   height: 0px;
   flex-grow: 1;
   overflow-y: scroll;
+}
+.chat-room-list-item {
+  padding: 20px 27px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--line-color);
+}
+.chat-room-list-item .last-message-info {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #474B54;
+}
+.chat-room-list-item .last-message-info > .message {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 0;
+  flex-grow: 1;
+}
+.topic-chat-room-list-item > h3 {
+  color: #FFF;
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: capitalize;
 }
 
