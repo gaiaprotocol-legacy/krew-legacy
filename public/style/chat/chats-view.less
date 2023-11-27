@@ -1,51 +1,23 @@
 .chats-view {
-    padding   : 31px 20px 31px 30px;
     width     : 410px;
     height    : 100%;
     overflow-y: scroll;
 
     @media @phone {
-        padding   : 20px;
         width     : 100%;
         height    : auto;
         overflow-y: visible;
     }
 
-    >h1 {
-        font-feature-settings: 'clig'off, 'liga'off;
-        font-family          : Quicksand;
-        font-size            : 22px;
-        font-style           : normal;
-        font-weight          : 700;
-        line-height          : normal;
-        text-transform       : capitalize;
-        margin-bottom        : 40px;
-
-        @media @phone {
-            display: none;
-        }
-    }
-
     >main {
         display       : flex;
         flex-direction: column;
-        gap           : 20px;
 
         >section {
             display       : flex;
             flex-direction: column;
-            padding       : 20px;
-            gap           : 20px;
 
-            >h2 {
-                font-feature-settings: 'clig'off, 'liga'off;
-                font-family          : Quicksand;
-                font-size            : 18px;
-                font-style           : normal;
-                font-weight          : 700;
-                line-height          : normal;
-                text-transform       : capitalize;
-            }
+            >h2 {}
         }
     }
 }

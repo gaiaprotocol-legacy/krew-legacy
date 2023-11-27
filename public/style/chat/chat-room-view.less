@@ -1,0 +1,30 @@
+.chat-room-view {
+    position      : absolute;
+    left          : 510px;
+    top           : 20px;
+    width         : calc(100% - 530px);
+    height        : calc(100% - 40px);
+    display       : flex;
+    flex-direction: column;
+
+    @media @phone {
+        position      : fixed;
+        border-radius : 0;
+        left          : 0;
+        top           : 0;
+        width         : 100%;
+        height        : 100%;
+        z-index       : 999991;
+        padding-bottom: env(safe-area-inset-bottom);
+
+        &.mobile-hidden {
+            display: none;
+        }
+    }
+
+    >.chat-message-list {
+        height    : 0px;
+        flex-grow : 1;
+        overflow-y: scroll;
+    }
+}
