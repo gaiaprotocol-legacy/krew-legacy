@@ -109,6 +109,7 @@ button.component {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 6px 0;
 }
 button.component.disabled {
   cursor: not-allowed;
@@ -243,6 +244,7 @@ button.component.contained {
 }
 :root {
   --bg-color: #171821;
+  --bg2-color: #1C1D26;
   --text-color: #B5BFD6;
   --line-color: #393636;
   background-color: var(--bg-color);
@@ -253,6 +255,9 @@ button.component.contained {
 html,
 body {
   height: 100%;
+}
+p {
+  line-height: 1.6;
 }
 .profile-image {
   flex-shrink: 0;
@@ -432,7 +437,6 @@ body {
 }
 .title-bar > button.sign-in {
   width: 120px;
-  height: 32px;
 }
 .title-bar-search-form > label {
   display: flex;
@@ -524,6 +528,8 @@ body {
   height: 100%;
   overflow-y: scroll;
   border-right: 1px solid var(--line-color);
+  display: flex;
+  flex-direction: column;
 }
 @media only screen and (max-width: 859px) {
   .chats-view {
@@ -533,13 +539,8 @@ body {
     border-right: none;
   }
 }
-.chats-view > main {
-  display: flex;
-  flex-direction: column;
-}
-.chats-view > main > section {
-  display: flex;
-  flex-direction: column;
+.chats-view > .login-required {
+  margin: 16px;
 }
 .chat-room-view {
   position: absolute;
@@ -574,6 +575,7 @@ body {
   padding: 20px 27px;
   cursor: pointer;
   border-bottom: 1px solid var(--line-color);
+  background-color: var(--bg2-color);
 }
 .chat-room-list-item .last-message-info {
   margin-top: 4px;
@@ -594,5 +596,19 @@ body {
   font-size: 18px;
   font-weight: 500;
   text-transform: capitalize;
+}
+.login-required {
+  background-color: var(--bg2-color);
+  border: 1px solid var(--line-color);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+}
+.login-required > main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 

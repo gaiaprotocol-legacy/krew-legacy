@@ -1,5 +1,5 @@
 user-not-found-message: User not found
-login-required-message: This page requires login. Would you like to login?
+login-required-message: Login required. Would you like to login?
 login-required-login-button: Login with 𝕏
 
 title-bar-sign-in-button: Sign In
@@ -7,9 +7,6 @@ title-bar-search-form-placeholder: Search for krews
 title-bar-dropdown-menu-profile-button: Profile
 title-bar-dropdown-menu-settings-button: Settings
 title-bar-dropdown-menu-logout-button: Logout
-
-chats-view-title: Chats
-chats-view-general-section-title: General
 
 topic-chat-room-list-empty-message: No chat rooms for topics
 

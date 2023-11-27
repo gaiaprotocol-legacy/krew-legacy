@@ -10,18 +10,10 @@ export default class ChatsView extends View {
     Layout.append(
       this.container = el(
         ".chats-view",
-        el("h1", msg("chats-view-title")),
-        el(
-          "main",
-          el(
-            "section",
-            el("h2", msg("chats-view-general-section-title")),
-            new TopicChatRoomList(),
-          ),
-          ...(!KrewSignedUserManager.signed ? [new LoginRequiredDisplay()] : [
-            //TODO: krew chat room list
-          ]),
-        ),
+        new TopicChatRoomList(),
+        ...(!KrewSignedUserManager.signed ? [new LoginRequiredDisplay()] : [
+          //TODO: krew chat room list
+        ]),
       ),
     );
   }
