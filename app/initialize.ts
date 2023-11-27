@@ -1,5 +1,6 @@
 import {
   AppInitializer,
+  BodyNode,
   el,
   MaterialIconSystem,
   msg,
@@ -12,12 +13,15 @@ import messages_ja from "../locales/ja.yml";
 import messages_zh from "../locales/zh.yml";
 import messages_zh_HK from "../locales/zh_HK.yml";
 import messages_zh_TW from "../locales/zh_TW.yml";
+import TopicChatRoomView from "./chat-topic/TopicChatRoomView.js";
+import ChatsView from "./chat/ChatsView.js";
 import Config from "./Config.js";
 import EnvironmentManager from "./EnvironmentManager.js";
 import Layout from "./layout/Layout.js";
 import PostsView from "./post/PostsView.js";
 import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
 import WalletManager from "./wallet/WalletManager.js";
+import KrewLoadingAnimation from "./KrewLoadingAnimation.js";
 
 msg.setMessages({
   en: messages_en,
@@ -47,7 +51,13 @@ export default async function initialize(config: Config) {
   Router.route("**", Layout, ["test/**"]);
   Router.route("", PostsView);
 
+  Router.route(["chats", "chat/{topic}"], ChatsView);
+  Router.route(["chats", "chat/general"], TopicChatRoomView);
+  //Router.route("chat/{krewId}", KrewChatRoomView, ["chat/general"]);
+
   Router.route("test/chat", TestChatView);
   Router.route("test/posts", TestPostListView);
   Router.route("test/post", TestPostView);
+
+  new KrewLoadingAnimation().appendTo(BodyNode);
 }

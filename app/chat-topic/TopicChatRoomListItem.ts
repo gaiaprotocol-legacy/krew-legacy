@@ -1,0 +1,16 @@
+import { el, Router } from "common-app-module";
+import { Topic } from "sofi-module";
+import ChatRoomListItem from "../chat/ChatRoomListItem.js";
+
+export default class TopicChatRoomListItem extends ChatRoomListItem {
+  constructor(topic: Topic) {
+    super(".topic-chat-room-list-item", topic);
+    this.append(
+      el("h3", topic.topic),
+      this.lastMessageDisplay,
+    ).onDom(
+      "click",
+      () => Router.go(`/chat/${topic.topic}`),
+    );
+  }
+}
