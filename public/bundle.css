@@ -267,6 +267,15 @@ body {
     height: 34px;
   }
 }
+.krew-loading-animation {
+  display: flex;
+  justify-content: center;
+}
+.krew-loading-animation > .lottie-animation {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
 .layout {
   position: relative;
   height: 100%;

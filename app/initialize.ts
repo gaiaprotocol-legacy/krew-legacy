@@ -1,6 +1,5 @@
 import {
   AppInitializer,
-  BodyNode,
   el,
   MaterialIconSystem,
   msg,
@@ -21,7 +20,6 @@ import Layout from "./layout/Layout.js";
 import PostsView from "./post/PostsView.js";
 import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
 import WalletManager from "./wallet/WalletManager.js";
-import KrewLoadingAnimation from "./KrewLoadingAnimation.js";
 
 msg.setMessages({
   en: messages_en,
@@ -58,6 +56,4 @@ export default async function initialize(config: Config) {
   Router.route("test/chat", TestChatView);
   Router.route("test/posts", TestPostListView);
   Router.route("test/post", TestPostView);
-
-  new KrewLoadingAnimation().appendTo(BodyNode);
 }

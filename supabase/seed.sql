@@ -189,6 +189,16 @@ CREATE TABLE IF NOT EXISTS "public"."reposts" (
 
 ALTER TABLE "public"."reposts" OWNER TO "postgres";
 
+CREATE TABLE IF NOT EXISTS "public"."topics" (
+    "topic" "text" NOT NULL,
+    "last_message" "text",
+    "last_message_sent_at" timestamp with time zone DEFAULT '-infinity'::timestamp with time zone NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone
+);
+
+ALTER TABLE "public"."topics" OWNER TO "postgres";
+
 CREATE TABLE IF NOT EXISTS "public"."total_key_balances" (
     "wallet_address" "text" NOT NULL,
     "total_key_balance" bigint DEFAULT '0'::bigint NOT NULL,
@@ -249,6 +259,9 @@ ALTER TABLE ONLY "public"."posts"
 
 ALTER TABLE ONLY "public"."reposts"
     ADD CONSTRAINT "reposts_pkey" PRIMARY KEY ("post_id", "user_id");
+
+ALTER TABLE ONLY "public"."topics"
+    ADD CONSTRAINT "topics_pkey" PRIMARY KEY ("topic");
 
 ALTER TABLE ONLY "public"."total_key_balances"
     ADD CONSTRAINT "total_key_balances_pkey" PRIMARY KEY ("wallet_address");
@@ -348,6 +361,8 @@ ALTER TABLE "public"."reposts" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE "public"."topic_chat_messages" ENABLE ROW LEVEL SECURITY;
 
+ALTER TABLE "public"."topics" ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE "public"."total_key_balances" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE "public"."users_public" ENABLE ROW LEVEL SECURITY;
@@ -363,6 +378,8 @@ CREATE POLICY "view everyone" ON "public"."post_likes" FOR SELECT USING (true);
 CREATE POLICY "view everyone" ON "public"."reposts" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."topic_chat_messages" FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "view everyone" ON "public"."topics" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."total_key_balances" FOR SELECT USING (true);
 
@@ -432,6 +449,10 @@ GRANT ALL ON SEQUENCE "public"."posts_id_seq" TO "service_role";
 GRANT ALL ON TABLE "public"."reposts" TO "anon";
 GRANT ALL ON TABLE "public"."reposts" TO "authenticated";
 GRANT ALL ON TABLE "public"."reposts" TO "service_role";
+
+GRANT ALL ON TABLE "public"."topics" TO "anon";
+GRANT ALL ON TABLE "public"."topics" TO "authenticated";
+GRANT ALL ON TABLE "public"."topics" TO "service_role";
 
 GRANT ALL ON TABLE "public"."total_key_balances" TO "anon";
 GRANT ALL ON TABLE "public"."total_key_balances" TO "authenticated";
