@@ -104,12 +104,48 @@ meter {
 /*!*********************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
   \*********************************************************************************************************************************************/
+.popup-background {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999998;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(23, 24, 33, 0.9);
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  padding: 20px 0;
+}
+.popup.component {
+  padding: 30px;
+  max-width: 532px;
+  width: 90%;
+  margin: auto;
+  border: 1px solid var(--line-color);
+  background-color: var(--bg2-color);
+  border-radius: 16px;
+}
+.popup.component > header > h1 {
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 500;
+}
+.popup.component > main {
+  margin-top: 16px;
+}
+.popup.component > footer {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
 button.component {
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 6px 0;
+  padding: 6px 16px;
   color: #25D366;
 }
 button.component.disabled {
@@ -157,6 +193,66 @@ button.component.contained {
   width: 120px;
   height: 120px;
 }
+.chat-message-display {
+  border-radius: 0 16px 16px 16px;
+  border: 1px solid var(--line-color);
+  background-color: var(--bg2-color);
+  padding: 16px;
+}
+.chat-message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.chat-message-list-item {
+  display: flex;
+  gap: 10px;
+}
+.chat-message-list-item > .author-profile-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+@media only screen and (max-width: 859px) {
+  .chat-message-list-item > .author-profile-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.chat-message-list-item > main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: start;
+}
+.chat-message-list-item > main > header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.chat-message-list-item > main > header > .author > .name {
+  color: #fff;
+  font-weight: 500;
+}
+.chat-message-list-item > main > header > .date {
+  color: #474B54;
+  font-size: 12px;
+}
+.chat-message-list-item.authored {
+  justify-content: end;
+}
+.chat-message-list-item.authored > main {
+  align-items: end;
+}
+.chat-message-list-item.authored > main > .chat-message-display {
+  border-radius: 16px 0 16px 16px;
+}
 .chat-message-form {
   border-top: 1px solid var(--line-color);
   height: 90px;
@@ -170,6 +266,10 @@ button.component.contained {
 .chat-message-form > main > section.rich {
   display: flex;
   padding: 0 16px;
+  align-items: center;
+}
+.chat-message-form > main > section.rich > button {
+  cursor: pointer;
 }
 .chat-message-form > main > form {
   flex-grow: 1;
@@ -599,6 +699,7 @@ p {
   height: 0px;
   flex-grow: 1;
   overflow-y: scroll;
+  padding: 16px;
 }
 .chat-room-list-item {
   height: 90px;

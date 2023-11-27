@@ -1,6 +1,8 @@
 import { ButtonType } from "common-app-module";
 import { ChatMessageForm } from "sofi-module";
 import MaterialIcon from "../MaterialIcon.js";
+import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
+import LoginRequiredPopup from "../user/LoginRequiredPopup.js";
 import TopicChatMessageService from "./TopicChatMessageService.js";
 
 export default class TopicChatMessageForm extends ChatMessageForm {
@@ -11,6 +13,10 @@ export default class TopicChatMessageForm extends ChatMessageForm {
   }
 
   protected async sendMessage(message: string, files: File[]) {
+    if (!KrewSignedUserManager.signed) {
+      new LoginRequiredPopup();
+      throw new Error("You must be signed in to send messages");
+    }
     const data = await TopicChatMessageService.sendMessage(
       this.topic,
       message,
