@@ -690,21 +690,31 @@ p {
 .posts-view {
   position: relative;
   height: 100%;
-  max-width: 1000px;
-  margin: auto;
-  padding-top: 20px;
 }
 @media only screen and (max-width: 859px) {
   .posts-view {
     height: auto;
   }
 }
-.posts-view > .form-container {
+.posts-view > main {
+  padding: 20px 0;
+  height: 100%;
+  overflow-y: auto;
+}
+@media only screen and (max-width: 859px) {
+  .posts-view > main {
+    height: auto;
+    overflow-y: visible;
+  }
+}
+.posts-view > main > .form-container {
+  max-width: 1000px;
+  margin: auto;
   padding: 20px;
   border-radius: 20px;
   background-color: var(--bg2-color);
 }
-.posts-view > .form-container > .post-target-selector > select {
+.posts-view > main > .form-container > .post-target-selector > select {
   border: 1px solid var(--line-color);
   border-radius: 16px;
   padding: 12px 20px;
@@ -716,14 +726,21 @@ p {
   background-size: 5px 5px, 5px 5px, 1px 1.5em;
   background-repeat: no-repeat;
 }
-.posts-view > .form-container > .post-target-selector > select:focus {
+.posts-view > main > .form-container > .post-target-selector > select:focus {
   background-image: linear-gradient(45deg, gray 50%, transparent 50%), linear-gradient(135deg, transparent 50%, gray 50%), linear-gradient(to right, gray, gray);
   background-position: calc(100% - 15px) calc(1em + 4px), calc(100% - 20px) calc(1em + 4px), calc(100% - 2.5em) calc(0.5em + 4px);
   background-size: 5px 5px, 5px 5px, 1px 1.5em;
   background-repeat: no-repeat;
 }
-.posts-view > .form-container > .post-form {
+.posts-view > main > .form-container > .post-form {
   margin-top: 20px;
+}
+.posts-view > main > .post-container {
+  max-width: 1000px;
+  margin: auto;
+  margin-top: 20px;
+  border-radius: 20px;
+  background-color: var(--bg2-color);
 }
 .posts-view > button.post {
   position: absolute;

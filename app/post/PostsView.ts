@@ -26,50 +26,53 @@ export default class PostsView extends View {
       this.container = el(
         ".posts-view",
         el(
-          ".form-container",
-          this.targetSelector = new PostTargetSelector(),
-          this.form = new KrewPostForm(),
-        ),
-        el(
           "main",
-          KrewSignedUserManager.signed
-            ? this.tabs = new Tabs(
-              "posts-view-tabs",
-              KrewSignedUserManager.walletLinked
-                ? [
-                  { id: "global", label: "Global" },
-                  { id: "following", label: "Following" },
-                  { id: "held", label: "Held" },
-                ]
-                : [
-                  { id: "global", label: "Global" },
-                  { id: "following", label: "Following" },
-                ],
-            )
-            : undefined,
-          this.globalPostList = new GlobalPostList<KrewPost>(
-            KrewPostService,
-            {
-              signedUserId: KrewSignedUserManager.user?.user_id,
-              wait: true,
-            },
-            KrewPostInteractions,
-            new KrewLoadingAnimation(),
+          el(
+            ".form-container",
+            this.targetSelector = new PostTargetSelector(),
+            this.form = new KrewPostForm(),
           ),
-          KrewSignedUserManager.signed
-            ? this.followingPostList = new FollowingPostList(
+          el(
+            ".post-container",
+            KrewSignedUserManager.signed
+              ? this.tabs = new Tabs(
+                "posts-view-tabs",
+                KrewSignedUserManager.walletLinked
+                  ? [
+                    { id: "global", label: "Global" },
+                    { id: "following", label: "Following" },
+                    { id: "held", label: "Held" },
+                  ]
+                  : [
+                    { id: "global", label: "Global" },
+                    { id: "following", label: "Following" },
+                  ],
+              )
+              : undefined,
+            this.globalPostList = new GlobalPostList<KrewPost>(
               KrewPostService,
               {
-                signedUserId: KrewSignedUserManager.user?.user_id!,
+                signedUserId: KrewSignedUserManager.user?.user_id,
                 wait: true,
               },
               KrewPostInteractions,
               new KrewLoadingAnimation(),
-            )
-            : undefined,
-          /*KrewSignedUserManager.walletLinked
+            ),
+            KrewSignedUserManager.signed
+              ? this.followingPostList = new FollowingPostList(
+                KrewPostService,
+                {
+                  signedUserId: KrewSignedUserManager.user?.user_id!,
+                  wait: true,
+                },
+                KrewPostInteractions,
+                new KrewLoadingAnimation(),
+              )
+              : undefined,
+            /*KrewSignedUserManager.walletLinked
             ? this.keyHeldPostList = new KeyHeldPostList()
             : undefined,*/
+          ),
         ),
         el("button.post", new MaterialIcon("add"), {
           click: () => new PostPopup(),
@@ -86,7 +89,7 @@ export default class PostsView extends View {
       this.globalPostList.show();
     } else {
       this.tabs.on("select", (id: string) => {
-        [this.globalPostList, this.followingPostList/*, this.keyHeldPostList*/]
+        [this.globalPostList, this.followingPostList /*, this.keyHeldPostList*/]
           .forEach((list) => list?.hide());
         if (id === "global") this.globalPostList.show();
         else if (id === "following") this.followingPostList?.show();
