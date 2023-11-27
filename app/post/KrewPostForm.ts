@@ -8,9 +8,9 @@ export default class KrewPostForm extends PostForm {
   public target: number = PostTarget.EVERYONE;
 
   constructor(
-    private parentPostId: number | undefined,
-    focus: boolean,
-    private callback: (post: KrewPost) => void,
+    private parentPostId?: number,
+    focus?: boolean,
+    private callback?: (post: KrewPost) => void,
   ) {
     super(KrewSignedUserManager.user?.profile_image_thumbnail ?? "", focus);
   }
@@ -28,6 +28,6 @@ export default class KrewPostForm extends PostForm {
       },
     });
 
-    this.callback(post);
+    if (this.callback) this.callback(post);
   }
 }

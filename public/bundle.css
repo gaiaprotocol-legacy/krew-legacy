@@ -118,7 +118,7 @@ meter {
   padding: 20px 0;
 }
 .popup.component {
-  padding: 30px;
+  padding: 20px 30px;
   max-width: 532px;
   width: 90%;
   margin: auto;
@@ -381,6 +381,56 @@ button.component.contained {
 .post-thread.sofi-component > .post-form {
   border-bottom: 1px solid #242424;
 }
+.post-form.sofi-component > main {
+  display: flex;
+  gap: 20px;
+}
+@media only screen and (max-width: 859px) {
+  .post-form.sofi-component > main {
+    gap: 12px;
+  }
+}
+.post-form.sofi-component > main > .author-profile-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+}
+@media only screen and (max-width: 859px) {
+  .post-form.sofi-component > main > .author-profile-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.post-form.sofi-component > main > form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.post-form.sofi-component > main > form > .message-input {
+  border: 1px solid var(--line-color);
+  padding: 12px;
+  border-radius: 12px;
+  min-height: 100px;
+}
+.post-form.sofi-component > footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 70px;
+}
+@media only screen and (max-width: 859px) {
+  .post-form.sofi-component > footer {
+    padding-left: 62px;
+  }
+}
+.post-form.sofi-component > footer > section.rich > button {
+  padding: 4px;
+  cursor: pointer;
+}
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' 0, 'opsz' 24;
 }
@@ -640,11 +690,40 @@ p {
 .posts-view {
   position: relative;
   height: 100%;
+  max-width: 1000px;
+  margin: auto;
+  padding-top: 20px;
 }
 @media only screen and (max-width: 859px) {
   .posts-view {
     height: auto;
   }
+}
+.posts-view > .form-container {
+  padding: 20px;
+  border-radius: 20px;
+  background-color: var(--bg2-color);
+}
+.posts-view > .form-container > .post-target-selector > select {
+  border: 1px solid var(--line-color);
+  border-radius: 16px;
+  padding: 12px 20px;
+  padding-right: 52px;
+  font-weight: 500;
+  text-transform: capitalize;
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%), linear-gradient(135deg, gray 50%, transparent 50%), linear-gradient(to right, gray, gray);
+  background-position: calc(100% - 20px) calc(1em + 6px), calc(100% - 15px) calc(1em + 6px), calc(100% - 2.5em) calc(0.5em + 4px);
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+}
+.posts-view > .form-container > .post-target-selector > select:focus {
+  background-image: linear-gradient(45deg, gray 50%, transparent 50%), linear-gradient(135deg, transparent 50%, gray 50%), linear-gradient(to right, gray, gray);
+  background-position: calc(100% - 15px) calc(1em + 4px), calc(100% - 20px) calc(1em + 4px), calc(100% - 2.5em) calc(0.5em + 4px);
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+}
+.posts-view > .form-container > .post-form {
+  margin-top: 20px;
 }
 .posts-view > button.post {
   position: absolute;
@@ -678,6 +757,35 @@ p {
 }
 .posts-view > button.post:active {
   opacity: 1;
+}
+.post-popup > header {
+  display: flex;
+  justify-content: space-between;
+}
+.post-popup > header > .post-target-selector > select {
+  border: 1px solid var(--line-color);
+  border-radius: 16px;
+  padding: 12px 20px;
+  padding-right: 52px;
+  font-weight: 500;
+  text-transform: capitalize;
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%), linear-gradient(135deg, gray 50%, transparent 50%), linear-gradient(to right, gray, gray);
+  background-position: calc(100% - 20px) calc(1em + 6px), calc(100% - 15px) calc(1em + 6px), calc(100% - 2.5em) calc(0.5em + 4px);
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+}
+.post-popup > header > .post-target-selector > select:focus {
+  background-image: linear-gradient(45deg, gray 50%, transparent 50%), linear-gradient(135deg, transparent 50%, gray 50%), linear-gradient(to right, gray, gray);
+  background-position: calc(100% - 15px) calc(1em + 4px), calc(100% - 20px) calc(1em + 4px), calc(100% - 2.5em) calc(0.5em + 4px);
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+}
+.post-popup > header > button.close {
+  padding: 4px;
+  cursor: pointer;
+}
+.post-popup > .post-form {
+  margin-top: 20px;
 }
 .chats-view {
   width: 410px;

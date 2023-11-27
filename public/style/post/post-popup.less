@@ -1,18 +1,7 @@
-.posts-view {
-    position   : relative;
-    height     : 100%;
-    max-width  : 1000px;
-    margin     : auto;
-    padding-top: 20px;
-
-    @media @phone {
-        height: auto;
-    }
-
-    >.form-container {
-        padding         : 20px;
-        border-radius   : 20px;
-        background-color: var(--bg2-color);
+.post-popup {
+    >header {
+        display        : flex;
+        justify-content: space-between;
 
         >.post-target-selector {
             >select {
@@ -55,44 +44,13 @@
             }
         }
 
-        >.post-form {
-            margin-top: 20px;
+        >button.close {
+            padding: 4px;
+            cursor : pointer;
         }
     }
 
-    >button.post {
-        position        : absolute;
-        bottom          : 30px;
-        right           : 31px;
-        z-index         : 999997;
-        width           : 56px;
-        height          : 56px;
-        border-radius   : 50%;
-        box-shadow      : 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
-        display         : flex;
-        align-items     : center;
-        justify-content : center;
-        cursor          : pointer;
-        background-color: #25D366;
-        color           : #171821;
-        opacity         : 0.8;
-
-        @media @phone {
-            position: fixed;
-            bottom  : calc(110px + env(safe-area-inset-bottom));
-            right   : 20px;
-        }
-
-        >.icon {
-            font-size: 30px;
-        }
-
-        &:hover {
-            opacity: 1;
-        }
-
-        &:active {
-            opacity: 1;
-        }
+    >.post-form {
+        margin-top: 20px;
     }
 }
