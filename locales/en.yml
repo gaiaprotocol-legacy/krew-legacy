@@ -9,6 +9,18 @@ title-bar-dropdown-menu-profile-button: Profile
 title-bar-dropdown-menu-settings-button: Settings
 title-bar-dropdown-menu-logout-button: Logout
 
+post-target-everyone: Everyone
+post-target-key-holders: Key Holders
+
+post-form-posted-snackbar-message: Your post has been successfully published.
+post-form-posted-snackbar-button: View
+
+post-owner-menu-delete-button: Delete
+delete-post-confirm-title: Delete Post
+delete-post-confirm-message: Are you sure you want to delete this post?
+delete-post-confirm-delete-button: Delete
+delete-post-confirm-deleting-button: Deleting...
+
 topic-chat-room-list-empty-message: No chat rooms for topics
 
 chat-message-list-empty-message: No messages yet

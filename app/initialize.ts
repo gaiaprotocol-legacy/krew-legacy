@@ -2,11 +2,10 @@ import {
   AppInitializer,
   el,
   MaterialIconSystem,
-  msg,
   Router,
   SplashLoader,
 } from "common-app-module";
-import { TestChatView, TestPostListView, TestPostView } from "sofi-module";
+import { msg, TestChatView, TestPostListView, TestPostView } from "sofi-module";
 import messages_en from "../locales/en.yml";
 import messages_ja from "../locales/ja.yml";
 import messages_zh from "../locales/zh.yml";
