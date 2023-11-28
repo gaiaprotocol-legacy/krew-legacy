@@ -1,3 +1,16 @@
 .post-list.sofi-component {
-    
+    position      : relative;
+    display       : flex;
+    flex-direction: column;
+
+    &.hidden {
+        display: none;
+    }
+
+    &:empty::before {
+        content   : attr(data-empty-message);
+        text-align: center;
+        color     : #474B54;
+        padding   : 20px 0;
+    }
 }

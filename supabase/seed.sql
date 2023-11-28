@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS "public"."posts" (
     "message" "text" NOT NULL,
     "translated" "jsonb",
     "rich" "jsonb",
-    "post_ref" bigint,
+    "parent" bigint,
     "comment_count" integer DEFAULT 0 NOT NULL,
     "repost_count" integer DEFAULT 0 NOT NULL,
     "like_count" integer DEFAULT 0 NOT NULL,

@@ -104,6 +104,26 @@ meter {
 /*!*********************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
   \*********************************************************************************************************************************************/
+.tabs.component {
+  border-bottom: 1px solid var(--line-color);
+  display: flex;
+  gap: 60px;
+  padding: 10px 30px 0;
+}
+.tabs.component > .tab {
+  cursor: pointer;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  border-bottom: 3px solid transparent;
+}
+.tabs.component > .tab:hover {
+  color: var(--accent-color);
+}
+.tabs.component > .tab.active {
+  color: var(--accent-color);
+  border-bottom: 3px solid var(--accent-color);
+}
 .popup-background {
   position: fixed;
   left: 0;
@@ -379,7 +399,21 @@ button.component.contained {
 }
 .post-thread.sofi-component > .post-display,
 .post-thread.sofi-component > .post-form {
-  border-bottom: 1px solid #242424;
+  border-bottom: 1px solid var(--line-color);
+}
+.post-list.sofi-component {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.post-list.sofi-component.hidden {
+  display: none;
+}
+.post-list.sofi-component:empty::before {
+  content: attr(data-empty-message);
+  text-align: center;
+  color: #474B54;
+  padding: 20px 0;
 }
 .post-form.sofi-component > main {
   display: flex;
@@ -453,6 +487,7 @@ button.component.contained {
   --bg2-color: #1C1D26;
   --text-color: #B5BFD6;
   --line-color: #393636;
+  --accent-color: #25D366;
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: 'Inter', sans-serif;
