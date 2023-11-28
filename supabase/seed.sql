@@ -24,6 +24,65 @@ CREATE EXTENSION IF NOT EXISTS "supabase_vault" WITH SCHEMA "vault";
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
+CREATE OR REPLACE FUNCTION "public"."decrease_follow_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update users_public
+  set
+    follower_count = follower_count - 1
+  where
+    user_id = old.followee_id;
+  update users_public
+  set
+    following_count = following_count - 1
+  where
+    user_id = old.follower_id;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."decrease_follow_count"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."decrease_post_comment_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  IF old.parent IS NOT NULL THEN
+    update posts
+    set
+      comment_count = comment_count - 1
+    where
+      id = old.parent;
+  END IF;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."decrease_post_comment_count"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."decrease_post_like_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update posts
+  set
+    like_count = like_count - 1
+  where
+    id = old.post_id;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."decrease_post_like_count"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."decrease_repost_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update posts
+  set
+    repost_count = repost_count - 1
+  where
+    id = old.post_id;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."decrease_repost_count"() OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
     LANGUAGE "plpgsql"
     AS $$
@@ -159,6 +218,65 @@ END;
 $$;
 
 ALTER FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."increase_follow_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update users_public
+  set
+    follower_count = follower_count + 1
+  where
+    user_id = new.followee_id;
+  update users_public
+  set
+    following_count = following_count + 1
+  where
+    user_id = new.follower_id;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."increase_follow_count"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."increase_post_comment_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  IF new.parent IS NOT NULL THEN
+    update posts
+    set
+      comment_count = comment_count + 1
+    where
+      id = new.parent;
+  END IF;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."increase_post_comment_count"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."increase_post_like_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update posts
+  set
+    like_count = like_count + 1
+  where
+    id = new.post_id;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."increase_post_like_count"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."increase_repost_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update posts
+  set
+    repost_count = repost_count + 1
+  where
+    id = new.post_id;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."increase_repost_count"() OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."set_topic_last_message"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
@@ -431,6 +549,22 @@ ALTER TABLE ONLY "public"."users_public"
 ALTER TABLE ONLY "public"."wallet_linking_nonces"
     ADD CONSTRAINT "wallet_linking_nonces_pkey" PRIMARY KEY ("user_id");
 
+CREATE TRIGGER "decrease_follow_count" AFTER DELETE ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_follow_count"();
+
+CREATE TRIGGER "decrease_post_comment_count" AFTER DELETE ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_post_comment_count"();
+
+CREATE TRIGGER "decrease_post_like_count" AFTER DELETE ON "public"."post_likes" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_post_like_count"();
+
+CREATE TRIGGER "decrease_repost_count" AFTER DELETE ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_repost_count"();
+
+CREATE TRIGGER "increase_follow_count" AFTER INSERT ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."increase_follow_count"();
+
+CREATE TRIGGER "increase_post_comment_count" AFTER INSERT ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."increase_post_comment_count"();
+
+CREATE TRIGGER "increase_post_like_count" AFTER INSERT ON "public"."post_likes" FOR EACH ROW EXECUTE FUNCTION "public"."increase_post_like_count"();
+
+CREATE TRIGGER "increase_repost_count" AFTER INSERT ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."increase_repost_count"();
+
 CREATE TRIGGER "set_krew_key_holders_updated_at" BEFORE UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
 CREATE TRIGGER "set_krews_updated_at" BEFORE UPDATE ON "public"."krews" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
@@ -575,6 +709,22 @@ GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
 GRANT USAGE ON SCHEMA "public" TO "service_role";
 
+GRANT ALL ON FUNCTION "public"."decrease_follow_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."decrease_follow_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."decrease_follow_count"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."decrease_post_comment_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."decrease_post_comment_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."decrease_post_comment_count"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."decrease_post_like_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."decrease_post_like_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."decrease_post_like_count"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."decrease_repost_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."decrease_repost_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."decrease_repost_count"() TO "service_role";
+
 GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "service_role";
@@ -586,6 +736,22 @@ GRANT ALL ON FUNCTION "public"."get_global_posts"("last_post_id" bigint, "max_co
 GRANT ALL ON FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."increase_follow_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."increase_follow_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."increase_follow_count"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."increase_post_comment_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."increase_post_comment_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."increase_post_comment_count"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."increase_post_like_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."increase_post_like_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."increase_post_like_count"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."increase_repost_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."increase_repost_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."increase_repost_count"() TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."set_topic_last_message"() TO "anon";
 GRANT ALL ON FUNCTION "public"."set_topic_last_message"() TO "authenticated";
