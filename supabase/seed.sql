@@ -278,6 +278,19 @@ end;$$;
 
 ALTER FUNCTION "public"."increase_repost_count"() OWNER TO "postgres";
 
+CREATE OR REPLACE FUNCTION "public"."notify_follow_event"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+    insert into notifications (
+        user_id, triggered_by, type
+    ) values (
+        new.followee_id, new.follower_id, 2
+    );
+    return null;
+end;$$;
+
+ALTER FUNCTION "public"."notify_follow_event"() OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."set_notification_read_at"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$BEGIN
@@ -764,6 +777,10 @@ GRANT ALL ON FUNCTION "public"."increase_post_like_count"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."increase_repost_count"() TO "anon";
 GRANT ALL ON FUNCTION "public"."increase_repost_count"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."increase_repost_count"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."notify_follow_event"() TO "anon";
+GRANT ALL ON FUNCTION "public"."notify_follow_event"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."notify_follow_event"() TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "anon";
 GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "authenticated";
