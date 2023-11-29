@@ -311,6 +311,27 @@ end;$$;
 
 ALTER FUNCTION "public"."notify_post_comment_event"() OWNER TO "postgres";
 
+CREATE OR REPLACE FUNCTION "public"."notify_post_like_event"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$DECLARE
+    v_author UUID;
+BEGIN
+    SELECT author INTO v_author FROM posts WHERE id = new.post_id;
+    
+    IF v_author <> new.user_id THEN
+        INSERT INTO notifications (
+            user_id, triggered_by, type, source_id
+        ) VALUES (
+            v_author, new.user_id, 3, new.post_id
+        );
+    END IF;
+    
+    RETURN NULL;
+END;
+$$;
+
+ALTER FUNCTION "public"."notify_post_like_event"() OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."set_notification_read_at"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$BEGIN
@@ -805,6 +826,10 @@ GRANT ALL ON FUNCTION "public"."notify_follow_event"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."notify_post_comment_event"() TO "anon";
 GRANT ALL ON FUNCTION "public"."notify_post_comment_event"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."notify_post_comment_event"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."notify_post_like_event"() TO "anon";
+GRANT ALL ON FUNCTION "public"."notify_post_like_event"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."notify_post_like_event"() TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "anon";
 GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "authenticated";
