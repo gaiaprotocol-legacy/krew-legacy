@@ -278,6 +278,18 @@ end;$$;
 
 ALTER FUNCTION "public"."increase_repost_count"() OWNER TO "postgres";
 
+CREATE OR REPLACE FUNCTION "public"."set_notification_read_at"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$BEGIN
+  IF old.read = false AND new.read = true THEN
+    new.read_at := now();
+  END IF;
+  RETURN new;
+END;
+$$;
+
+ALTER FUNCTION "public"."set_notification_read_at"() OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."set_topic_last_message"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$begin
@@ -752,6 +764,10 @@ GRANT ALL ON FUNCTION "public"."increase_post_like_count"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."increase_repost_count"() TO "anon";
 GRANT ALL ON FUNCTION "public"."increase_repost_count"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."increase_repost_count"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "anon";
+GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."set_topic_last_message"() TO "anon";
 GRANT ALL ON FUNCTION "public"."set_topic_last_message"() TO "authenticated";
