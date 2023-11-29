@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "public"."notifications" (
     "id" bigint NOT NULL,
-    "user_id" "uuid" NOT NULL,
+    "user" "uuid" NOT NULL,
     "triggered_by" "uuid" NOT NULL,
     "type" smallint NOT NULL,
     "source_id" bigint,
@@ -27,9 +27,9 @@ ALTER TABLE ONLY "public"."notifications"
 ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_triggered_by_fkey" FOREIGN KEY ("triggered_by") REFERENCES "public"."users_public"("user_id");
 ALTER TABLE ONLY "public"."notifications"
-    ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_public"("user_id");
+    ADD CONSTRAINT "notifications_user_fkey" FOREIGN KEY ("user") REFERENCES "public"."users_public"("user_id");
 
-CREATE POLICY "can view only user" ON "public"."notifications" FOR SELECT TO "authenticated" USING (("user_id" = "auth"."uid"()));
+CREATE POLICY "can view only user" ON "public"."notifications" FOR SELECT TO "authenticated" USING (("user" = "auth"."uid"()));
 
 ALTER TABLE "public"."notifications" ENABLE ROW LEVEL SECURITY;
 
