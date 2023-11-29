@@ -678,9 +678,19 @@ CREATE TRIGGER "increase_post_like_count" AFTER INSERT ON "public"."post_likes" 
 
 CREATE TRIGGER "increase_repost_count" AFTER INSERT ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."increase_repost_count"();
 
+CREATE TRIGGER "notify_follow_event" AFTER INSERT ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."notify_follow_event"();
+
+CREATE TRIGGER "notify_post_comment_event" AFTER INSERT ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."notify_post_comment_event"();
+
+CREATE TRIGGER "notify_post_like_event" AFTER INSERT ON "public"."post_likes" FOR EACH ROW EXECUTE FUNCTION "public"."notify_post_like_event"();
+
+CREATE TRIGGER "notify_repost_event" AFTER INSERT ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."notify_repost_event"();
+
 CREATE TRIGGER "set_krew_key_holders_updated_at" BEFORE UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
 CREATE TRIGGER "set_krews_updated_at" BEFORE UPDATE ON "public"."krews" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+CREATE TRIGGER "set_notification_read_at" BEFORE UPDATE ON "public"."notifications" FOR EACH ROW EXECUTE FUNCTION "public"."set_notification_read_at"();
 
 CREATE TRIGGER "set_posts_updated_at" BEFORE UPDATE ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
