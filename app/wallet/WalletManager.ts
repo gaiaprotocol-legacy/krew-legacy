@@ -6,7 +6,7 @@ import {
   signMessage,
   watchAccount,
 } from "@wagmi/core";
-import { avalanche, avalancheFuji } from "@wagmi/core/chains";
+import { kroma, kromaSepolia } from "@wagmi/core/chains";
 import {
   EthereumClient,
   w3mConnectors,
@@ -31,7 +31,7 @@ class WalletManager extends EventContainer {
   }
 
   public init(projectId: string) {
-    const chains = [avalanche, avalancheFuji];
+    const chains = [kroma, kromaSepolia];
 
     const { publicClient } = configureChains(chains, [
       w3mProvider({ projectId }),

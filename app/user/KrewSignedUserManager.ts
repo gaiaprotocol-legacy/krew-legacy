@@ -1,11 +1,11 @@
 import { Supabase } from "common-app-module";
-import { SignedUserManager } from "sofi-module";
+import { SignedUserManager, SoFiUserPublic } from "sofi-module";
 import EnvironmentManager from "../EnvironmentManager.js";
 import WalletManager from "../wallet/WalletManager.js";
 import KrewUserCacher from "./KrewUserCacher.js";
 import KrewUserService from "./KrewUserService.js";
 
-class KrewSignedUserManager extends SignedUserManager {
+class KrewSignedUserManager extends SignedUserManager<SoFiUserPublic> {
   protected async fetchUser(userId: string) {
     const user = await KrewUserService.fetchUser(userId);
     if (user) KrewUserCacher.cache(user);
