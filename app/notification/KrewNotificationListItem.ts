@@ -3,11 +3,10 @@ import { NotificationListItem } from "sofi-module";
 import KrewNotification, {
   KrewNotificationType,
 } from "../database-interface/KrewNotification.js";
-import KrewPost from "../database-interface/KrewPost.js";
 
 export default class KrewNotificationListItem
   extends NotificationListItem<KrewNotificationType> {
-  constructor(notification: KrewNotification, post: KrewPost | undefined) {
+  constructor(notification: KrewNotification) {
     super(".krew-notification-list-item", notification);
 
     const name = `<b>${notification.triggerer.display_name}</b>`;
@@ -39,15 +38,25 @@ export default class KrewNotificationListItem
         },
       );
       this.addClass("post-like").append(
-        el("main", titleDisplay, el("p", post?.message), dateDisplay),
-      ).onDom("click", () => Router.go(`/post/${post?.id}`));
+        el(
+          "main",
+          titleDisplay,
+          el("p", notification.post_message),
+          dateDisplay,
+        ),
+      ).onDom("click", () => Router.go(`/post/${notification.post_id}`));
     } else if (notification.type === KrewNotificationType.REPOST) {
       titleDisplay.domElement.innerHTML = msg("notification-message-repost", {
         name,
       });
       this.addClass("repost").append(
-        el("main", titleDisplay, el("p", post?.message), dateDisplay),
-      ).onDom("click", () => Router.go(`/post/${post?.id}`));
+        el(
+          "main",
+          titleDisplay,
+          el("p", notification.post_message),
+          dateDisplay,
+        ),
+      ).onDom("click", () => Router.go(`/post/${notification.post_id}`));
     } else if (notification.type === KrewNotificationType.POST_COMMENT) {
       titleDisplay.domElement.innerHTML = msg(
         "notification-message-post-comment",
@@ -56,15 +65,25 @@ export default class KrewNotificationListItem
         },
       );
       this.addClass("post-comment").append(
-        el("main", titleDisplay, el("p", post?.message), dateDisplay),
-      ).onDom("click", () => Router.go(`/post/${post?.id}`));
+        el(
+          "main",
+          titleDisplay,
+          el("p", notification.post_message),
+          dateDisplay,
+        ),
+      ).onDom("click", () => Router.go(`/post/${notification.post_id}`));
     } else if (notification.type === KrewNotificationType.POST_TAG) {
       titleDisplay.domElement.innerHTML = msg("notification-message-post-tag", {
         name,
       });
       this.addClass("post-tag").append(
-        el("main", titleDisplay, el("p", post?.message), dateDisplay),
-      ).onDom("click", () => Router.go(`/post/${post?.id}`));
+        el(
+          "main",
+          titleDisplay,
+          el("p", notification.post_message),
+          dateDisplay,
+        ),
+      ).onDom("click", () => Router.go(`/post/${notification.post_id}`));
     }
   }
 }

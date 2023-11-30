@@ -3,8 +3,9 @@ notifications
     user_id - uuid, fk to users_public.user_id - not null
     triggerer - uuid, fk to users_public.user_id - not null
 	type - int2 - not null
-	source_id - int8 - nullable
 	amount - int8 - nullable
+	post_id - int8, fk to posts.id - nullable
+	post_message - text - nullable
 	read - bool - false
 	read_at - timestampz - nullable
 	created_at - timestampz - now()

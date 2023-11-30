@@ -14,4 +14,6 @@ export default interface KrewNotification
   extends Notification<KrewNotificationType> {
   type: KrewNotificationType;
   amount?: number;
+  post_id?: string;
+  post_message?: string;
 }

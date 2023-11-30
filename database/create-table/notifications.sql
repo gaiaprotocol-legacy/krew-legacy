@@ -3,8 +3,9 @@ CREATE TABLE IF NOT EXISTS "public"."notifications" (
     "user_id" "uuid" NOT NULL,
     "triggerer" "uuid" NOT NULL,
     "type" smallint NOT NULL,
-    "source_id" bigint,
     "amount" bigint,
+    "post_id" bigint,
+    "post_message" "text",
     "read" boolean DEFAULT false NOT NULL,
     "read_at" timestamp with time zone,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
@@ -28,6 +29,9 @@ ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_triggerer_fkey" FOREIGN KEY ("triggerer") REFERENCES "public"."users_public"("user_id");
 ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_public"("user_id");
+
+ALTER TABLE ONLY "public"."notifications"
+    ADD CONSTRAINT "notifications_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "public"."posts"("id");
 
 CREATE POLICY "can view only user" ON "public"."notifications" FOR SELECT TO "authenticated" USING (("user_id" = "auth"."uid"()));
 

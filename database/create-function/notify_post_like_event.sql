@@ -2,14 +2,15 @@ CREATE OR REPLACE FUNCTION "public"."notify_post_like_event"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$DECLARE
     v_author UUID;
+    v_message TEXT;
 BEGIN
-    SELECT author INTO v_author FROM posts WHERE id = new.post_id;
+    SELECT author, message INTO v_author, v_message FROM posts WHERE id = new.post_id;
     
     IF v_author <> new.user_id THEN
         INSERT INTO notifications (
-            user_id, triggerer, type, source_id
+            user_id, triggerer, type, post_id, post_message
         ) VALUES (
-            v_author, new.user_id, 3, new.post_id
+            v_author, new.user_id, 3, new.post_id, v_message
         );
     END IF;
     

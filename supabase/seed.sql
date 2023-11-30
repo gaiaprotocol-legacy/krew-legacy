@@ -512,14 +512,16 @@ ALTER TABLE "public"."krews" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."notifications" (
     "id" bigint NOT NULL,
-    "user" "uuid" NOT NULL,
+    "user_id" "uuid" NOT NULL,
     "triggerer" "uuid" NOT NULL,
     "type" smallint NOT NULL,
     "source_id" bigint,
     "amount" bigint,
     "read" boolean DEFAULT false NOT NULL,
     "read_at" timestamp with time zone,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "post_id" bigint,
+    "post_message" "text"
 );
 
 ALTER TABLE "public"."notifications" OWNER TO "postgres";
@@ -712,10 +714,13 @@ ALTER TABLE ONLY "public"."krew_chat_messages"
     ADD CONSTRAINT "krew_chat_messages_author_fkey" FOREIGN KEY ("author") REFERENCES "public"."users_public"("user_id");
 
 ALTER TABLE ONLY "public"."notifications"
+    ADD CONSTRAINT "notifications_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "public"."posts"("id");
+
+ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_triggerer_fkey" FOREIGN KEY ("triggerer") REFERENCES "public"."users_public"("user_id");
 
 ALTER TABLE ONLY "public"."notifications"
-    ADD CONSTRAINT "notifications_user_fkey" FOREIGN KEY ("user") REFERENCES "public"."users_public"("user_id");
+    ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_public"("user_id");
 
 ALTER TABLE ONLY "public"."post_likes"
     ADD CONSTRAINT "post_likes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_public"("user_id");
@@ -759,7 +764,7 @@ CREATE POLICY "can view only holder or owner" ON "public"."krew_chat_messages" F
            FROM "public"."users_public"
           WHERE ("users_public"."user_id" = "auth"."uid"()))))))));
 
-CREATE POLICY "can view only user" ON "public"."notifications" FOR SELECT TO "authenticated" USING (("user" = "auth"."uid"()));
+CREATE POLICY "can view only user" ON "public"."notifications" FOR SELECT TO "authenticated" USING (("user_id" = "auth"."uid"()));
 
 CREATE POLICY "can write only authed" ON "public"."posts" FOR INSERT TO "authenticated" WITH CHECK ((("message" <> ''::"text") AND ("length"("message") <= 2000) AND ("author" = "auth"."uid"()) AND (("krew" IS NULL) OR (EXISTS ( SELECT 1
    FROM "public"."krews"
