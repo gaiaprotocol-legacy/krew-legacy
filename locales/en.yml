@@ -32,3 +32,25 @@ notification-message-post-like: "{name} liked your post"
 notification-message-repost: "{name} reposted your post"
 notification-message-post-comment: "{name} commented on your post"
 notification-message-post-tag: "{name} tagged you in a post"
+
+not-signed-in-title: Not signed in
+not-signed-in-message: You need to sign in to perform this action
+not-signed-in-confirm: Sign in
+no-wallet-connected-title: No wallet connected
+no-wallet-connected-message: You need to connect a wallet to perform this action
+no-wallet-linked-title: No wallet linked
+no-wallet-linked-message: You need to link a wallet to perform this action
+no-wallet-linked-confirm: Link wallet
+wallet-address-mismatch-title: Wallet address mismatch
+wallet-address-mismatch-message: The wallet address associated with your account and the current crypto wallet address do not match. Please change the crypto wallet address.
+invalid-network-title: Invalid network
+invalid-network-message: You need to be on the Avalanche network to perform this action
+
+switch-to-kroma-popup-title: Switch to Kroma for Krew
+switch-to-kroma-popup-message: Krew operates on Kroma. To utilize Krew, please change your wallet's chain to Kroma.
+switch-to-kroma-popup-what-is-kroma: What is Kroma?
+switch-to-kroma-popup-warning-title: Warning
+switch-to-kroma-popup-warning-message: If you do not switch to Kroma, Krew may not function properly. Ensure you change the chain for a seamless experience.
+switch-to-kroma-popup-warning-understood-button: Understood
+switch-to-kroma-popup-later-button: Later
+switch-to-kroma-popup-switch-button: Switch Now
