@@ -16,8 +16,18 @@ export default class KrewNotificationList
     }, new KrewLoadingAnimation());
   }
 
-  protected addNotificationItem(notification: KrewNotification): void {
-    this.append(new KrewNotificationListItem(notification));
+  protected addNotificationItem(
+    notification: KrewNotification,
+    isNew: boolean,
+  ): void {
+    const item = new KrewNotificationListItem(notification);
+    isNew ? this.prepend(item) : this.append(item);
+  }
+
+  protected async fetchNotification(
+    id: number,
+  ): Promise<KrewNotification | undefined> {
+    return await KrewNotificationStore.fetchNotification(id);
   }
 
   protected async fetchNotifications(): Promise<KrewNotification[]> {
