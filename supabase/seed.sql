@@ -282,7 +282,7 @@ CREATE OR REPLACE FUNCTION "public"."notify_follow_event"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$begin
     insert into notifications (
-        user_id, triggered_by, type
+        user_id, triggerer, type
     ) values (
         new.followee_id, new.follower_id, 2
     );
@@ -300,7 +300,7 @@ begin
         SELECT author INTO v_author FROM posts WHERE id = new.parent;
         IF v_author <> new.author THEN
             INSERT INTO notifications (
-                user_id, triggered_by, type, source_id
+                user_id, triggerer, type, source_id
             ) VALUES (
                 v_author, new.author, 5, new.id
             );
@@ -320,7 +320,7 @@ BEGIN
     
     IF v_author <> new.user_id THEN
         INSERT INTO notifications (
-            user_id, triggered_by, type, source_id
+            user_id, triggerer, type, source_id
         ) VALUES (
             v_author, new.user_id, 3, new.post_id
         );
@@ -341,7 +341,7 @@ BEGIN
     
     IF v_author <> new.user_id THEN
         INSERT INTO notifications (
-            user_id, triggered_by, type, source_id
+            user_id, triggerer, type, source_id
         ) VALUES (
             v_author, new.user_id, 4, new.post_id
         );
@@ -513,7 +513,7 @@ ALTER TABLE "public"."krews" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."notifications" (
     "id" bigint NOT NULL,
     "user" "uuid" NOT NULL,
-    "triggered_by" "uuid" NOT NULL,
+    "triggerer" "uuid" NOT NULL,
     "type" smallint NOT NULL,
     "source_id" bigint,
     "amount" bigint,
@@ -712,7 +712,7 @@ ALTER TABLE ONLY "public"."krew_chat_messages"
     ADD CONSTRAINT "krew_chat_messages_author_fkey" FOREIGN KEY ("author") REFERENCES "public"."users_public"("user_id");
 
 ALTER TABLE ONLY "public"."notifications"
-    ADD CONSTRAINT "notifications_triggered_by_fkey" FOREIGN KEY ("triggered_by") REFERENCES "public"."users_public"("user_id");
+    ADD CONSTRAINT "notifications_triggerer_fkey" FOREIGN KEY ("triggerer") REFERENCES "public"."users_public"("user_id");
 
 ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_user_fkey" FOREIGN KEY ("user") REFERENCES "public"."users_public"("user_id");

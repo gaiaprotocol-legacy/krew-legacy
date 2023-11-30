@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION "public"."notify_follow_event"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$begin
     insert into notifications (
-        user_id, triggered_by, type
+        user_id, triggerer, type
     ) values (
         new.followee_id, new.follower_id, 2
     );

@@ -1,6 +1,6 @@
 import { Notification } from "sofi-module";
 
-export enum KrewoNotificationType {
+export enum KrewNotificationType {
   BUY_KEY,
   SELL_KEY,
   FOLLOW,
@@ -10,8 +10,8 @@ export enum KrewoNotificationType {
   POST_TAG,
 }
 
-export default interface KrewoNotification
-  extends Notification<KrewoNotificationType> {
-  type: KrewoNotificationType;
+export default interface KrewNotification
+  extends Notification<KrewNotificationType> {
+  type: KrewNotificationType;
   amount?: number;
 }

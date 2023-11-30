@@ -1,7 +1,7 @@
 notifications
 	id - int8 - auto_increment - pk
-    user - uuid, fk to users_public.user_id - not null
-    triggered_by - uuid, fk to users_public.user_id - not null
+    user_id - uuid, fk to users_public.user_id - not null
+    triggerer - uuid, fk to users_public.user_id - not null
 	type - int2 - not null
 	source_id - int8 - nullable
 	amount - int8 - nullable
