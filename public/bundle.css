@@ -228,7 +228,7 @@ button.component.contained {
   width: 100%;
   height: 3px;
   background-color: rgba(37, 211, 102, 0.1);
-  z-index: 999999;
+  z-index: 999997;
   overflow: hidden;
 }
 .list-loading-bar.component::before {
@@ -770,6 +770,53 @@ p {
   top: 0;
   z-index: 1;
   border-left: 1px solid var(--line-color);
+}
+.create-krew-form > h2 {
+  font-size: 24px;
+}
+.create-krew-form > p {
+  margin-top: 8px;
+}
+.create-krew-form > .select-krew-type {
+  margin-top: 16px;
+  display: flex;
+  gap: 20px;
+}
+.create-krew-form > .select-krew-type > section {
+  flex: 1;
+  border: 1px solid var(--line-color);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+}
+.create-krew-form > .select-krew-type > section.selected {
+  border: 1px solid var(--accent-color);
+}
+.create-krew-form > .select-krew-type > section > h2 {
+  font-size: 20px;
+  color: #fff;
+}
+.create-krew-form > .select-krew-type > section > p {
+  height: 100px;
+  margin-top: 8px;
+}
+.create-krew-form > .select-krew-type > section > ul {
+  margin-top: 16px;
+}
+.create-krew-form > .select-krew-type > section > ul > li {
+  margin-left: 16px;
+  margin-bottom: 8px;
+  list-style-type: decimal;
+  line-height: 1.6em;
+}
+.create-krew-form > button.create {
+  margin-top: 24px;
+  width: 100%;
+  padding: 16px 0;
+  font-size: 16px;
+}
+.create-krew-popup {
+  max-width: 800px !important;
 }
 .posts-view {
   position: relative;

@@ -55,24 +55,24 @@ switch-to-kroma-popup-warning-understood-button: Understood
 switch-to-kroma-popup-later-button: Later
 switch-to-kroma-popup-switch-button: Switch Now
 
-create-krew-popup-title: Create Your Krew
-create-krew-popup-intro: Embark on your krew journey! Here, you can form your own personal krew or join hands with others to establish a communal krew. Select your preferred krew type and get ready to explore the exciting world of krews!
-create-krew-popup-personal-krew-title: Personal Krew
-create-krew-popup-personal-krew-description: Create a personal krew to be the star of your community. This is where your ideas, hobbies, and interests take center stage.
-create-krew-popup-personal-krew-feature-1: >
+create-krew-form-title: Create Your Krew
+create-krew-form-intro: Embark on your krew journey! Here, you can form your own personal krew or join hands with others to establish a communal krew. Select your preferred krew type and get ready to explore the exciting world of krews!
+create-krew-form-personal-krew-title: Personal Krew
+create-krew-form-personal-krew-description: Create a personal krew to be the star of your community. This is where your ideas, hobbies, and interests take center stage.
+create-krew-form-personal-krew-feature-1: >
   Independent Operation: You have full control over your krew's decisions.
-create-krew-popup-personal-krew-feature-2: >
+create-krew-form-personal-krew-feature-2: >
   Revenue Generation: Earn from key trading fees within your krew.
-create-krew-popup-personal-krew-feature-3: >
+create-krew-form-personal-krew-feature-3: >
   Community Building: Connect with like-minded individuals.
-create-krew-popup-communal-krew-title: Communal Krew
-create-krew-popup-communal-krew-description: A communal krew is a collaborative community formed with others. Whether it's with friends, colleagues, or people with shared objectives, a communal krew offers a collective experience.
-create-krew-popup-communal-krew-feature-1: >
+create-krew-form-communal-krew-title: Communal Krew
+create-krew-form-communal-krew-description: A communal krew is a collaborative community formed with others. Whether it's with friends, colleagues, or people with shared objectives, a communal krew offers a collective experience.
+create-krew-form-communal-krew-feature-1: >
   Collaborative Operation: Decisions and management are shared among all members.
-create-krew-popup-communal-krew-feature-2: >
+create-krew-form-communal-krew-feature-2: >
   Shared Revenue: Benefit from key trading fees distributed among the krew.
-create-krew-popup-communal-krew-feature-3: >
+create-krew-form-communal-krew-feature-3: >
   Network Expansion: Build a network with diverse and experienced individuals.
-create-krew-popup-create-button: Create Krew
-create-krew-popup-no-krew-type-selected-title: Please Select Your Krew Type
-create-krew-popup-no-krew-type-selected-message: Once you've made your selection, press the [Create Krew] button to begin. If you haven't decided on the type of krew yet, please select one to proceed. Let your imagination shape your krew's future!
+create-krew-form-create-button: Create Krew
+create-krew-form-no-krew-type-selected-title: Please Select Your Krew Type
+create-krew-form-no-krew-type-selected-message: Once you've made your selection, press the [Create Krew] button to begin. If you haven't decided on the type of krew yet, please select one to proceed. Let your imagination shape your krew's future!
