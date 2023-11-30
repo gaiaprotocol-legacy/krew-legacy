@@ -74,5 +74,5 @@ create-krew-popup-communal-krew-feature-2: >
 create-krew-popup-communal-krew-feature-3: >
   Network Expansion: Build a network with diverse and experienced individuals.
 create-krew-popup-create-button: Create Krew
-create-krew-type-not-selected-title: Please Select Your Krew Type
-create-krew-type-not-selected-message: Once you've made your selection, press the [Create Krew] button to begin. If you haven't decided on the type of krew yet, please select one to proceed. Let your imagination shape your krew's future!
+create-krew-popup-no-krew-type-selected-title: Please Select Your Krew Type
+create-krew-popup-no-krew-type-selected-message: Once you've made your selection, press the [Create Krew] button to begin. If you haven't decided on the type of krew yet, please select one to proceed. Let your imagination shape your krew's future!

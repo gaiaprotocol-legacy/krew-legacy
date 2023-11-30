@@ -4,20 +4,17 @@ import {
   Button,
   ButtonType,
   Component,
-  DomNode,
   el,
   msg,
-  Popup,
+  Popup
 } from "common-app-module";
 import EnvironmentManager from "../EnvironmentManager.js";
 
 export default class SwitchToKromaPopup extends Popup {
-  public content: DomNode;
-
   constructor() {
     super({ barrierDismissible: true });
     this.append(
-      this.content = new Component(
+      new Component(
         ".popup.switch-to-kroma-popup",
         el("header", el("h1", msg("switch-to-kroma-popup-title"))),
         el(
@@ -36,7 +33,7 @@ export default class SwitchToKromaPopup extends Popup {
           "footer",
           new Button({
             type: ButtonType.Text,
-            tag: ".cancel-button",
+            tag: ".cancel",
             click: () => {
               new Alert({
                 title: msg("switch-to-kroma-popup-warning-title"),
@@ -50,7 +47,7 @@ export default class SwitchToKromaPopup extends Popup {
             title: msg("switch-to-kroma-popup-later-button"),
           }),
           new Button({
-            tag: ".switch-button",
+            tag: ".switch",
             click: async () => {
               await switchNetwork({ chainId: EnvironmentManager.kromaChainId });
               this.delete();

@@ -2,10 +2,16 @@ import {
   AppInitializer,
   el,
   MaterialIconSystem,
+  msg,
   Router,
   SplashLoader,
 } from "common-app-module";
-import { msg, TestChatView, TestPostListView, TestPostView } from "sofi-module";
+import {
+  inject_sofi_msg,
+  TestChatView,
+  TestPostListView,
+  TestPostView,
+} from "sofi-module";
 import messages_en from "../locales/en.yml";
 import messages_ja from "../locales/ja.yml";
 import messages_zh from "../locales/zh.yml";
@@ -21,6 +27,7 @@ import PostsView from "./post/PostsView.js";
 import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
 import WalletManager from "./wallet/WalletManager.js";
 
+inject_sofi_msg();
 msg.setMessages({
   en: messages_en,
   zh: messages_zh,

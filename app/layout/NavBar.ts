@@ -1,4 +1,5 @@
 import { DomNode, el, Router } from "common-app-module";
+import CreateKrewPopup from "../krew/CreateKrewPopup.js";
 import MaterialIcon from "../MaterialIcon.js";
 
 export default class NavBar extends DomNode {
@@ -20,7 +21,7 @@ export default class NavBar extends DomNode {
         click: () => Router.go("/explore"),
       }),
       el("button.add", new MaterialIcon("add"), {
-        //TODO:
+        click: () => new CreateKrewPopup(),
       }),
     );
   }
