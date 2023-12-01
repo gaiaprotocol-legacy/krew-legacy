@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import Contract from "./Contract.js";
 import { KrewCommunal } from "./abi/krew/KrewCommunal.js";
@@ -46,8 +47,7 @@ class KrewCommunalContract extends Contract<KrewCommunal> {
 
   public async buyKeys(krewId: bigint, amount: bigint) {
     const writeContract = await this.getWriteContract();
-    const oracleSignature = ""; //TODO: get oracle signature
-    const tx = await writeContract.buyKeys(krewId, amount, oracleSignature, {
+    const tx = await writeContract.buyKeys(krewId, amount, ethers.ZeroHash, {
       value: await this.getBuyPriceAfterFee(krewId, amount),
     });
     return tx.wait();
@@ -55,8 +55,7 @@ class KrewCommunalContract extends Contract<KrewCommunal> {
 
   public async sellKeys(krewId: bigint, amount: bigint) {
     const writeContract = await this.getWriteContract();
-    const oracleSignature = ""; //TODO: get oracle signature
-    const tx = await writeContract.sellKeys(krewId, amount, oracleSignature);
+    const tx = await writeContract.sellKeys(krewId, amount, ethers.ZeroHash);
     return tx.wait();
   }
 }
