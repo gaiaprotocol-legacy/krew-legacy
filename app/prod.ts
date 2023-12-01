@@ -10,4 +10,7 @@ await initialize({
 
   kromaRpc: "https://api.kroma.network",
   kromaChainId: 255,
+
+  krewPersonalAddress: "0x0",
+  krewCommunalAddress: "0x0",
 });

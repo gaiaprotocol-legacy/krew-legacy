@@ -29,11 +29,14 @@ class KrewPersonalContract extends Contract<KrewPersonal> {
     return this.viewContract.holderBalance(krewId, walletAddress);
   }
 
+  public async createKrew() {
+    const writeContract = await this.getWriteContract();
+    const tx = await writeContract.createKrew();
+    return tx.wait();
+  }
+
   public async buyKeys(krewId: bigint, amount: bigint, value: bigint) {
     const writeContract = await this.getWriteContract();
-    if (!writeContract) {
-      throw new Error("No signer");
-    }
     const oracleSignature = ""; //TODO: get oracle signature
     const tx = await writeContract.buyKeys(krewId, amount, oracleSignature, {
       value,
@@ -43,9 +46,6 @@ class KrewPersonalContract extends Contract<KrewPersonal> {
 
   public async sellKeys(krewId: bigint, amount: bigint) {
     const writeContract = await this.getWriteContract();
-    if (!writeContract) {
-      throw new Error("No signer");
-    }
     const oracleSignature = ""; //TODO: get oracle signature
     const tx = await writeContract.sellKeys(krewId, amount, oracleSignature);
     return tx.wait();

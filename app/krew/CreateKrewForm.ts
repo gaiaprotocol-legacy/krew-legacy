@@ -1,4 +1,6 @@
-import { Alert, Button, DomNode, el, msg } from "common-app-module";
+import { Button, DomNode, el, msg } from "common-app-module";
+import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
+import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
 import KrewType from "../database-interface/KrewType.js";
 
 export default class CreateKrewForm extends DomNode {
@@ -40,18 +42,7 @@ export default class CreateKrewForm extends DomNode {
       ),
       new Button({
         tag: ".create",
-        click: () => {
-          if (!this.krewType) {
-            new Alert({
-              title: msg("create-krew-form-no-krew-type-selected-title"),
-              message: msg(
-                "create-krew-form-no-krew-type-selected-message",
-              ),
-            });
-            return;
-          }
-          this.createKrew();
-        },
+        click: () => this.createKrew(),
         title: msg("create-krew-form-create-button"),
       }),
     );
@@ -68,8 +59,11 @@ export default class CreateKrewForm extends DomNode {
     }
   }
 
-  private createKrew() {
-    console.log(`Creating a ${this.krewType} krew`);
-    //TODO:
+  private async createKrew() {
+    if (this.krewType === KrewType.Personal) {
+      await KrewPersonalContract.createKrew();
+    } else if (this.krewType === KrewType.Communal) {
+      await KrewCommunalContract.createKrew();
+    }
   }
 }

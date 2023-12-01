@@ -147,6 +147,9 @@ meter {
   border-radius: 16px;
 }
 .popup.component > header > h1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: #FFF;
   font-size: 16px;
   font-weight: 500;
@@ -1044,6 +1047,17 @@ p {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+.switch-to-kroma-popup > main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.switch-to-kroma-popup > main > img.banner {
+  border-radius: 8px;
+}
+.switch-to-kroma-popup > main > p > a {
+  text-decoration: underline;
 }
 .notifications-view > h1 {
   font-size: 24px;

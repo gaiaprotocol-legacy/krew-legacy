@@ -10,6 +10,10 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+CREATE EXTENSION IF NOT EXISTS "pg_cron" WITH SCHEMA "extensions";
+
+CREATE EXTENSION IF NOT EXISTS "pg_net" WITH SCHEMA "extensions";
+
 CREATE EXTENSION IF NOT EXISTS "pgsodium" WITH SCHEMA "pgsodium";
 
 CREATE EXTENSION IF NOT EXISTS "pg_graphql" WITH SCHEMA "graphql";
@@ -300,9 +304,9 @@ begin
         SELECT author INTO v_author FROM posts WHERE id = new.parent;
         IF v_author <> new.author THEN
             INSERT INTO notifications (
-                user_id, triggerer, type, source_id
+                user_id, triggerer, type, post_id, post_message
             ) VALUES (
-                v_author, new.author, 5, new.id
+                v_author, new.author, 5, new.id, new.message
             );
         END IF;
     END IF;
@@ -315,14 +319,15 @@ CREATE OR REPLACE FUNCTION "public"."notify_post_like_event"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$DECLARE
     v_author UUID;
+    v_message TEXT;
 BEGIN
-    SELECT author INTO v_author FROM posts WHERE id = new.post_id;
+    SELECT author, message INTO v_author, v_message FROM posts WHERE id = new.post_id;
     
     IF v_author <> new.user_id THEN
         INSERT INTO notifications (
-            user_id, triggerer, type, source_id
+            user_id, triggerer, type, post_id, post_message
         ) VALUES (
-            v_author, new.user_id, 3, new.post_id
+            v_author, new.user_id, 3, new.post_id, v_message
         );
     END IF;
     
@@ -336,14 +341,15 @@ CREATE OR REPLACE FUNCTION "public"."notify_repost_event"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$DECLARE
     v_author UUID;
+    v_message TEXT;
 BEGIN
-    SELECT author INTO v_author FROM posts WHERE id = new.post_id;
+    SELECT author, message INTO v_author, v_message FROM posts WHERE id = new.post_id;
     
     IF v_author <> new.user_id THEN
         INSERT INTO notifications (
-            user_id, triggerer, type, source_id
+            user_id, triggerer, type, post_id, post_message
         ) VALUES (
-            v_author, new.user_id, 4, new.post_id
+            v_author, new.user_id, 4, new.post_id, v_message
         );
     END IF;
     
@@ -515,7 +521,6 @@ CREATE TABLE IF NOT EXISTS "public"."notifications" (
     "user_id" "uuid" NOT NULL,
     "triggerer" "uuid" NOT NULL,
     "type" smallint NOT NULL,
-    "source_id" bigint,
     "amount" bigint,
     "read" boolean DEFAULT false NOT NULL,
     "read_at" timestamp with time zone,

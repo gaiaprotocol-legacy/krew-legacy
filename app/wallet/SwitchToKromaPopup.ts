@@ -1,16 +1,20 @@
-import { switchNetwork } from "@wagmi/core";
+import { getNetwork, switchNetwork } from "@wagmi/core";
 import {
   Alert,
   Button,
   ButtonType,
   Component,
   el,
+  ErrorAlert,
   msg,
-  Popup
+  Popup,
 } from "common-app-module";
 import EnvironmentManager from "../EnvironmentManager.js";
 
 export default class SwitchToKromaPopup extends Popup {
+  private resolve: (() => void) | undefined;
+  private reject: (() => void) | undefined;
+
   constructor() {
     super({ barrierDismissible: true });
     this.append(
@@ -42,6 +46,7 @@ export default class SwitchToKromaPopup extends Popup {
                   "switch-to-kroma-popup-warning-understood-button",
                 ),
               });
+              this.reject?.();
               this.delete();
             },
             title: msg("switch-to-kroma-popup-later-button"),
@@ -50,12 +55,32 @@ export default class SwitchToKromaPopup extends Popup {
             tag: ".switch",
             click: async () => {
               await switchNetwork({ chainId: EnvironmentManager.kromaChainId });
-              this.delete();
+
+              const { chain } = getNetwork();
+              if (!chain) {
+                new ErrorAlert({
+                  title: msg("invalid-network-title"),
+                  message: msg("invalid-network-message"),
+                });
+                throw new Error("Invalid network");
+              }
+
+              if (chain.id === EnvironmentManager.kromaChainId) {
+                this.resolve?.();
+                this.delete();
+              }
             },
             title: msg("switch-to-kroma-popup-switch-button"),
           }),
         ),
       ),
     );
+  }
+
+  public async wait(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
   }
 }

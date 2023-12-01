@@ -9,4 +9,7 @@ export default interface Config {
 
   kromaRpc: string;
   kromaChainId: number;
+
+  krewPersonalAddress: string;
+  krewCommunalAddress: string;
 }

@@ -20,6 +20,8 @@ import messages_zh_TW from "../locales/zh_TW.yml";
 import TopicChatRoomView from "./chat-topic/TopicChatRoomView.js";
 import ChatsView from "./chat/ChatsView.js";
 import Config from "./Config.js";
+import KrewCommunalContract from "./contracts/KrewCommunalContract.js";
+import KrewPersonalContract from "./contracts/KrewPersonalContract.js";
 import EnvironmentManager from "./EnvironmentManager.js";
 import Layout from "./layout/Layout.js";
 import NotificationsView from "./notification/NotificationsView.js";
@@ -46,8 +48,12 @@ export default async function initialize(config: Config) {
   );
 
   EnvironmentManager.messageForWalletLinking = config.messageForWalletLinking;
+  EnvironmentManager.kromaRpc = config.kromaRpc;
+  EnvironmentManager.kromaChainId = config.kromaChainId;
 
   WalletManager.init(config.walletConnectProjectId);
+  KrewPersonalContract.init(config.krewPersonalAddress);
+  KrewCommunalContract.init(config.krewCommunalAddress);
 
   await SplashLoader.load(el("img", { src: "/images/logo-transparent.png" }), [
     KrewSignedUserManager.fetchUserOnInit(),
