@@ -512,7 +512,7 @@ ALTER TABLE "public"."krew_key_holders" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."krews" (
     "id" "text" NOT NULL,
-    "last_fetched_key_price" numeric DEFAULT '10000000000000000'::numeric NOT NULL,
+    "last_fetched_key_price" numeric DEFAULT '68750000000000'::numeric NOT NULL,
     "total_trading_key_volume" numeric DEFAULT '0'::numeric NOT NULL,
     "total_earned_trading_fees" numeric DEFAULT '0'::numeric NOT NULL,
     "is_key_price_up" boolean,
@@ -523,7 +523,6 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "updated_at" timestamp with time zone,
     "owner" "text",
-    "type" smallint NOT NULL,
     "name" "text",
     "profile_image" "text",
     "profile_image_thumbnail" "text",
@@ -812,9 +811,9 @@ CREATE POLICY "can view only user" ON "public"."notifications" FOR SELECT TO "au
 
 CREATE POLICY "can write only authed" ON "public"."posts" FOR INSERT TO "authenticated" WITH CHECK ((("message" <> ''::"text") AND ("length"("message") <= 2000) AND ("author" = "auth"."uid"()) AND (("krew" IS NULL) OR (EXISTS ( SELECT 1
    FROM "public"."krews"
-  WHERE (("krews"."id" = "posts"."krew") AND ((("krews"."type" = 0) AND ("krews"."owner" = ( SELECT "users_public"."wallet_address"
+  WHERE (("krews"."id" = "posts"."krew") AND (((POSITION(('p_'::"text") IN ("krews"."id")) = 1) AND ("krews"."owner" = ( SELECT "users_public"."wallet_address"
            FROM "public"."users_public"
-          WHERE ("users_public"."user_id" = "auth"."uid"())))) OR (("krews"."type" = 1) AND (1 <= ( SELECT "krew_key_holders"."last_fetched_balance"
+          WHERE ("users_public"."user_id" = "auth"."uid"())))) OR ((POSITION(('c_'::"text") IN ("krews"."id")) = 1) AND (1 <= ( SELECT "krew_key_holders"."last_fetched_balance"
            FROM "public"."krew_key_holders"
           WHERE (("krew_key_holders"."krew" = "krew_key_holders"."krew") AND ("krew_key_holders"."wallet_address" = ( SELECT "users_public"."wallet_address"
                    FROM "public"."users_public"
@@ -882,7 +881,7 @@ CREATE POLICY "view everyone" ON "public"."users_public" FOR SELECT USING (true)
 
 CREATE POLICY "view everyone or only keyholders" ON "public"."posts" FOR SELECT USING ((("target" = 0) OR ("author" = "auth"."uid"()) OR ("krew" IS NULL) OR (EXISTS ( SELECT 1
    FROM "public"."krews"
-  WHERE (("krews"."id" = "posts"."krew") AND ((("krews"."type" = 0) AND ("krews"."owner" = ( SELECT "users_public"."wallet_address"
+  WHERE (("krews"."id" = "posts"."krew") AND (((POSITION(('p_'::"text") IN ("krews"."id")) = 1) AND ("krews"."owner" = ( SELECT "users_public"."wallet_address"
            FROM "public"."users_public"
           WHERE ("users_public"."user_id" = "auth"."uid"())))) OR (1 <= ( SELECT "krew_key_holders"."last_fetched_balance"
            FROM "public"."krew_key_holders"

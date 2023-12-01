@@ -1,12 +1,11 @@
 CREATE TABLE IF NOT EXISTS "public"."krews" (
     "id" "text" NOT NULL,
-    "type" smallint NOT NULL,
     "owner" "text",
     "name" "text",
     "profile_image" "text",
     "profile_image_thumbnail" "text",
     "metadata" "jsonb",
-    "last_fetched_key_price" numeric DEFAULT '10000000000000000'::numeric NOT NULL,
+    "last_fetched_key_price" numeric DEFAULT '68750000000000'::numeric NOT NULL,
     "total_trading_key_volume" numeric DEFAULT '0'::numeric NOT NULL,
     "total_earned_trading_fees" numeric DEFAULT '0'::numeric NOT NULL,
     "is_key_price_up" boolean,

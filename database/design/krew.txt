@@ -1,12 +1,11 @@
 krews
 	id - text - pk
-	type - int2 - not null
 	owner - text - nullable
 	name - text - nullable
 	profile_image - text - nullable
 	profile_image_thumbnail - text - nullable
 	metadata - jsonb - nullable
-	last_fetched_key_price - numeric - 10000000000000000
+	last_fetched_key_price - numeric - 68750000000000
 	total_trading_key_volume - numeric - 0
 	total_earned_trading_fees - numeric - 0
 	is_key_price_up - bool - nullable
