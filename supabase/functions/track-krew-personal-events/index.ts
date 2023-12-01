@@ -23,26 +23,26 @@ serveWithOptions(async () => {
   for (const event of events) {
     const eventTopic = event.topics[0];
 
-    let event_type, wallet_address, krew_id;
+    let event_type, wallet_address, krew;
     if (eventTopic === contract.krewCreatedEventFilter?.[0]) {
       event_type = 0;
-      krew_id = event.args[0];
+      krew = "p_" + event.args[0];
       wallet_address = event.args[1];
     } else if (eventTopic === contract.tradeEventFilter?.[0]) {
       event_type = 1;
       wallet_address = event.args[0];
-      krew_id = event.args[1];
+      krew = "p_" + event.args[1];
     }
 
     const { error: saveEventError } = await supabase
-      .from("krew_personal_contract_events")
+      .from("krew_contract_events")
       .upsert({
         block_number: event.blockNumber,
         log_index: event.index,
         event_type,
         args: event.args.map((arg) => arg.toString()),
         wallet_address,
-        krew_id,
+        krew,
       });
     if (saveEventError) throw saveEventError;
   }

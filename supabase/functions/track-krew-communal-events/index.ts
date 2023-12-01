@@ -10,7 +10,7 @@ const contract = new KrewCommunalContract(signer);
 serveWithOptions(async () => {
   const { data, error: fetchEventBlockError } = await supabase.from(
     "tracked_event_blocks",
-  ).select().eq("contract_type", 0);
+  ).select().eq("contract_type", 1);
   if (fetchEventBlockError) throw fetchEventBlockError;
 
   let toBlock = (data?.[0]?.block_number ??
@@ -23,26 +23,26 @@ serveWithOptions(async () => {
   for (const event of events) {
     const eventTopic = event.topics[0];
 
-    let event_type, wallet_address, krew_id;
+    let event_type, wallet_address, krew;
     if (eventTopic === contract.krewCreatedEventFilter?.[0]) {
       event_type = 0;
-      krew_id = event.args[0];
+      krew = "c_" + event.args[0];
       wallet_address = event.args[1];
     } else if (eventTopic === contract.tradeEventFilter?.[0]) {
       event_type = 1;
       wallet_address = event.args[0];
-      krew_id = event.args[1];
+      krew = "c_" + event.args[1];
     }
 
     const { error: saveEventError } = await supabase
-      .from("krew_communal_contract_events")
+      .from("krew_contract_events")
       .upsert({
         block_number: event.blockNumber,
         log_index: event.index,
         event_type,
         args: event.args.map((arg) => arg.toString()),
         wallet_address,
-        krew_id,
+        krew,
       });
     if (saveEventError) throw saveEventError;
   }
@@ -50,7 +50,7 @@ serveWithOptions(async () => {
   const { error: saveEventBlockError } = await supabase.from(
     "tracked_event_blocks",
   ).upsert({
-    contract_type: 0,
+    contract_type: 1,
     block_number: toBlock,
     updated_at: new Date().toISOString(),
   });

@@ -19,3 +19,12 @@ krew_key_holders
 	last_fetched_balance - int8 - 0
 	created_at - timestampz - now()
 	updated_at - timestampz - nullable
+
+krew_contract_events
+	block_number - int8 - pk
+	log_index - int8 - pk
+	event_type - int2 - not null
+	args - text[] - not null
+	wallet_address - text - not null
+	krew - text - not null
+	created_at - timestampz - now()

@@ -1,0 +1,4 @@
+tracked_event_blocks
+	contract_type - int2 - pk
+	block_number - int8 - not null
+	updated_at - timestampz - now()
