@@ -3,7 +3,7 @@ import KrewPersonalContract from "../_shared/contracts/KrewPersonalContract.ts";
 import { serveWithOptions } from "../_shared/cors.ts";
 import supabase from "../_shared/supabase.ts";
 
-const provider = new ethers.JsonRpcProvider(Deno.env.get("AVAX_RPC")!);
+const provider = new ethers.JsonRpcProvider(Deno.env.get("KROMA_RPC")!);
 const signer = new ethers.JsonRpcSigner(provider, ethers.ZeroAddress);
 const contract = new KrewPersonalContract(signer);
 

@@ -523,7 +523,11 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "updated_at" timestamp with time zone,
     "owner" "text",
-    "type" smallint NOT NULL
+    "type" smallint NOT NULL,
+    "name" "text",
+    "profile_image" "text",
+    "profile_image_thumbnail" "text",
+    "metadata" "jsonb"
 );
 
 ALTER TABLE "public"."krews" OWNER TO "postgres";

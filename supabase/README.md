@@ -30,7 +30,7 @@ select
 select
   cron.schedule(
     'track-krew-personal-events-every-10-minutes',
-    '*/10 * * * *',
+    '1,11,21,31,41,51 * * * *',
     $$
     select net.http_get(
         'https://sfwnwiuxgehxbyystchq.supabase.co/functions/v1/track-krew-personal-events',
