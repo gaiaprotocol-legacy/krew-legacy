@@ -1,8 +1,9 @@
 CREATE TABLE IF NOT EXISTS "public"."notifications" (
     "id" bigint NOT NULL,
     "user_id" "uuid" NOT NULL,
-    "triggerer" "uuid" NOT NULL,
+    "triggerer" "uuid",
     "type" smallint NOT NULL,
+    "krew" "text",
     "amount" bigint,
     "post_id" bigint,
     "post_message" "text",
@@ -26,9 +27,13 @@ ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_pkey" PRIMARY KEY ("id");
 
 ALTER TABLE ONLY "public"."notifications"
-    ADD CONSTRAINT "notifications_triggerer_fkey" FOREIGN KEY ("triggerer") REFERENCES "public"."users_public"("user_id");
-ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_public"("user_id");
+
+ALTER TABLE ONLY "public"."notifications"
+    ADD CONSTRAINT "notifications_triggerer_fkey" FOREIGN KEY ("triggerer") REFERENCES "public"."users_public"("user_id");
+
+ALTER TABLE ONLY "public"."notifications"
+    ADD CONSTRAINT "notifications_krew_fkey" FOREIGN KEY ("krew") REFERENCES "public"."krews"("id");
 
 ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "public"."posts"("id");

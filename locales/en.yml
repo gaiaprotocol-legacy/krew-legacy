@@ -25,13 +25,14 @@ topic-chat-room-list-empty-message: No chat rooms for topics
 chat-message-list-empty-message: No messages yet
 notification-list-empty-message: No notifications yet
 
-notification-message-buy-key: "{name} purchased {amount} ice(s)"
-notification-message-sell-key: "{name} sold {amount} ice(s)"
-notification-message-follow: "{name} started following you"
-notification-message-post-like: "{name} liked your post"
-notification-message-repost: "{name} reposted your post"
-notification-message-post-comment: "{name} commented on your post"
-notification-message-post-tag: "{name} tagged you in a post"
+notification-message-create-key: "You created {krew_name} krew"
+notification-message-buy-key: "{triggerer} purchased {amount} ice(s)"
+notification-message-sell-key: "{triggerer} sold {amount} ice(s)"
+notification-message-follow: "{triggerer} started following you"
+notification-message-post-like: "{triggerer} liked your post"
+notification-message-repost: "{triggerer} reposted your post"
+notification-message-post-comment: "{triggerer} commented on your post"
+notification-message-post-tag: "{triggerer} tagged you in a post"
 
 not-signed-in-title: Not signed in
 not-signed-in-message: You need to sign in to perform this action.

@@ -9,32 +9,38 @@ export default class KrewNotificationListItem
   constructor(notification: KrewNotification) {
     super(".krew-notification-list-item", notification);
 
-    const name = `<b>${notification.triggerer.display_name}</b>`;
+    const triggerer = `<b>${notification.triggerer?.display_name}</b>`;
     const titleDisplay = el("h3");
     const dateDisplay = el(".date", DateUtil.fromNow(notification.created_at));
 
-    if (notification.type === KrewNotificationType.BUY_KEY) {
+    if (notification.type === KrewNotificationType.CREATE_KEY) {
+      titleDisplay.domElement.innerHTML = msg(
+        "notification-message-create-key",
+        { krew_name: notification.krew?.name },
+      );
+      this.addClass("create-key").append(el("main", titleDisplay, dateDisplay));
+    } else if (notification.type === KrewNotificationType.BUY_KEY) {
       titleDisplay.domElement.innerHTML = msg("notification-message-buy-key", {
-        name,
+        triggerer,
         amount: notification.amount,
       });
       this.addClass("buy-key").append(el("main", titleDisplay, dateDisplay));
     } else if (notification.type === KrewNotificationType.SELL_KEY) {
       titleDisplay.domElement.innerHTML = msg("notification-message-sell-key", {
-        name,
+        triggerer,
         amount: notification.amount,
       });
       this.addClass("sell-key").append(el("main", titleDisplay, dateDisplay));
     } else if (notification.type === KrewNotificationType.FOLLOW) {
       titleDisplay.domElement.innerHTML = msg("notification-message-follow", {
-        name,
+        triggerer,
       });
       this.addClass("follow").append(el("main", titleDisplay, dateDisplay));
     } else if (notification.type === KrewNotificationType.POST_LIKE) {
       titleDisplay.domElement.innerHTML = msg(
         "notification-message-post-like",
         {
-          name,
+          triggerer,
         },
       );
       this.addClass("post-like").append(
@@ -47,7 +53,7 @@ export default class KrewNotificationListItem
       ).onDom("click", () => Router.go(`/post/${notification.post_id}`));
     } else if (notification.type === KrewNotificationType.REPOST) {
       titleDisplay.domElement.innerHTML = msg("notification-message-repost", {
-        name,
+        triggerer,
       });
       this.addClass("repost").append(
         el(
@@ -61,7 +67,7 @@ export default class KrewNotificationListItem
       titleDisplay.domElement.innerHTML = msg(
         "notification-message-post-comment",
         {
-          name,
+          triggerer,
         },
       );
       this.addClass("post-comment").append(
@@ -74,7 +80,7 @@ export default class KrewNotificationListItem
       ).onDom("click", () => Router.go(`/post/${notification.post_id}`));
     } else if (notification.type === KrewNotificationType.POST_TAG) {
       titleDisplay.domElement.innerHTML = msg("notification-message-post-tag", {
-        name,
+        triggerer,
       });
       this.addClass("post-tag").append(
         el(

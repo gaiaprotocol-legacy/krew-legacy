@@ -1,9 +1,11 @@
-import { NotificationSelectQuery, NotificationStore } from "sofi-module";
-import KrewNotification from "../database-interface/KrewNotification.js";
+import { NotificationStore } from "sofi-module";
+import KrewNotification, {
+  KrewNotificationSelectQuery,
+} from "../database-interface/KrewNotification.js";
 
 class KrewNotificationStore extends NotificationStore<KrewNotification> {
   constructor() {
-    super("notifications", NotificationSelectQuery, 100);
+    super("notifications", KrewNotificationSelectQuery, 100);
   }
 }
 

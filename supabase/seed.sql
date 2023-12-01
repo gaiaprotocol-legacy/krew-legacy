@@ -288,7 +288,7 @@ CREATE OR REPLACE FUNCTION "public"."notify_follow_event"() RETURNS "trigger"
     insert into notifications (
         user_id, triggerer, type
     ) values (
-        new.followee_id, new.follower_id, 2
+        new.followee_id, new.follower_id, 3
     );
     return null;
 end;$$;
@@ -306,7 +306,7 @@ begin
             INSERT INTO notifications (
                 user_id, triggerer, type, post_id, post_message
             ) VALUES (
-                v_author, new.author, 5, new.id, new.message
+                v_author, new.author, 6, new.id, new.message
             );
         END IF;
     END IF;
@@ -327,7 +327,7 @@ BEGIN
         INSERT INTO notifications (
             user_id, triggerer, type, post_id, post_message
         ) VALUES (
-            v_author, new.user_id, 3, new.post_id, v_message
+            v_author, new.user_id, 4, new.post_id, v_message
         );
     END IF;
     
@@ -349,7 +349,7 @@ BEGIN
         INSERT INTO notifications (
             user_id, triggerer, type, post_id, post_message
         ) VALUES (
-            v_author, new.user_id, 4, new.post_id, v_message
+            v_author, new.user_id, 5, new.post_id, v_message
         );
     END IF;
     
@@ -358,6 +358,88 @@ END;
 $$;
 
 ALTER FUNCTION "public"."notify_repost_event"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."parse_krew_contract_event"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$DECLARE
+    v_sender UUID;
+    v_receiver UUID;
+    v_wallet_address text;
+begin
+    IF new.event_type = 0 THEN
+        IF position('p_' in new.krew) = 1 THEN
+            insert into krews (
+                id, owner
+            ) values (
+                new.krew, new.wallet_address
+            );
+        ELSIF position('c_' in new.krew) = 1 THEN
+            insert into krews (
+                id
+            ) values (
+                new.krew
+            );
+        END IF;
+        insert into krew_key_holders (
+            krew, wallet_address, last_fetched_balance
+        ) values (
+            new.krew, new.wallet_address, 1
+        );
+        insert into notifications (
+            user_id, krew, type
+        ) values (
+            (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address),
+            new.krew, 1
+        );
+    ELSIF new.event_type = 1 THEN
+        insert into krew_key_holders (
+            krew, wallet_address
+        ) values (
+            new.krew, new.wallet_address
+        ) on conflict (subject) do nothing;
+        IF new.args[3] = 'true' THEN
+            update krew_key_holders set
+                last_fetched_balance = last_fetched_balance + new.args[4]::int8
+            where
+                krew = new.krew and
+                wallet_address = new.wallet_address;
+        ELSE
+            update krew_key_holders set
+                last_fetched_balance = last_fetched_balance - new.args[4]::int8
+            where
+                krew = new.krew and
+                wallet_address = new.wallet_address;
+        END IF;
+        IF position('p_' in new.krew) = 1 THEN
+            v_sender := (SELECT user_id FROM users_public WHERE wallet_address = (
+                SELECT owner FROM krews WHERE id = new.krew
+            ));
+            v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
+            IF v_sender != v_receiver THEN
+                insert into notifications (
+                    user_id, triggerer, krew, amount, type
+                ) values (
+                    v_sender, v_receiver, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 2 ELSE 3 END
+                );
+            END IF;
+        ELSIF position('c_' in new.krew) = 1 THEN
+            FOR v_wallet_address IN SELECT wallet_address FROM krew_key_holders WHERE krew = new.krew LOOP
+                v_sender := (SELECT user_id FROM users_public WHERE wallet_address = v_wallet_address);
+                v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
+                IF v_sender != v_receiver THEN
+                    insert into notifications (
+                        user_id, triggerer, krew, amount, type
+                    ) values (
+                        v_sender, v_receiver, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 2 ELSE 3 END
+                    );
+                END IF;
+            END LOOP;
+        END IF;
+    END IF;
+    RETURN NULL;
+end;$$;
+
+ALTER FUNCTION "public"."parse_krew_contract_event"() OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."set_notification_read_at"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
@@ -526,7 +608,8 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "name" "text",
     "profile_image" "text",
     "profile_image_thumbnail" "text",
-    "metadata" "jsonb"
+    "metadata" "jsonb",
+    "krew" "text"
 );
 
 ALTER TABLE "public"."krews" OWNER TO "postgres";
@@ -534,14 +617,15 @@ ALTER TABLE "public"."krews" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."notifications" (
     "id" bigint NOT NULL,
     "user_id" "uuid" NOT NULL,
-    "triggerer" "uuid" NOT NULL,
+    "triggerer" "uuid",
     "type" smallint NOT NULL,
     "amount" bigint,
     "read" boolean DEFAULT false NOT NULL,
     "read_at" timestamp with time zone,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "post_id" bigint,
-    "post_message" "text"
+    "post_message" "text",
+    "krew" "text"
 );
 
 ALTER TABLE "public"."notifications" OWNER TO "postgres";
@@ -731,6 +815,8 @@ CREATE TRIGGER "notify_post_like_event" AFTER INSERT ON "public"."post_likes" FO
 
 CREATE TRIGGER "notify_repost_event" AFTER INSERT ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."notify_repost_event"();
 
+CREATE TRIGGER "parse_krew_contract_event" AFTER INSERT ON "public"."krew_contract_events" FOR EACH ROW EXECUTE FUNCTION "public"."parse_krew_contract_event"();
+
 CREATE TRIGGER "set_krew_key_holders_updated_at" BEFORE UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
 CREATE TRIGGER "set_krews_updated_at" BEFORE UPDATE ON "public"."krews" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
@@ -755,6 +841,9 @@ ALTER TABLE ONLY "public"."follows"
 
 ALTER TABLE ONLY "public"."krew_chat_messages"
     ADD CONSTRAINT "krew_chat_messages_author_fkey" FOREIGN KEY ("author") REFERENCES "public"."users_public"("user_id");
+
+ALTER TABLE ONLY "public"."notifications"
+    ADD CONSTRAINT "notifications_krew_fkey" FOREIGN KEY ("krew") REFERENCES "public"."krews"("id");
 
 ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_post_id_fkey" FOREIGN KEY ("post_id") REFERENCES "public"."posts"("id");
@@ -955,6 +1044,10 @@ GRANT ALL ON FUNCTION "public"."notify_post_like_event"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."notify_repost_event"() TO "anon";
 GRANT ALL ON FUNCTION "public"."notify_repost_event"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."notify_repost_event"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."parse_krew_contract_event"() TO "anon";
+GRANT ALL ON FUNCTION "public"."parse_krew_contract_event"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."parse_krew_contract_event"() TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "anon";
 GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "authenticated";

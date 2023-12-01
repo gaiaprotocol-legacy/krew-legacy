@@ -1,6 +1,7 @@
-import { Notification } from "sofi-module";
+import { Notification, NotificationSelectQuery } from "sofi-module";
 
 export enum KrewNotificationType {
+  CREATE_KEY,
   BUY_KEY,
   SELL_KEY,
   FOLLOW,
@@ -13,7 +14,13 @@ export enum KrewNotificationType {
 export default interface KrewNotification
   extends Notification<KrewNotificationType> {
   type: KrewNotificationType;
+  krew?: {
+    name?: string;
+  };
   amount?: number;
   post_id?: string;
   post_message?: string;
 }
+
+export const KrewNotificationSelectQuery = NotificationSelectQuery +
+  ", krew(name)";

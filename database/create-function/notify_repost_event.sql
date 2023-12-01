@@ -10,7 +10,7 @@ BEGIN
         INSERT INTO notifications (
             user_id, triggerer, type, post_id, post_message
         ) VALUES (
-            v_author, new.user_id, 4, new.post_id, v_message
+            v_author, new.user_id, 5, new.post_id, v_message
         );
     END IF;
     

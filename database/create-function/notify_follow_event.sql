@@ -4,7 +4,7 @@ CREATE OR REPLACE FUNCTION "public"."notify_follow_event"() RETURNS "trigger"
     insert into notifications (
         user_id, triggerer, type
     ) values (
-        new.followee_id, new.follower_id, 2
+        new.followee_id, new.follower_id, 3
     );
     return null;
 end;$$;
