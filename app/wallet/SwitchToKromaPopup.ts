@@ -15,6 +15,8 @@ export default class SwitchToKromaPopup extends Popup {
   private resolve: (() => void) | undefined;
   private reject: (() => void) | undefined;
 
+  private switchButton: Button;
+
   constructor() {
     super({ barrierDismissible: true });
     this.append(
@@ -46,18 +48,34 @@ export default class SwitchToKromaPopup extends Popup {
                   "switch-to-kroma-popup-warning-understood-button",
                 ),
               });
-              this.reject?.();
               this.delete();
             },
             title: msg("switch-to-kroma-popup-later-button"),
           }),
-          new Button({
+          this.switchButton = new Button({
             tag: ".switch",
             click: async () => {
-              await switchNetwork({ chainId: EnvironmentManager.kromaChainId });
+              this.switchButton.title = el(".loading-spinner");
+              try {
+                await switchNetwork({
+                  chainId: EnvironmentManager.kromaChainId,
+                });
+              } catch (e) {
+                this.switchButton.title = msg(
+                  "switch-to-kroma-popup-switch-button",
+                );
+                new ErrorAlert({
+                  title: msg("switch-to-kroma-popup-error-title"),
+                  message: msg("switch-to-kroma-popup-error-message"),
+                });
+                throw new Error("Invalid network");
+              }
 
               const { chain } = getNetwork();
               if (!chain) {
+                this.switchButton.title = msg(
+                  "switch-to-kroma-popup-switch-button",
+                );
                 new ErrorAlert({
                   title: msg("invalid-network-title"),
                   message: msg("invalid-network-message"),
@@ -65,8 +83,12 @@ export default class SwitchToKromaPopup extends Popup {
                 throw new Error("Invalid network");
               }
 
+              this.switchButton.title = msg(
+                "switch-to-kroma-popup-switch-button",
+              );
               if (chain.id === EnvironmentManager.kromaChainId) {
                 this.resolve?.();
+                this.reject = undefined;
                 this.delete();
               }
             },
@@ -75,6 +97,10 @@ export default class SwitchToKromaPopup extends Popup {
         ),
       ),
     );
+
+    this.on("delete", () => {
+      if (this.reject) this.reject();
+    });
   }
 
   public async wait(): Promise<void> {

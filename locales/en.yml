@@ -25,14 +25,14 @@ topic-chat-room-list-empty-message: No chat rooms for topics
 chat-message-list-empty-message: No messages yet
 notification-list-empty-message: No notifications yet
 
-notification-message-create-key: "You created {krew_name} krew"
-notification-message-buy-key: "{triggerer} purchased {amount} ice(s)"
-notification-message-sell-key: "{triggerer} sold {amount} ice(s)"
-notification-message-follow: "{triggerer} started following you"
-notification-message-post-like: "{triggerer} liked your post"
-notification-message-repost: "{triggerer} reposted your post"
-notification-message-post-comment: "{triggerer} commented on your post"
-notification-message-post-tag: "{triggerer} tagged you in a post"
+notification-message-create-key: "You created {krew_name} krew."
+notification-message-buy-key: "{triggerer} purchased {amount} ice(s)."
+notification-message-sell-key: "{triggerer} sold {amount} ice(s)."
+notification-message-follow: "{triggerer} started following you."
+notification-message-post-like: "{triggerer} liked your post."
+notification-message-repost: "{triggerer} reposted your post."
+notification-message-post-comment: "{triggerer} commented on your post."
+notification-message-post-tag: "{triggerer} tagged you in a post."
 
 not-signed-in-title: Not signed in
 not-signed-in-message: You need to sign in to perform this action.
@@ -44,6 +44,8 @@ no-wallet-linked-message: You need to link a wallet to perform this action.
 no-wallet-linked-confirm: Link wallet
 wallet-address-mismatch-title: Wallet address mismatch
 wallet-address-mismatch-message: The wallet address associated with your account and the current crypto wallet address do not match. Please change the crypto wallet address.
+switch-to-kroma-popup-error-title: Error
+switch-to-kroma-popup-error-message: An error occurred while switching to Kroma. Please try again.
 invalid-network-title: Invalid network
 invalid-network-message: You need to be on the Kroma network to perform this action.
 

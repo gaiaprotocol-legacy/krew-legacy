@@ -552,6 +552,24 @@ body {
 p {
   line-height: 1.6;
 }
+@keyframes loading-spinner-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading-spinner:after {
+  content: " ";
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: loading-spinner-animation 1.2s linear infinite;
+}
 .profile-image {
   flex-shrink: 0;
   width: 50px;

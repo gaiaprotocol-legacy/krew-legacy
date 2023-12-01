@@ -7,6 +7,7 @@ export default class CreateKrewForm extends DomNode {
   private krewType: KrewType = KrewType.Personal;
   private personalSection: DomNode;
   private communalSection: DomNode;
+  private createButton: Button;
 
   constructor() {
     super(".create-krew-form");
@@ -40,7 +41,7 @@ export default class CreateKrewForm extends DomNode {
           { click: () => this.selectKrewType(KrewType.Communal) },
         ),
       ),
-      new Button({
+      this.createButton = new Button({
         tag: ".create",
         click: () => this.createKrew(),
         title: msg("create-krew-form-create-button"),
@@ -60,10 +61,18 @@ export default class CreateKrewForm extends DomNode {
   }
 
   private async createKrew() {
-    if (this.krewType === KrewType.Personal) {
-      await KrewPersonalContract.createKrew();
-    } else if (this.krewType === KrewType.Communal) {
-      await KrewCommunalContract.createKrew();
+    this.createButton.title = el(".loading-spinner");
+    try {
+      if (this.krewType === KrewType.Personal) {
+        const krewId = await KrewPersonalContract.createKrew();
+        this.fireEvent("krewCreated", KrewType.Personal, krewId);
+      } else if (this.krewType === KrewType.Communal) {
+        const krewId = await KrewCommunalContract.createKrew();
+        this.fireEvent("krewCreated", KrewType.Communal, krewId);
+      }
+    } catch (e) {
+      console.error(e);
     }
+    this.createButton.title = msg("create-krew-form-create-button");
   }
 }
