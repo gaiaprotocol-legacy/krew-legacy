@@ -2,12 +2,28 @@ import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import Contract from "./Contract.js";
 import { KrewCommunal } from "./abi/krew/KrewCommunal.js";
 import KrewCommunalArtifact from "./abi/krew/KrewCommunal.json" assert {
-  type: "json"
+  type: "json",
 };
 
 class KrewCommunalContract extends Contract<KrewCommunal> {
   constructor() {
     super(KrewCommunalArtifact.abi);
+  }
+
+  public async getBuyPrice(krewId: bigint, amount: bigint) {
+    return this.viewContract.getBuyPrice(krewId, amount);
+  }
+
+  public async getSellPrice(krewId: bigint, amount: bigint) {
+    return this.viewContract.getSellPrice(krewId, amount);
+  }
+
+  public async getBuyPriceAfterFee(krewId: bigint, amount: bigint) {
+    return this.viewContract.getBuyPriceAfterFee(krewId, amount);
+  }
+
+  public async getSellPriceAfterFee(krewId: bigint, amount: bigint) {
+    return this.viewContract.getSellPriceAfterFee(krewId, amount);
   }
 
   public async createKrew() {
@@ -26,6 +42,22 @@ class KrewCommunalContract extends Contract<KrewCommunal> {
     );
     if (!events || events.length === 0) throw new Error("No events");
     return events[0].args?.[0];
+  }
+
+  public async buyKeys(krewId: bigint, amount: bigint) {
+    const writeContract = await this.getWriteContract();
+    const oracleSignature = ""; //TODO: get oracle signature
+    const tx = await writeContract.buyKeys(krewId, amount, oracleSignature, {
+      value: await this.getBuyPriceAfterFee(krewId, amount),
+    });
+    return tx.wait();
+  }
+
+  public async sellKeys(krewId: bigint, amount: bigint) {
+    const writeContract = await this.getWriteContract();
+    const oracleSignature = ""; //TODO: get oracle signature
+    const tx = await writeContract.sellKeys(krewId, amount, oracleSignature);
+    return tx.wait();
   }
 }
 

@@ -392,6 +392,10 @@ begin
             new.krew, 0
         );
     ELSIF new.event_type = 1 THEN
+        update krews set
+            supply = new.args[9]::numeric
+        where
+            krew = new.krew;
         insert into krew_key_holders (
             krew, wallet_address
         ) values (
@@ -600,7 +604,7 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "is_key_price_up" boolean,
     "last_message" "text",
     "last_message_sent_at" timestamp with time zone DEFAULT '-infinity'::timestamp with time zone NOT NULL,
-    "key_holder_count" integer DEFAULT 0 NOT NULL,
+    "key_holder_count" integer DEFAULT 1 NOT NULL,
     "last_key_purchased_at" timestamp with time zone DEFAULT '-infinity'::timestamp with time zone NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "updated_at" timestamp with time zone,
@@ -608,7 +612,8 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "name" "text",
     "profile_image" "text",
     "profile_image_thumbnail" "text",
-    "metadata" "jsonb"
+    "metadata" "jsonb",
+    "supply" numeric DEFAULT '1'::numeric NOT NULL
 );
 
 ALTER TABLE "public"."krews" OWNER TO "postgres";

@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import Contract from "./Contract.js";
 import { KrewPersonal } from "./abi/krew/KrewPersonal.js";
@@ -48,11 +49,11 @@ class KrewPersonalContract extends Contract<KrewPersonal> {
     return events[0].args?.[0];
   }
 
-  public async buyKeys(krewId: bigint, amount: bigint, value: bigint) {
+  public async buyKeys(krewId: bigint, amount: bigint) {
     const writeContract = await this.getWriteContract();
-    const oracleSignature = ""; //TODO: get oracle signature
+    const oracleSignature = ethers.ZeroHash; //TODO: get oracle signature
     const tx = await writeContract.buyKeys(krewId, amount, oracleSignature, {
-      value,
+      value: await this.getBuyPriceAfterFee(krewId, amount),
     });
     return tx.wait();
   }

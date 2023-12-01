@@ -26,7 +26,7 @@ import type {
 export interface KrewCommunalInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "buyKey"
+      | "buyKeys"
       | "calculateAdditionalTokenOwnerFee"
       | "claimHolderFee"
       | "claimableHolderFee"
@@ -47,7 +47,7 @@ export interface KrewCommunalInterface extends Interface {
       | "protocolFeeDestination"
       | "protocolFeePercent"
       | "renounceOwnership"
-      | "sellKey"
+      | "sellKeys"
       | "setHolderFeePercent"
       | "setOracleAddress"
       | "setProtocolFeeDestination"
@@ -69,7 +69,7 @@ export interface KrewCommunalInterface extends Interface {
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "buyKey",
+    functionFragment: "buyKeys",
     values: [BigNumberish, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
@@ -147,7 +147,7 @@ export interface KrewCommunalInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "sellKey",
+    functionFragment: "sellKeys",
     values: [BigNumberish, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
@@ -171,7 +171,7 @@ export interface KrewCommunalInterface extends Interface {
     values: [AddressLike]
   ): string;
 
-  decodeFunctionResult(functionFragment: "buyKey", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "buyKeys", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "calculateAdditionalTokenOwnerFee",
     data: BytesLike
@@ -228,7 +228,7 @@ export interface KrewCommunalInterface extends Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "sellKey", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "sellKeys", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setHolderFeePercent",
     data: BytesLike
@@ -438,7 +438,7 @@ export interface KrewCommunal extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  buyKey: TypedContractMethod<
+  buyKeys: TypedContractMethod<
     [krew: BigNumberish, amount: BigNumberish, oracleSignature: BytesLike],
     [void],
     "payable"
@@ -532,7 +532,7 @@ export interface KrewCommunal extends BaseContract {
 
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
-  sellKey: TypedContractMethod<
+  sellKeys: TypedContractMethod<
     [krew: BigNumberish, amount: BigNumberish, oracleSignature: BytesLike],
     [void],
     "nonpayable"
@@ -573,7 +573,7 @@ export interface KrewCommunal extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "buyKey"
+    nameOrSignature: "buyKeys"
   ): TypedContractMethod<
     [krew: BigNumberish, amount: BigNumberish, oracleSignature: BytesLike],
     [void],
@@ -684,7 +684,7 @@ export interface KrewCommunal extends BaseContract {
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "sellKey"
+    nameOrSignature: "sellKeys"
   ): TypedContractMethod<
     [krew: BigNumberish, amount: BigNumberish, oracleSignature: BytesLike],
     [void],

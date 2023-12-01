@@ -28,6 +28,7 @@ import Layout from "./layout/Layout.js";
 import NotificationsView from "./notification/NotificationsView.js";
 import PostsView from "./post/PostsView.js";
 import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
+import UserView from "./user/UserView.js";
 import WalletManager from "./wallet/WalletManager.js";
 
 inject_sofi_msg();
@@ -63,12 +64,16 @@ export default async function initialize(config: Config) {
   Router.route("**", Layout, ["test/**"]);
   Router.route("", PostsView);
 
-  Router.route(["chats", "chat/{topic}"], ChatsView);
+  Router.route(["chats", "chat/{topic}", "{t}/{krewId}/chat"], ChatsView);
   Router.route(["chats", "chat/general"], TopicChatRoomView);
-  //Router.route("chat/{krewId}", KrewChatRoomView, ["chat/general"]);
 
-  Router.route("krew/{type}/{id}/edit", EditKrewView);
+  //Router.route("{t}/{krewId}/chat", KrewChatRoomView);
+  //Router.route("{t}/{krewId}", KrewView, ["chat/{topic}"]);
+  Router.route("{t}/{krewId}/edit", EditKrewView);
+
   Router.route("notifications", NotificationsView);
+
+  Router.route("{xUsername}", UserView, ["chats", "notifications"]);
 
   Router.route("test/chat", TestChatView);
   Router.route("test/posts", TestPostListView);
