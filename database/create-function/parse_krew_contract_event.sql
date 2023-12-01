@@ -31,6 +31,10 @@ begin
             new.krew, 0
         );
     ELSIF new.event_type = 1 THEN
+        update krews set
+            supply = new.args[9]::numeric
+        where
+            krew = new.krew;
         insert into krew_key_holders (
             krew, wallet_address
         ) values (

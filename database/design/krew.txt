@@ -5,13 +5,14 @@ krews
 	profile_image - text - nullable
 	profile_image_thumbnail - text - nullable
 	metadata - jsonb - nullable
+	supply - numeric - 1
 	last_fetched_key_price - numeric - 68750000000000
 	total_trading_key_volume - numeric - 0
 	total_earned_trading_fees - numeric - 0
 	is_key_price_up - bool - nullable
 	last_message - text - nullable
 	last_message_sent_at - timestampz - -infinity
-	key_holder_count - int4 - 0
+	key_holder_count - int4 - 1
 	last_key_purchased_at - timestampz - -infinity
 	created_at - timestampz - now()
 	updated_at - timestampz - nullable
