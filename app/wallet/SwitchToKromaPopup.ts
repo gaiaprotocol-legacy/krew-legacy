@@ -4,10 +4,10 @@ import {
   Button,
   ButtonType,
   Component,
-  el,
   ErrorAlert,
-  msg,
   Popup,
+  el,
+  msg,
 } from "common-app-module";
 import EnvironmentManager from "../EnvironmentManager.js";
 
@@ -56,6 +56,7 @@ export default class SwitchToKromaPopup extends Popup {
             tag: ".switch",
             click: async () => {
               this.switchButton.title = el(".loading-spinner");
+
               try {
                 await switchNetwork({
                   chainId: EnvironmentManager.kromaChainId,

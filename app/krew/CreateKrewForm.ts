@@ -1,4 +1,4 @@
-import { Button, DomNode, el, msg } from "common-app-module";
+import { Button, DomNode, el, msg, Supabase } from "common-app-module";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
 import KrewType from "../database-interface/KrewType.js";
@@ -11,6 +11,8 @@ export default class CreateKrewForm extends DomNode {
 
   constructor() {
     super(".create-krew-form");
+    this.addAllowedEvents("krewCreated");
+
     this.append(
       el("h2", msg("create-krew-form-title")),
       el("p", msg("create-krew-form-intro")),
@@ -62,17 +64,29 @@ export default class CreateKrewForm extends DomNode {
 
   private async createKrew() {
     this.createButton.title = el(".loading-spinner");
+
     try {
       if (this.krewType === KrewType.Personal) {
         const krewId = await KrewPersonalContract.createKrew();
+        const { error } = await Supabase.client.functions.invoke(
+          "track-krew-personal-events",
+        );
+        if (error) throw error;
         this.fireEvent("krewCreated", KrewType.Personal, krewId);
       } else if (this.krewType === KrewType.Communal) {
         const krewId = await KrewCommunalContract.createKrew();
+        const { error } = await Supabase.client.functions.invoke(
+          "track-krew-communal-events",
+        );
+        if (error) throw error;
         this.fireEvent("krewCreated", KrewType.Communal, krewId);
       }
     } catch (e) {
       console.error(e);
     }
-    this.createButton.title = msg("create-krew-form-create-button");
+
+    if (!this.deleted) {
+      this.createButton.title = msg("create-krew-form-create-button");
+    }
   }
 }

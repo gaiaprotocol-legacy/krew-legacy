@@ -23,6 +23,7 @@ import Config from "./Config.js";
 import KrewCommunalContract from "./contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "./contracts/KrewPersonalContract.js";
 import EnvironmentManager from "./EnvironmentManager.js";
+import EditKrewView from "./krew/EditKrewView.js";
 import Layout from "./layout/Layout.js";
 import NotificationsView from "./notification/NotificationsView.js";
 import PostsView from "./post/PostsView.js";
@@ -65,6 +66,8 @@ export default async function initialize(config: Config) {
   Router.route(["chats", "chat/{topic}"], ChatsView);
   Router.route(["chats", "chat/general"], TopicChatRoomView);
   //Router.route("chat/{krewId}", KrewChatRoomView, ["chat/general"]);
+
+  Router.route("krew/{type}/{id}/edit", EditKrewView);
   Router.route("notifications", NotificationsView);
 
   Router.route("test/chat", TestChatView);

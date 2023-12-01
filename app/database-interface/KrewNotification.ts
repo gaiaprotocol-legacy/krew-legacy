@@ -15,6 +15,7 @@ export default interface KrewNotification
   extends Notification<KrewNotificationType> {
   type: KrewNotificationType;
   krew?: {
+    id: string;
     name?: string;
   };
   amount?: number;
@@ -23,4 +24,4 @@ export default interface KrewNotification
 }
 
 export const KrewNotificationSelectQuery = NotificationSelectQuery +
-  ", krew(name)";
+  ", krew(id, name)";

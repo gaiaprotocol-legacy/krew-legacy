@@ -18,24 +18,45 @@ export default class KrewNotificationListItem
         "notification-message-create-key",
         { krew_name: notification.krew?.name },
       );
-      this.addClass("create-key").append(el("main", titleDisplay, dateDisplay));
+      this.addClass("create-key").append(el("main", titleDisplay, dateDisplay))
+        .onDom(
+          "click",
+          () =>
+            Router.go(
+              `/krew/${
+                notification.krew?.id.startsWith("p_") ? "personal" : "communal"
+              }/${notification.krew?.id.substring(2)}`,
+            ),
+        );
     } else if (notification.type === KrewNotificationType.BUY_KEY) {
       titleDisplay.domElement.innerHTML = msg("notification-message-buy-key", {
         triggerer,
         amount: notification.amount,
       });
-      this.addClass("buy-key").append(el("main", titleDisplay, dateDisplay));
+      this.addClass("buy-key").append(el("main", titleDisplay, dateDisplay))
+        .onDom(
+          "click",
+          () => Router.go(`/${notification.triggerer?.x_username}`),
+        );
     } else if (notification.type === KrewNotificationType.SELL_KEY) {
       titleDisplay.domElement.innerHTML = msg("notification-message-sell-key", {
         triggerer,
         amount: notification.amount,
       });
-      this.addClass("sell-key").append(el("main", titleDisplay, dateDisplay));
+      this.addClass("sell-key").append(el("main", titleDisplay, dateDisplay))
+        .onDom(
+          "click",
+          () => Router.go(`/${notification.triggerer?.x_username}`),
+        );
     } else if (notification.type === KrewNotificationType.FOLLOW) {
       titleDisplay.domElement.innerHTML = msg("notification-message-follow", {
         triggerer,
       });
-      this.addClass("follow").append(el("main", titleDisplay, dateDisplay));
+      this.addClass("follow").append(el("main", titleDisplay, dateDisplay))
+        .onDom(
+          "click",
+          () => Router.go(`/${notification.triggerer?.x_username}`),
+        );
     } else if (notification.type === KrewNotificationType.POST_LIKE) {
       titleDisplay.domElement.innerHTML = msg(
         "notification-message-post-like",
