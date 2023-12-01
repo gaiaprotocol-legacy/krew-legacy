@@ -608,8 +608,7 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "name" "text",
     "profile_image" "text",
     "profile_image_thumbnail" "text",
-    "metadata" "jsonb",
-    "krew" "text"
+    "metadata" "jsonb"
 );
 
 ALTER TABLE "public"."krews" OWNER TO "postgres";

@@ -28,7 +28,7 @@ begin
             user_id, krew, type
         ) values (
             (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address),
-            new.krew, 1
+            new.krew, 0
         );
     ELSIF new.event_type = 1 THEN
         insert into krew_key_holders (
@@ -58,7 +58,7 @@ begin
                 insert into notifications (
                     user_id, triggerer, krew, amount, type
                 ) values (
-                    v_sender, v_receiver, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 2 ELSE 3 END
+                    v_sender, v_receiver, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 1 ELSE 2 END
                 );
             END IF;
         ELSIF position('c_' in new.krew) = 1 THEN
@@ -69,7 +69,7 @@ begin
                     insert into notifications (
                         user_id, triggerer, krew, amount, type
                     ) values (
-                        v_sender, v_receiver, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 2 ELSE 3 END
+                        v_sender, v_receiver, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 1 ELSE 2 END
                     );
                 END IF;
             END LOOP;
