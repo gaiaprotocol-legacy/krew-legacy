@@ -30,7 +30,7 @@ serveWithOptions(async (req) => {
       ).upload(
         `${user.id}/profile-image.png`,
         result.body,
-        { upsert: true },
+        { contentType: "image/png", upsert: true },
       );
       if (storeError) throw storeError;
 
@@ -51,7 +51,7 @@ serveWithOptions(async (req) => {
       ).upload(
         `${user.id}/profile-image-thumbnail.png`,
         result.body,
-        { upsert: true },
+        { contentType: "image/png", upsert: true },
       );
       if (storeError) throw storeError;
 

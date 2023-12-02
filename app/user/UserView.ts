@@ -33,11 +33,19 @@ export default class UserView extends View {
         this.container.append(
           el("h1", krew.id),
           el("a", "buy", {
-            click: () => {
+            click: async () => {
               if (krew.id.startsWith("p_")) {
-                KrewPersonalContract.buyKeys(BigInt(krew.id.substring(2)), 1n);
+                await KrewPersonalContract.buyKeys(
+                  BigInt(krew.id.substring(2)),
+                  1n,
+                );
+                await KrewService.trackPersonalEvents();
               } else if (krew.id.startsWith("c_")) {
-                KrewCommunalContract.buyKeys(BigInt(krew.id.substring(2)), 1n);
+                await KrewCommunalContract.buyKeys(
+                  BigInt(krew.id.substring(2)),
+                  1n,
+                );
+                await KrewService.trackCommunalEvents();
               }
             },
           }),

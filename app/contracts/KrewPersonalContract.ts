@@ -51,7 +51,7 @@ class KrewPersonalContract extends Contract<KrewPersonal> {
 
   public async buyKeys(krewId: bigint, amount: bigint) {
     const writeContract = await this.getWriteContract();
-    const tx = await writeContract.buyKeys(krewId, amount, ethers.ZeroHash, {
+    const tx = await writeContract.buyKeys(krewId, amount, "0x", {
       value: await this.getBuyPriceAfterFee(krewId, amount),
     });
     return tx.wait();
@@ -59,7 +59,7 @@ class KrewPersonalContract extends Contract<KrewPersonal> {
 
   public async sellKeys(krewId: bigint, amount: bigint) {
     const writeContract = await this.getWriteContract();
-    const tx = await writeContract.sellKeys(krewId, amount, ethers.ZeroHash);
+    const tx = await writeContract.sellKeys(krewId, amount, "0x");
     return tx.wait();
   }
 }

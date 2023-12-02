@@ -1,7 +1,8 @@
-import { Button, DomNode, el, msg, Supabase } from "common-app-module";
+import { Button, DomNode, el, msg } from "common-app-module";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
 import KrewType from "../database-interface/KrewType.js";
+import KrewService from "./KrewService.js";
 
 export default class CreateKrewForm extends DomNode {
   private krewType: KrewType = KrewType.Personal;
@@ -68,17 +69,11 @@ export default class CreateKrewForm extends DomNode {
     try {
       if (this.krewType === KrewType.Personal) {
         const krewId = await KrewPersonalContract.createKrew();
-        const { error } = await Supabase.client.functions.invoke(
-          "track-krew-personal-events",
-        );
-        if (error) throw error;
+        await KrewService.trackPersonalEvents();
         this.fireEvent("krewCreated", KrewType.Personal, krewId);
       } else if (this.krewType === KrewType.Communal) {
         const krewId = await KrewCommunalContract.createKrew();
-        const { error } = await Supabase.client.functions.invoke(
-          "track-krew-communal-events",
-        );
-        if (error) throw error;
+        await KrewService.trackCommunalEvents();
         this.fireEvent("krewCreated", KrewType.Communal, krewId);
       }
     } catch (e) {

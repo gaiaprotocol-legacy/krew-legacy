@@ -12,7 +12,7 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     using AddressUpgradeable for address payable;
     using ECDSAUpgradeable for bytes32;
 
-    uint256 private constant BASE_DIVIDER = 100;
+    uint256 private constant BASE_DIVIDER = 16000;
 
     address payable public protocolFeeDestination;
     uint256 public protocolFeePercent;

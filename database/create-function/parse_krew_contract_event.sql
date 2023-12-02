@@ -34,12 +34,12 @@ begin
         update krews set
             supply = new.args[9]::numeric
         where
-            krew = new.krew;
+            id = new.krew;
         insert into krew_key_holders (
             krew, wallet_address
         ) values (
             new.krew, new.wallet_address
-        ) on conflict (subject) do nothing;
+        ) on conflict (krew, wallet_address) do nothing;
         IF new.args[3] = 'true' THEN
             update krew_key_holders set
                 last_fetched_balance = last_fetched_balance + new.args[4]::int8
