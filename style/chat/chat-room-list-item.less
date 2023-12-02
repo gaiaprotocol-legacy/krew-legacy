@@ -1,0 +1,26 @@
+.chat-room-list-item {
+    height          : 90px;
+    display         : flex;
+    flex-direction  : column;
+    justify-content : center;
+    padding         : 0 27px;
+    cursor          : pointer;
+    border-bottom   : 1px solid var(--line-color);
+    background-color: var(--bg2-color);
+
+    .last-message-info {
+        margin-top     : 4px;
+        display        : flex;
+        align-items    : center;
+        justify-content: space-between;
+        color          : #474B54;
+
+        >.message {
+            white-space  : nowrap;
+            text-overflow: ellipsis;
+            overflow     : hidden;
+            width        : 0;
+            flex-grow    : 1;
+        }
+    }
+}

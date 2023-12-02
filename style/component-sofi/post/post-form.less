@@ -1,0 +1,46 @@
+.post-form.sofi-component {
+    >main {
+        display: flex;
+        gap    : 20px;
+
+        @media @phone {
+            gap: 12px;
+        }
+
+        >.author-profile-image {
+            .profile-image();
+        }
+
+        >form {
+            flex-grow     : 1;
+            display       : flex;
+            flex-direction: column;
+            gap           : 12px;
+
+            >.message-input {
+                border       : 1px solid var(--line-color);
+                padding      : 12px;
+                border-radius: 12px;
+                min-height   : 100px;
+            }
+        }
+    }
+
+    >footer {
+        display        : flex;
+        justify-content: space-between;
+        align-items    : center;
+        padding-left   : 70px;
+
+        @media @phone {
+            padding-left: 62px;
+        }
+
+        >section.rich {
+            >button {
+                padding: 4px;
+                cursor : pointer;
+            }
+        }
+    }
+}

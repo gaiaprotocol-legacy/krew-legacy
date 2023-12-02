@@ -1,0 +1,23 @@
+.dropdown-menu.component {
+    position     : fixed;
+    z-index      : 999998;
+    width        : 160px;
+    border-radius: 15px;
+    border       : 1px solid rgba(181, 191, 214, 0.20);
+    background   : #1C1D26;
+    overflow     : hidden;
+    box-shadow   : 0 0 10px rgba(0, 0, 0, 0.5);
+
+    >li>button {
+        cursor         : pointer;
+        width          : 100%;
+        padding        : 10px 0;
+        display        : flex;
+        justify-content: center;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color     : #fff;
+        }
+    }
+}
