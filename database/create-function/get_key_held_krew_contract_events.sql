@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION get_key_held_activities(
+CREATE OR REPLACE FUNCTION get_key_held_krew_contract_events(
     p_wallet_address text,
     last_created_at timestamp with time zone DEFAULT NULL,
     max_count int DEFAULT 100
@@ -42,8 +42,9 @@ BEGIN
         a.created_at DESC
     LIMIT 
         max_count;
-END;
-$$;
+END
+$$ LANGUAGE plpgsql;
+
 ALTER FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
 GRANT ALL ON FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "anon";
