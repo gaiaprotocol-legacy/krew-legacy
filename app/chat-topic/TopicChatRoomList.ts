@@ -16,8 +16,6 @@ export default class TopicChatRoomList extends ChatRoomList {
       for (const t of cachedTopics) {
         this.append(new TopicChatRoomListItem(t));
       }
-    } else {
-      this.append(new ListLoadingBar());
     }
 
     this.refresh();

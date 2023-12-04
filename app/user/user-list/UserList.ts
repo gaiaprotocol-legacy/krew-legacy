@@ -1,4 +1,4 @@
-import { DomNode, Store } from "common-app-module";
+import { DomNode, ListLoadingBar, Store } from "common-app-module";
 import { SoFiUserPublic } from "sofi-module";
 import UserListItem from "./UserListItem.js";
 
@@ -17,8 +17,19 @@ export default abstract class UserList extends DomNode {
     new UserListItem(userPublic).appendTo(this);
   }
 
+  private async refresh() {
+    this.append(new ListLoadingBar());
+
+    //TODO:
+
+    if (!this.deleted) {
+      this.refreshed = true;
+    }
+  }
+
   public show() {
     this.deleteClass("hidden");
+    if (!this.refreshed) this.refresh();
   }
 
   public hide() {

@@ -1,5 +1,5 @@
 import { msg } from "common-app-module";
-import UserList from "../UserList.js";
+import UserList from "../user-list/UserList.js";
 
 export default class HoldingList extends UserList {
   constructor(walletAddress: string) {

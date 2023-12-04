@@ -96,6 +96,9 @@ holder-list-empty-message: No users holding ice for you yet
 following-list-empty-message: Not following anyone yet
 follower-list-empty-message: No followers yet
 
+global-activity-list-empty-message: No global activities yet
+your-keys-activity-list-empty-message: No activities yet
+
 user-connections-holding-tab: Holding
 user-connections-following-tab: Following
 user-connections-followers-tab: Followers
