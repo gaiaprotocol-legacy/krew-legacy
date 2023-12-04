@@ -88,3 +88,13 @@ buy-key-popup-total-price-title: Total (including fee)
 key-bought-popup-title: Key Purchase Successful!
 key-bought-popup-message: Your purchase of the Krew key has been successfully completed. As a member of {krew}, you now have access to exclusive content and special activities. We sincerely congratulate you on becoming a part of the {krew} community!
 key-bought-popup-go-to-krew-button: Go to Krew Page
+
+holding-list-empty-message: No users you hold ices for yet
+holder-list-empty-message: No users holding ice for you yet
+following-list-empty-message: Not following anyone yet
+follower-list-empty-message: No followers yet
+
+user-connections-holding-tab: Holding
+user-connections-holders-tab: Holders
+user-connections-following-tab: Following
+user-connections-followers-tab: Followers
