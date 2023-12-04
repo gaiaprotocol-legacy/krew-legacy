@@ -23,6 +23,7 @@ import Config from "./Config.js";
 import KrewCommunalContract from "./contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "./contracts/KrewPersonalContract.js";
 import EnvironmentManager from "./EnvironmentManager.js";
+import KeysView from "./key/KeysView.js";
 import Layout from "./layout/Layout.js";
 import NotificationsView from "./notification/NotificationsView.js";
 import PostsView from "./post/PostsView.js";
@@ -79,9 +80,10 @@ export default async function initialize(config: Config) {
     "{xUsername}/followers",
   ]);*/
 
+  Router.route("keys", KeysView);
   Router.route("notifications", NotificationsView);
 
-  Router.route("{xUsername}", UserView, ["chats", "notifications"]);
+  Router.route("{xUsername}", UserView, ["chats", "keys", "notifications"]);
   Router.route(
     [
       "{xUsername}/holding",
