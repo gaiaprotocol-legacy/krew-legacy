@@ -1,4 +1,4 @@
-import { BodyNode, DomNode, el, Router } from "common-app-module";
+import { BodyNode, DomNode, el, msg, Router } from "common-app-module";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import LoginRequiredDisplay from "../user/LoginRequiredDisplay.js";
 import KrewNotificationList from "./KrewNotificationList.js";
@@ -11,8 +11,8 @@ export default class NotificationsPanel extends DomNode {
     this.append(
       el(
         "header",
-        el("h1", "Notifications"),
-        el("a", "More", {
+        el("h1", msg("notification-title")),
+        el("a", msg("notification-more-button"), {
           click: () => {
             Router.go("/notifications");
             this.delete();

@@ -1,4 +1,4 @@
-import { el, View } from "common-app-module";
+import { el, msg, View } from "common-app-module";
 import Layout from "../layout/Layout.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import LoginRequiredDisplay from "../user/LoginRequiredDisplay.js";
@@ -10,7 +10,7 @@ export default class NotificationsView extends View {
     Layout.append(
       this.container = el(
         ".notifications-view",
-        el("h1", "Notifications"),
+        el("h1", msg("notification-title")),
         KrewSignedUserManager.signed
           ? new KrewNotificationList(KrewSignedUserManager.user!.user_id)
           : new LoginRequiredDisplay(),
