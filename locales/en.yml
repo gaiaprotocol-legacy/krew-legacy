@@ -98,3 +98,8 @@ user-connections-holding-tab: Holding
 user-connections-holders-tab: Holders
 user-connections-following-tab: Following
 user-connections-followers-tab: Followers
+
+user-post-list-empty-message: No posts from this user yet
+user-comment-post-list-empty-message: No comments from this user yet
+user-repost-list-empty-message: No reposts from this user yet
+user-liked-post-list-empty-message: No liked posts from this user yet

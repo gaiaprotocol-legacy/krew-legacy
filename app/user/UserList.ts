@@ -16,4 +16,12 @@ export default abstract class UserList extends DomNode {
   protected addUserItem(userPublic: SoFiUserPublic) {
     new UserListItem(userPublic).appendTo(this);
   }
+
+  public show() {
+    this.deleteClass("hidden");
+  }
+
+  public hide() {
+    this.addClass("hidden");
+  }
 }

@@ -1,12 +1,20 @@
 import { el, msg, Router, Tabs, View, ViewParams } from "common-app-module";
-import { PreviewUserPublic } from "sofi-module";
+import { SoFiUserPublic } from "sofi-module";
 import Layout from "../../layout/Layout.js";
 import MaterialIcon from "../../MaterialIcon.js";
 import KrewUserCacher from "../KrewUserCacher.js";
 import KrewUserService from "../KrewUserService.js";
+import FollowerList from "./FollowerList.js";
+import FollowingList from "./FollowingList.js";
+import HolderList from "./HolderList.js";
+import HoldingList from "./HoldingList.js";
 
 export default class UserConnectionsView extends View {
   private tabs: Tabs | undefined;
+  private holdingList: HoldingList | undefined;
+  private holderList: HolderList | undefined;
+  private followingList: FollowingList | undefined;
+  private followerList: FollowerList | undefined;
 
   constructor(params: ViewParams, uri: string, data?: any) {
     super();
@@ -25,20 +33,28 @@ export default class UserConnectionsView extends View {
   private async render(
     xUsername: string,
     currentTab: string,
-    previewUserPublic?: PreviewUserPublic,
+    previewUserPublic?: SoFiUserPublic,
   ) {
-    let username = previewUserPublic?.display_name;
     let userId = previewUserPublic?.user_id;
+    let walletAddress = previewUserPublic?.wallet_address;
+    let displayName = previewUserPublic?.display_name;
+
     if (!previewUserPublic) {
       const cached = KrewUserCacher.getByXUsername(xUsername);
       if (cached) {
-        username = cached.display_name;
-        userId = cached.user_id;
+        [userId, walletAddress, displayName] = [
+          cached.user_id,
+          cached.wallet_address,
+          cached.display_name,
+        ];
       } else {
         const userPublic = await KrewUserService.fetchByXUsername(xUsername);
         if (userPublic) {
-          username = userPublic.display_name;
-          userId = userPublic.user_id;
+          [userId, walletAddress, displayName] = [
+            userPublic.user_id,
+            userPublic.wallet_address,
+            userPublic.display_name,
+          ];
           KrewUserCacher.cache(userPublic);
         }
       }
@@ -51,20 +67,61 @@ export default class UserConnectionsView extends View {
           el("button", new MaterialIcon("arrow_back"), {
             click: () => history.back(),
           }),
-          el(".info", el("h1", username), el("h2", `@${xUsername}`)),
-          this.tabs = new Tabs("user-connections", [
-            { id: "holding", label: msg("user-connections-holding-tab") },
-            { id: "holders", label: msg("user-connections-holders-tab") },
-            { id: "following", label: msg("user-connections-following-tab") },
-            { id: "followers", label: msg("user-connections-followers-tab") },
-          ]),
+          el(".info", el("h1", displayName), el("h2", `@${xUsername}`)),
+          this.tabs = new Tabs(
+            "user-connections",
+            walletAddress
+              ? [
+                { id: "holding", label: msg("user-connections-holding-tab") },
+                { id: "holders", label: msg("user-connections-holders-tab") },
+                {
+                  id: "following",
+                  label: msg("user-connections-following-tab"),
+                },
+                {
+                  id: "followers",
+                  label: msg("user-connections-followers-tab"),
+                },
+              ]
+              : [
+                {
+                  id: "following",
+                  label: msg("user-connections-following-tab"),
+                },
+                {
+                  id: "followers",
+                  label: msg("user-connections-followers-tab"),
+                },
+              ],
+          ),
+          ...(walletAddress
+            ? [
+              this.holdingList = new HoldingList(walletAddress),
+              this.holderList = new HolderList(walletAddress),
+              this.followingList = new FollowingList(userId),
+              this.followerList = new FollowerList(userId),
+            ]
+            : [
+              this.followingList = new FollowingList(userId),
+              this.followerList = new FollowerList(userId),
+            ]),
         ),
       );
+
       this.tabs.on("select", (id: string) => {
         Router.changeUri(`/${xUsername}/${id}`);
-        //TODO:
-      });
-      this.tabs.select(currentTab);
+        [
+          this.holdingList,
+          this.holderList,
+          this.followingList,
+          this.followerList,
+        ]
+          .forEach((list) => list?.hide());
+        if (id === "holdings") this.holdingList?.show();
+        else if (id === "holders") this.holderList?.show();
+        else if (id === "following") this.followingList?.show();
+        else if (id === "followers") this.followerList?.show();
+      }).select(currentTab);
     } else {
       this.container.empty().append(
         el(
