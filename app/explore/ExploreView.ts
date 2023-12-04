@@ -1,11 +1,11 @@
 import { el, View } from "common-app-module";
 import Layout from "../layout/Layout.js";
 
-export default class ExplorerView extends View {
+export default class ExploreView extends View {
   constructor() {
     super();
     Layout.append(
-      this.container = el(".explorer-view"),
+      this.container = el(".explore-view"),
     );
   }
 }

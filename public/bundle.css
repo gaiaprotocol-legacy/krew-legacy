@@ -839,43 +839,6 @@ p {
 .create-krew-popup {
   max-width: 800px !important;
 }
-.buy-key-popup > main > .krew-image {
-  flex-shrink: 0;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #252525;
-  background-size: cover;
-  width: 140px;
-  height: 140px;
-  margin: 16px auto;
-}
-@media only screen and (max-width: 859px) {
-  .buy-key-popup > main > .krew-image {
-    width: 34px;
-    height: 34px;
-  }
-}
-.buy-key-popup > main > table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 16px;
-  border-style: hidden;
-  box-shadow: 0 0 0 1px var(--line-color);
-}
-.buy-key-popup > main > table > tr > th,
-.buy-key-popup > main > table > tr > td {
-  padding: 16px;
-  border-bottom: 1px solid var(--line-color);
-}
-.buy-key-popup > main > table > tr > td {
-  text-align: right;
-}
-.key-bought-popup > main > .lottie-animation {
-  width: 100%;
-  max-width: 320px;
-  margin: 0 auto;
-}
 .posts-view {
   position: relative;
   height: 100%;
@@ -1088,6 +1051,55 @@ p {
   font-size: 18px;
   font-weight: 500;
   text-transform: capitalize;
+}
+.keys-view {
+  max-width: 1000px;
+  margin: 20px auto;
+  border-radius: 20px;
+  background-color: var(--bg2-color);
+}
+.buy-key-popup > main > .krew-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+  width: 140px;
+  height: 140px;
+  margin: 16px auto;
+}
+@media only screen and (max-width: 859px) {
+  .buy-key-popup > main > .krew-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.buy-key-popup > main > table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 16px;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px var(--line-color);
+}
+.buy-key-popup > main > table > tr > th,
+.buy-key-popup > main > table > tr > td {
+  padding: 16px;
+  border-bottom: 1px solid var(--line-color);
+}
+.buy-key-popup > main > table > tr > td {
+  text-align: right;
+}
+.key-bought-popup > main > .lottie-animation {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+.explore-view {
+  max-width: 1000px;
+  margin: 20px auto;
+  border-radius: 20px;
+  background-color: var(--bg2-color);
 }
 .user-view {
   padding: 32px;

@@ -19,7 +19,7 @@ BEGIN
     INNER JOIN 
         krew_key_holders skh ON a.wallet_address = skh.wallet_address
     LEFT JOIN
-        krew k ON a.krew = k.id
+        krews k ON a.krew = k.id
     WHERE 
         skh.wallet_address = p_wallet_address
         AND skh.last_fetched_balance > 0

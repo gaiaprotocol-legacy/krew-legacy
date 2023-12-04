@@ -200,7 +200,7 @@ BEGIN
     INNER JOIN 
         krew_key_holders skh ON a.wallet_address = skh.wallet_address
     LEFT JOIN
-        krew k ON a.krew = k.id
+        krews k ON a.krew = k.id
     WHERE 
         skh.wallet_address = p_wallet_address
         AND skh.last_fetched_balance > 0
@@ -896,6 +896,9 @@ ALTER TABLE ONLY "public"."follows"
 
 ALTER TABLE ONLY "public"."krew_chat_messages"
     ADD CONSTRAINT "krew_chat_messages_author_fkey" FOREIGN KEY ("author") REFERENCES "public"."users_public"("user_id");
+
+ALTER TABLE ONLY "public"."krew_contract_events"
+    ADD CONSTRAINT "krew_contract_events_krew_fkey" FOREIGN KEY ("krew") REFERENCES "public"."krews"("id");
 
 ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_krew_fkey" FOREIGN KEY ("krew") REFERENCES "public"."krews"("id");
