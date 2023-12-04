@@ -4,14 +4,27 @@ CREATE OR REPLACE FUNCTION "public"."parse_krew_contract_event"() RETURNS "trigg
     v_sender UUID;
     v_receiver UUID;
     v_wallet_address text;
+    owner_data RECORD;
 begin
     IF new.event_type = 0 THEN
         IF position('p_' in new.krew) = 1 THEN
-            insert into krews (
-                id, owner
-            ) values (
-                new.krew, new.wallet_address
-            );
+            SELECT display_name, profile_image, profile_image_thumbnail, metadata 
+            INTO owner_data
+            FROM users_public 
+            WHERE wallet_address = new.wallet_address;
+            IF FOUND THEN
+                insert into krews (
+                    id, owner, display_name, profile_image, profile_image_thumbnail, metadata
+                ) values (
+                    new.krew, new.wallet_address, owner_data.display_name, owner_data.profile_image, owner_data.profile_image_thumbnail, owner_data.metadata
+                );
+            ELSE
+                insert into krews (
+                    id, owner
+                ) values (
+                    new.krew, new.wallet_address
+                );
+            END IF;
         ELSIF position('c_' in new.krew) = 1 THEN
             insert into krews (
                 id

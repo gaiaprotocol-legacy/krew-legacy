@@ -365,14 +365,27 @@ CREATE OR REPLACE FUNCTION "public"."parse_krew_contract_event"() RETURNS "trigg
     v_sender UUID;
     v_receiver UUID;
     v_wallet_address text;
+    owner_data RECORD;
 begin
     IF new.event_type = 0 THEN
         IF position('p_' in new.krew) = 1 THEN
-            insert into krews (
-                id, owner
-            ) values (
-                new.krew, new.wallet_address
-            );
+            SELECT display_name, profile_image, profile_image_thumbnail, metadata 
+            INTO owner_data
+            FROM users_public 
+            WHERE wallet_address = new.wallet_address;
+            IF FOUND THEN
+                insert into krews (
+                    id, owner, display_name, profile_image, profile_image_thumbnail, metadata
+                ) values (
+                    new.krew, new.wallet_address, owner_data.display_name, owner_data.profile_image, owner_data.profile_image_thumbnail, owner_data.metadata
+                );
+            ELSE
+                insert into krews (
+                    id, owner
+                ) values (
+                    new.krew, new.wallet_address
+                );
+            END IF;
         ELSIF position('c_' in new.krew) = 1 THEN
             insert into krews (
                 id
@@ -395,12 +408,12 @@ begin
         update krews set
             supply = new.args[9]::numeric
         where
-            krew = new.krew;
+            id = new.krew;
         insert into krew_key_holders (
             krew, wallet_address
         ) values (
             new.krew, new.wallet_address
-        ) on conflict (subject) do nothing;
+        ) on conflict (krew, wallet_address) do nothing;
         IF new.args[3] = 'true' THEN
             update krew_key_holders set
                 last_fetched_balance = last_fetched_balance + new.args[4]::int8
@@ -791,6 +804,9 @@ ALTER TABLE ONLY "public"."tracked_event_blocks"
 
 ALTER TABLE ONLY "public"."users_public"
     ADD CONSTRAINT "users_public_pkey" PRIMARY KEY ("user_id");
+
+ALTER TABLE ONLY "public"."users_public"
+    ADD CONSTRAINT "users_public_wallet_address_key" UNIQUE ("wallet_address");
 
 ALTER TABLE ONLY "public"."wallet_linking_nonces"
     ADD CONSTRAINT "wallet_linking_nonces_pkey" PRIMARY KEY ("user_id");

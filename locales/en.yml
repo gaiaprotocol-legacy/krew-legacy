@@ -79,3 +79,5 @@ create-krew-form-communal-krew-feature-3: >
 create-krew-form-create-button: Create Krew
 create-krew-form-no-krew-type-selected-title: Please Select Your Krew Type
 create-krew-form-no-krew-type-selected-message: Once you've made your selection, press the [Create Krew] button to begin. If you haven't decided on the type of krew yet, please select one to proceed. Let your imagination shape your krew's future!
+
+buy-key-popup-buy-button: Buy 1 {krew}'s Key
