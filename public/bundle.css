@@ -1167,10 +1167,19 @@ p {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
-.notifications-panel > h1 {
-  font-size: 24px;
-  border-bottom: 1px solid var(--line-color);
+.notifications-panel > header {
   padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line-color);
+}
+.notifications-panel > header > h1 {
+  font-size: 24px;
+}
+.notifications-panel > header > a {
+  color: var(--accent-color);
+  cursor: pointer;
 }
 .notifications-panel > .notification-list {
   max-height: 500px;
