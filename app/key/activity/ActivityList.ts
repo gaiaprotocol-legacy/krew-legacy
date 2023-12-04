@@ -9,6 +9,7 @@ export interface ActivityListOptions {
 
 export default abstract class ActivityList extends DomNode {
   protected store: Store;
+  protected lastCreatedAt: string | undefined;
   private refreshed = false;
 
   constructor(tag: string, options: ActivityListOptions) {
@@ -37,6 +38,7 @@ export default abstract class ActivityList extends DomNode {
       for (const e of events) {
         this.append(new ActivityListItem(e));
       }
+      this.lastCreatedAt = events[events.length - 1]?.created_at;
       this.refreshed = true;
     }
   }

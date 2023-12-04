@@ -202,12 +202,15 @@ BEGIN
     RETURN QUERY
     SELECT *
     FROM 
-        krew_contract_events
+        krew_contract_events a
+    INNER JOIN 
+        subject_key_holders skh ON a.wallet_address = skh.wallet_address
     WHERE 
-        wallet_address = p_wallet_address
-        AND (last_created_at IS NULL OR created_at < last_created_at)
+        skh.wallet_address = p_wallet_address
+        AND skh.last_fetched_balance > 0
+        AND (last_created_at IS NULL OR a.created_at < last_created_at)
     ORDER BY 
-        created_at DESC
+        a.created_at DESC
     LIMIT 
         max_count;
 END;

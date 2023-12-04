@@ -52,7 +52,7 @@ BEGIN
     INNER JOIN 
         users_public u ON p.author = u.user_id
     INNER JOIN 
-        subject_key_holders skh ON u.wallet_address = skh.wallet_address
+        krew_key_holders skh ON u.wallet_address = skh.wallet_address
     WHERE 
         skh.wallet_address = p_wallet_address
         AND skh.last_fetched_balance > 0
