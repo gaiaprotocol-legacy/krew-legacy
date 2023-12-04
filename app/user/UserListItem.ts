@@ -1,7 +1,8 @@
-import { DomNode, UserPublic } from "common-app-module";
+import { DomNode } from "common-app-module";
+import { SoFiUserPublic } from "sofi-module";
 
 export default class UserListItem extends DomNode {
-  constructor(private userPublic: UserPublic) {
+  constructor(private user: SoFiUserPublic) {
     super(".user-list-item");
   }
 }
