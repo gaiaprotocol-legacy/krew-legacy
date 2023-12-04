@@ -6,13 +6,11 @@ import KrewUserCacher from "../KrewUserCacher.js";
 import KrewUserService from "../KrewUserService.js";
 import FollowerList from "./FollowerList.js";
 import FollowingList from "./FollowingList.js";
-import HolderList from "./HolderList.js";
 import HoldingList from "./HoldingList.js";
 
 export default class UserConnectionsView extends View {
   private tabs: Tabs | undefined;
   private holdingList: HoldingList | undefined;
-  private holderList: HolderList | undefined;
   private followingList: FollowingList | undefined;
   private followerList: FollowerList | undefined;
 
@@ -73,7 +71,6 @@ export default class UserConnectionsView extends View {
             walletAddress
               ? [
                 { id: "holding", label: msg("user-connections-holding-tab") },
-                { id: "holders", label: msg("user-connections-holders-tab") },
                 {
                   id: "following",
                   label: msg("user-connections-following-tab"),
@@ -97,7 +94,6 @@ export default class UserConnectionsView extends View {
           ...(walletAddress
             ? [
               this.holdingList = new HoldingList(walletAddress),
-              this.holderList = new HolderList(walletAddress),
               this.followingList = new FollowingList(userId),
               this.followerList = new FollowerList(userId),
             ]
@@ -112,13 +108,11 @@ export default class UserConnectionsView extends View {
         Router.changeUri(`/${xUsername}/${id}`);
         [
           this.holdingList,
-          this.holderList,
           this.followingList,
           this.followerList,
         ]
           .forEach((list) => list?.hide());
-        if (id === "holdings") this.holdingList?.show();
-        else if (id === "holders") this.holderList?.show();
+        if (id === "holding") this.holdingList?.show();
         else if (id === "following") this.followingList?.show();
         else if (id === "followers") this.followerList?.show();
       }).select(currentTab);

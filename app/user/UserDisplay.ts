@@ -24,6 +24,16 @@ export default class UserDisplay extends DomNode {
     displayClaimableFee = false,
   ) {
     super(".user-display");
+    if (!user && previewUser) {
+      user = {
+        ...previewUser,
+        total_earned_trading_fees: "0",
+        follower_count: 0,
+        following_count: 0,
+        blocked: false,
+        created_at: "-infinity",
+      };
+    }
     this.append(
       this.userProfile = new UserProfile(user, displayClaimableFee),
       this.postsContainer = el(".posts-container"),
