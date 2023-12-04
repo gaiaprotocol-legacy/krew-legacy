@@ -1,7 +1,6 @@
 import { el, View, ViewParams } from "common-app-module";
 import { PreviewUserPublic } from "sofi-module";
-import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
-import BuyPersonalKeyPopup from "../krew-personal/BuyPersonalKeyPopup.js";
+import BuyKeyPopup from "../key/BuyKeyPopup.js";
 import KrewService from "../krew/KrewService.js";
 import Layout from "../layout/Layout.js";
 import KrewUserService from "./KrewUserService.js";
@@ -33,17 +32,7 @@ export default class UserView extends View {
         this.container.append(
           el("h1", krew.id),
           el("a", "buy", {
-            click: async () => {
-              if (krew.id.startsWith("p_")) {
-                new BuyPersonalKeyPopup(krew);
-              } else if (krew.id.startsWith("c_")) {
-                await KrewCommunalContract.buyKeys(
-                  BigInt(krew.id.substring(2)),
-                  1n,
-                );
-                await KrewService.trackCommunalEvents();
-              }
-            },
+            click: () => new BuyKeyPopup(krew),
           }),
         );
       }

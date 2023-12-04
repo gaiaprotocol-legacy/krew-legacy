@@ -1,34 +1,35 @@
-import { ethers } from "ethers";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import Contract from "./Contract.js";
+import KrewContract from "./KrewContract.js";
 import { KrewPersonal } from "./abi/krew/KrewPersonal.js";
 import KrewPersonalArtifact from "./abi/krew/KrewPersonal.json" assert {
   type: "json",
 };
 
-class KrewPersonalContract extends Contract<KrewPersonal> {
+class KrewPersonalContract extends Contract<KrewPersonal>
+  implements KrewContract {
   constructor() {
     super(KrewPersonalArtifact.abi);
   }
 
   public async getBuyPrice(krewId: bigint, amount: bigint) {
-    return this.viewContract.getBuyPrice(krewId, amount);
+    return await this.viewContract.getBuyPrice(krewId, amount);
   }
 
   public async getSellPrice(krewId: bigint, amount: bigint) {
-    return this.viewContract.getSellPrice(krewId, amount);
+    return await this.viewContract.getSellPrice(krewId, amount);
   }
 
   public async getBuyPriceAfterFee(krewId: bigint, amount: bigint) {
-    return this.viewContract.getBuyPriceAfterFee(krewId, amount);
+    return await this.viewContract.getBuyPriceAfterFee(krewId, amount);
   }
 
   public async getSellPriceAfterFee(krewId: bigint, amount: bigint) {
-    return this.viewContract.getSellPriceAfterFee(krewId, amount);
+    return await this.viewContract.getSellPriceAfterFee(krewId, amount);
   }
 
   public async getBalance(krewId: bigint, walletAddress: string) {
-    return this.viewContract.holderBalance(krewId, walletAddress);
+    return await this.viewContract.holderBalance(krewId, walletAddress);
   }
 
   public async createKrew(): Promise<bigint> {

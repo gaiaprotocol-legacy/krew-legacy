@@ -80,4 +80,11 @@ create-krew-form-create-button: Create Krew
 create-krew-form-no-krew-type-selected-title: Please Select Your Krew Type
 create-krew-form-no-krew-type-selected-message: Once you've made your selection, press the [Create Krew] button to begin. If you haven't decided on the type of krew yet, please select one to proceed. Let your imagination shape your krew's future!
 
+buy-key-popup-title: Buy 1 {krew}'s Key
 buy-key-popup-buy-button: Buy 1 {krew}'s Key
+buy-key-popup-price-title: Price
+buy-key-popup-total-price-title: Total (including fee)
+
+key-bought-popup-title: Key Purchase Successful!
+key-bought-popup-message: Your purchase of the Krew key has been successfully completed. As a member of {krew}, you now have access to exclusive content and special activities. We sincerely congratulate you on becoming a part of the {krew} community!
+key-bought-popup-go-to-krew-button: Go to Krew Page
