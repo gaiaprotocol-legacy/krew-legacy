@@ -10,12 +10,10 @@ import {
 import KrewSignedUserManager from "./KrewSignedUserManager.js";
 
 export default class LoginRequiredPopup extends Popup {
-  public content: DomNode;
-
   constructor() {
     super({ barrierDismissible: true });
     this.append(
-      this.content = new Component(
+      new Component(
         ".popup.login-required-popup",
         el("header", el("h1", msg("login-required-title"))),
         el(
