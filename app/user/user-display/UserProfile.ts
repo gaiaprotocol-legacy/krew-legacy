@@ -1,4 +1,4 @@
-import { DomNode, el } from "common-app-module";
+import { DateUtil, DomNode, el, msg } from "common-app-module";
 import { SoFiUserPublic } from "sofi-module";
 import BuyKeyPopup from "../../key/BuyKeyPopup.js";
 import KrewService from "../../krew/KrewService.js";
@@ -8,6 +8,12 @@ export default class UserProfile extends DomNode {
   private portfolioValueFetched = false;
   private krewsFetched = false;
 
+  private info: DomNode;
+  private claimableFee: DomNode | undefined;
+  private krews: DomNode;
+  private metrics: DomNode;
+  private connections: DomNode;
+
   constructor(
     user: SoFiUserPublic | undefined,
     private displayClaimableFee = false,
@@ -15,11 +21,13 @@ export default class UserProfile extends DomNode {
     super(".user-profile");
 
     this.append(
-      el("section.info"),
-      displayClaimableFee ? el("section.claimable-fee") : undefined,
-      el("section.krews"),
-      el("section.metrics"),
-      el("section.connections"),
+      this.info = el("section.info"),
+      displayClaimableFee
+        ? this.claimableFee = el("section.claimable-fee")
+        : undefined,
+      this.krews = el("section.krews"),
+      this.metrics = el("section.metrics"),
+      this.connections = el("section.connections"),
     );
 
     if (user) {
@@ -44,7 +52,40 @@ export default class UserProfile extends DomNode {
   }
 
   private renderUser(user: SoFiUserPublic) {
-    //TODO:
+    this.info.empty().append(
+      el(".profile-image", {
+        style: {
+          backgroundImage: `url(${user.profile_image_thumbnail})`,
+        },
+      }),
+      el(
+        ".info",
+        el(
+          "header",
+          el("h2", user.display_name),
+          el(
+            "h3",
+            el("a", `@${user.x_username}`, {
+              href: `https://x.com/${user.x_username}`,
+              target: "_blank",
+            }),
+          ),
+        ),
+        el(
+          "p",
+          msg("user-profile-joined", {
+            date: DateUtil.format(user.created_at),
+          }),
+        ),
+        el(
+          "footer",
+          el("a", "𝕏", {
+            href: `https://twitter.com/${user.x_username}`,
+            target: "_blank",
+          }),
+        ),
+      ),
+    );
   }
 
   private async fetchClaimableFee(walletAddress: string) {
@@ -65,9 +106,11 @@ export default class UserProfile extends DomNode {
     if (this.krewsFetched) return;
     this.krewsFetched = true;
 
+    this.krews.empty();
+
     const krews = await KrewService.fetchOwnedKrews(walletAddress);
     for (const krew of krews) {
-      this.append(
+      this.krews.append(
         el("h1", krew.id),
         el("a", "buy", {
           click: () => new BuyKeyPopup(krew),
