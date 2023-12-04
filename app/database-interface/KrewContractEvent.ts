@@ -9,6 +9,13 @@ export default interface KrewContractEvent {
   event_type: EventType;
   args: string;
   wallet_address: string;
-  krew: string;
+  krew: {
+    id: string;
+    name?: string;
+    profile_image_thumbnail?: string;
+  };
   created_at: string;
 }
+
+export const KrewContractEventSelectQuery =
+  "*, krew(id, name, profile_image_thumbnail)";

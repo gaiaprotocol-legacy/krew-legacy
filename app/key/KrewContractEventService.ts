@@ -1,9 +1,11 @@
 import { Supabase, SupabaseService } from "common-app-module";
-import KrewContractEvent from "../database-interface/KrewContractEvent.js";
+import KrewContractEvent, {
+  KrewContractEventSelectQuery,
+} from "../database-interface/KrewContractEvent.js";
 
 class KrewContractEventService extends SupabaseService {
   constructor() {
-    super("krew_contract_events", "*", 100);
+    super("krew_contract_events", KrewContractEventSelectQuery, 100);
   }
 
   public async fetchGlobalEvents() {
@@ -23,12 +25,25 @@ class KrewContractEventService extends SupabaseService {
     walletAddress: string,
     lastCreatedAt?: string,
   ) {
-    const { data, error } = await Supabase.client.rpc("get_key_held_krew_contract_events", {
-      p_wallet_address: walletAddress,
-      last_created_at: lastCreatedAt,
-      max_count: this.fetchLimit,
-    });
+    let { data, error } = await Supabase.client.rpc(
+      "get_key_held_krew_contract_events",
+      {
+        p_wallet_address: walletAddress,
+        last_created_at: lastCreatedAt,
+        max_count: this.fetchLimit,
+      },
+    );
     if (error) throw error;
+    if (!data) data = [];
+
+    for (const event of data) {
+      event.krew = {
+        id: event.krew_id,
+        name: event.krew_name,
+        profile_image_thumbnail: event.krew_profile_image_thumbnail,
+      };
+    }
+
     return data ?? [];
   }
 }

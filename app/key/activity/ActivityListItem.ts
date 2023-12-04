@@ -4,5 +4,6 @@ import KrewContractEvent from "../../database-interface/KrewContractEvent.js";
 export default class ActivityListItem extends DomNode {
   constructor(event: KrewContractEvent) {
     super(".activity-list-item");
+    this.append("TODO: ActivityListItem");
   }
 }

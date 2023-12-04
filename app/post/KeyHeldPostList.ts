@@ -20,13 +20,33 @@ export default class KeyHeldPostList extends PostList<KrewPost> {
     );
   }
 
-  protected fetchPosts(): Promise<
+  protected async fetchPosts(): Promise<
     {
       fetchedPosts: { posts: KrewPost[]; mainPostId: number }[];
       repostedPostIds: number[];
       likedPostIds: number[];
     }
   > {
-    throw new Error("Method not implemented.");
+    if (KrewSignedUserManager.user?.wallet_address) {
+      const result = await KrewPostService.fetchKeyHeldPosts(
+        KrewSignedUserManager.user.user_id,
+        KrewSignedUserManager.user.wallet_address,
+        this.lastPostId,
+      );
+      return {
+        fetchedPosts: result.posts.map((p) => ({
+          posts: [p],
+          mainPostId: p.id,
+        })),
+        repostedPostIds: result.repostedPostIds,
+        likedPostIds: result.likedPostIds,
+      };
+    } else {
+      return {
+        fetchedPosts: [],
+        repostedPostIds: [],
+        likedPostIds: [],
+      };
+    }
   }
 }
