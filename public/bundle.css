@@ -240,7 +240,7 @@ button.component.contained {
   left: -50%;
   width: 50%;
   height: 100%;
-  background-color: #25D366;
+  background-color: rgba(37, 211, 102, 0.5);
   animation: list-loading-bar-loading 2s linear infinite;
 }
 .chat-message-display {
@@ -1154,5 +1154,26 @@ p {
   font-size: 24px;
   border-bottom: 1px solid var(--line-color);
   padding: 20px;
+}
+.notifications-panel {
+  position: fixed;
+  top: 58px;
+  right: 20px;
+  z-index: 999998;
+  width: 320px;
+  border-radius: 15px;
+  border: 1px solid rgba(181, 191, 214, 0.2);
+  background: #1C1D26;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.notifications-panel > h1 {
+  font-size: 24px;
+  border-bottom: 1px solid var(--line-color);
+  padding: 20px;
+}
+.notifications-panel > .notification-list {
+  max-height: 500px;
+  overflow-y: auto;
 }
 

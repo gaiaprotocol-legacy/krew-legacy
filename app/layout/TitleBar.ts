@@ -1,5 +1,6 @@
 import { Button, DomNode, el, msg, Router } from "common-app-module";
 import MaterialIcon from "../MaterialIcon.js";
+import NotificationsPanel from "../notification/NotificationsPanel.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import TitleBarSearchForm from "./title-bar/TitleBarSearchForm.js";
 import TitleBarUserDisplay from "./title-bar/TitleBarUserDisplay.js";
@@ -16,7 +17,12 @@ export default class TitleBar extends DomNode {
       this.searchForm = new TitleBarSearchForm(),
       ...KrewSignedUserManager.signed
         ? [
-          el("button.noti", new MaterialIcon("notifications")),
+          el("button.noti", new MaterialIcon("notifications"), {
+            click: (event, button) => {
+              event.stopPropagation();
+              new NotificationsPanel();
+            },
+          }),
           new TitleBarUserDisplay(KrewSignedUserManager.user!),
         ]
         : [

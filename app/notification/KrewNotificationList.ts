@@ -14,6 +14,7 @@ export default class KrewNotificationList
       storeName: "krew-notifications",
       emptyMessage: msg("notification-list-empty-message"),
     }, new KrewLoadingAnimation());
+    this.addAllowedEvents("changeUri");
   }
 
   protected addNotificationItem(
@@ -21,6 +22,7 @@ export default class KrewNotificationList
     isNew: boolean,
   ): void {
     const item = new KrewNotificationListItem(notification);
+    item.on("changeUri", () => this.fireEvent("changeUri"));
     isNew ? this.prepend(item) : this.append(item);
   }
 
