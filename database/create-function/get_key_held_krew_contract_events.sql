@@ -1,20 +1,6 @@
-CREATE OR REPLACE FUNCTION get_key_held_krew_contract_events(
-    p_wallet_address text,
-    last_created_at timestamp with time zone DEFAULT NULL,
-    max_count int DEFAULT 100
-)
-RETURNS TABLE (
-    block_number int8,
-    log_index int8,
-    event_type int2,
-    args text[],
-    wallet_address text,
-    krew text,
-    krew_id text,
-    krew_name text,
-    krew_profile_image_thumbnail text,
-    created_at timestamp with time zone
-) AS $$
+CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_profile_image_thumbnail" "text", "created_at" timestamp with time zone)
+    LANGUAGE "plpgsql"
+    AS $$
 BEGIN
     RETURN QUERY
     SELECT
@@ -43,7 +29,7 @@ BEGIN
     LIMIT 
         max_count;
 END
-$$ LANGUAGE plpgsql;
+$$;
 
 ALTER FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
