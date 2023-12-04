@@ -55,21 +55,18 @@ export default class UserProfile extends DomNode {
     this.info.empty().append(
       el(".profile-image", {
         style: {
-          backgroundImage: `url(${user.profile_image_thumbnail})`,
+          backgroundImage: `url(${user.profile_image})`,
         },
       }),
       el(
         ".info",
+        el("h2", user.display_name),
         el(
-          "header",
-          el("h2", user.display_name),
-          el(
-            "h3",
-            el("a", `@${user.x_username}`, {
-              href: `https://x.com/${user.x_username}`,
-              target: "_blank",
-            }),
-          ),
+          "h3",
+          el("a", `@${user.x_username}`, {
+            href: `https://x.com/${user.x_username}`,
+            target: "_blank",
+          }),
         ),
         el(
           "p",
