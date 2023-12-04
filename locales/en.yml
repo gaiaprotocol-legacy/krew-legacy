@@ -28,8 +28,8 @@ notification-list-empty-message: No notifications yet
 notification-title: Notifications
 notification-more-button: More
 notification-message-create-key: "You created {krew_name} krew."
-notification-message-buy-key: "{triggerer} purchased {amount} ice(s)."
-notification-message-sell-key: "{triggerer} sold {amount} ice(s)."
+notification-message-buy-key: "{triggerer} purchased {amount} key(s)."
+notification-message-sell-key: "{triggerer} sold {amount} key(s)."
 notification-message-follow: "{triggerer} started following you."
 notification-message-post-like: "{triggerer} liked your post."
 notification-message-repost: "{triggerer} reposted your post."
@@ -91,13 +91,13 @@ key-bought-popup-title: Key Purchase Successful!
 key-bought-popup-message: Your purchase of the Krew key has been successfully completed. As a member of {krew}, you now have access to exclusive content and special activities. We sincerely congratulate you on becoming a part of the {krew} community!
 key-bought-popup-go-to-krew-button: Go to Krew Page
 
-holding-list-empty-message: No users you hold ices for yet
-holder-list-empty-message: No users holding ice for you yet
+holding-list-empty-message: No users you hold keys for yet
+holder-list-empty-message: No users holding key for you yet
 following-list-empty-message: Not following anyone yet
 follower-list-empty-message: No followers yet
 
 global-activity-list-empty-message: No global activities yet
-your-keys-activity-list-empty-message: No activities yet
+key-held-activity-list-empty-message: No activities you hold keys for yet
 
 user-connections-holding-tab: Holding
 user-connections-following-tab: Following
@@ -107,5 +107,6 @@ user-post-list-empty-message: No posts from this user yet
 user-comment-post-list-empty-message: No comments from this user yet
 user-repost-list-empty-message: No reposts from this user yet
 user-liked-post-list-empty-message: No liked posts from this user yet
+key-held-post-list-empty-message: No posts you hold keys for yet
 
 user-profile-joined: Joined {date}

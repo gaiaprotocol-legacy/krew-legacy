@@ -1,5 +1,6 @@
 import { msg } from "common-app-module";
 import KrewContractEvent from "../../database-interface/KrewContractEvent.js";
+import KrewContractEventService from "../KrewContractEventService.js";
 import ActivityList from "./ActivityList.js";
 
 export default class GlobalActivityList extends ActivityList {
@@ -13,7 +14,7 @@ export default class GlobalActivityList extends ActivityList {
     );
   }
 
-  protected fetchActivities(): Promise<KrewContractEvent[]> {
-    throw new Error("Method not implemented.");
+  protected async fetchActivities(): Promise<KrewContractEvent[]> {
+    return await KrewContractEventService.fetchGlobalEvents();
   }
 }

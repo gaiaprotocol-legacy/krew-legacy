@@ -10,6 +10,7 @@ import KrewPostInteractions from "./KrewPostInteractions.js";
 import KrewPostService from "./KrewPostService.js";
 import PostPopup from "./PostPopup.js";
 import PostTargetSelector from "./PostTargetSelector.js";
+import KeyHeldPostList from "./KeyHeldPostList.js";
 
 export default class PostsView extends View {
   private targetSelector: PostTargetSelector;
@@ -17,7 +18,7 @@ export default class PostsView extends View {
   private tabs: Tabs | undefined;
   private globalPostList: GlobalPostList<KrewPost>;
   private followingPostList: FollowingPostList<KrewPost> | undefined;
-  //private keyHeldPostList: KeyHeldPostList | undefined;
+  private keyHeldPostList: KeyHeldPostList | undefined;
 
   constructor(params: ViewParams) {
     super();
@@ -69,9 +70,9 @@ export default class PostsView extends View {
                 new KrewLoadingAnimation(),
               )
               : undefined,
-            /*KrewSignedUserManager.walletLinked
-            ? this.keyHeldPostList = new KeyHeldPostList()
-            : undefined,*/
+            KrewSignedUserManager.walletLinked
+              ? this.keyHeldPostList = new KeyHeldPostList()
+              : undefined,
           ),
         ),
         el("button.post", new MaterialIcon("add"), {
@@ -89,11 +90,11 @@ export default class PostsView extends View {
       this.globalPostList.show();
     } else {
       this.tabs.on("select", (id: string) => {
-        [this.globalPostList, this.followingPostList /*, this.keyHeldPostList*/]
+        [this.globalPostList, this.followingPostList, this.keyHeldPostList]
           .forEach((list) => list?.hide());
         if (id === "global") this.globalPostList.show();
         else if (id === "following") this.followingPostList?.show();
-        //else if (id === "held") this.keyHeldPostList?.show();
+        else if (id === "held") this.keyHeldPostList?.show();
       }).init();
     }
   }

@@ -2,13 +2,13 @@ import { msg } from "common-app-module";
 import KrewContractEvent from "../../database-interface/KrewContractEvent.js";
 import ActivityList from "./ActivityList.js";
 
-export default class YourKeysActivityList extends ActivityList {
+export default class KeyHeldActivityList extends ActivityList {
   constructor() {
     super(
-      ".your-keys-activity-list",
+      ".key-held-activity-list",
       {
-        storeName: "your-keys-activities",
-        emptyMessage: msg("your-keys-activity-list-empty-message"),
+        storeName: "key-held-activities",
+        emptyMessage: msg("key-held-activity-list-empty-message"),
       },
     );
   }
