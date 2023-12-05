@@ -13,6 +13,7 @@ import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
 import Krew from "../database-interface/Krew.js";
 import KrewType from "../database-interface/KrewType.js";
 import KrewService from "../krew/KrewService.js";
+import KeyBoughtPopup from "./KeyBoughtPopup.js";
 
 export default class BuyKeyPopup extends Popup {
   private priceDisplay: DomNode;
@@ -122,13 +123,30 @@ export default class BuyKeyPopup extends Popup {
     this.totalPriceDisplay.text = `${ethers.formatEther(price)}`;
   }
 
-  private async buyKeys() {
-    await this.krewContract.buyKeys(this.krewId, 1n);
+  private async trackEvents() {
     if (this.krewType === KrewType.Personal) {
       await KrewService.trackPersonalEvents();
     } else if (this.krewType === KrewType.Communal) {
       await KrewService.trackCommunalEvents();
     }
-    await KrewService.trackKeyPriceAndBalance(this.krew.id);
+  }
+
+  private async buyKeys() {
+    this.buyButton.title = el(".loading-spinner");
+
+    try {
+      await this.krewContract.buyKeys(this.krewId, 1n);
+      await Promise.all([
+        this.trackEvents(),
+        KrewService.trackKeyPriceAndBalance(this.krew.id),
+      ]);
+      new KeyBoughtPopup(this.krew);
+      this.delete();
+    } catch (e) {
+      this.buyButton.title = msg("buy-key-popup-buy-button", {
+        krew: this.krew.name ?? "Krew",
+      });
+      throw e;
+    }
   }
 }

@@ -14,7 +14,7 @@ serveWithOptions(async (req) => {
   const { krew } = await req.json();
   if (!krew) throw new Error("Missing subjects");
 
-  const krewId = BigInt(krew.replace("c_", ""));
+  const krewId = BigInt(krew.substring(2));
 
   const user = await getSignedUser(req);
   if (!user) throw new Error("Unauthorized");
@@ -31,7 +31,7 @@ serveWithOptions(async (req) => {
 
   const [{ error: detailError }, { error: holderError }] = await Promise.all([
     supabase.from("krews").upsert({
-      krew,
+      id: krew,
       last_fetched_key_price: price.toString(),
     }),
     supabase.from("krew_key_holders").upsert({
