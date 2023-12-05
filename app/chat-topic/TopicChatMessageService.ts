@@ -31,18 +31,13 @@ class TopicChatMessageService extends MessageService<TopicChatMessage> {
 
   public async sendMessage(topic: string, message: string, files: File[]) {
     const rich = files.length ? await this.upload(files) : undefined;
-    const data = await this.safeFetch<TopicChatMessage>((b) =>
-      b.insert({ topic, message, rich }).select(this.selectQuery).single()
-    );
-    return data!;
+    return await this.safeInsertAndSelect({ topic, message, rich });
   }
 
   public async fetchMessages(topic: string) {
-    const data = await this.safeFetch<TopicChatMessage[]>((b) =>
-      b.select(this.selectQuery).limit(this.fetchLimit).eq("topic", topic)
-        .order("created_at", { ascending: false })
+    return await this.safeSelect((b) =>
+      b.eq("topic", topic).order("created_at", { ascending: false })
     );
-    return data ?? [];
   }
 }
 

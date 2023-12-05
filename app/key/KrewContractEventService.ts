@@ -3,22 +3,17 @@ import KrewContractEvent, {
   KrewContractEventSelectQuery,
 } from "../database-interface/KrewContractEvent.js";
 
-class KrewContractEventService extends SupabaseService {
+class KrewContractEventService extends SupabaseService<KrewContractEvent> {
   constructor() {
     super("krew_contract_events", KrewContractEventSelectQuery, 100);
   }
 
   public async fetchGlobalEvents() {
-    const data = await this.safeFetch<KrewContractEvent[]>((b) =>
-      b.select(this.selectQuery).order(
-        "block_number",
-        { ascending: false },
-      ).order(
-        "log_index",
-        { ascending: false },
-      )
+    return await this.safeSelect((b) =>
+      b.order("block_number", { ascending: false }).order("log_index", {
+        ascending: false,
+      })
     );
-    return data ?? [];
   }
 
   public async fetchKeyHeldEvents(

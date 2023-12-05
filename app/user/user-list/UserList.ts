@@ -26,7 +26,7 @@ export default abstract class UserList extends DomNode {
     }
   }
 
-  protected abstract fetchUsers(): void;
+  protected abstract fetchUsers(): Promise<SoFiUserPublic[]>;
 
   protected addUserItem(user: SoFiUserPublic) {
     new UserListItem(user).appendTo(this);
@@ -35,9 +35,14 @@ export default abstract class UserList extends DomNode {
   private async refresh() {
     this.append(new ListLoadingBar());
 
-    //TODO:
+    const users = await this.fetchUsers();
+    this.store?.set("cached-users", users, true);
 
     if (!this.deleted) {
+      this.empty();
+      for (const user of users) {
+        this.addUserItem(user);
+      }
       this.refreshed = true;
     }
   }

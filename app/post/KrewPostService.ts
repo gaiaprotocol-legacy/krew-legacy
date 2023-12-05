@@ -31,19 +31,14 @@ class KrewPostService extends PostService<KrewPost> {
 
   public async post(target: number, message: string, files: File[]) {
     const rich = files.length ? await this.upload(files) : undefined;
-    const data = await this.safeFetch<KrewPost>((b) =>
-      b.insert({ target, message, rich }).select(this.selectQuery).single()
-    );
-    this.notifyNewGlobalPost(data!);
-    return data!;
+    const data = await this.safeInsertAndSelect({ target, message, rich });
+    this.notifyNewGlobalPost(data);
+    return data;
   }
 
   public async comment(parent: number, message: string, files: File[]) {
     const rich = files.length ? await this.upload(files) : undefined;
-    const data = await this.safeFetch<KrewPost>((b) =>
-      b.insert({ parent, message, rich }).select(this.selectQuery).single()
-    );
-    return data!;
+    return await this.safeInsertAndSelect({ parent, message, rich });
   }
 
   public async fetchKeyHeldPosts(

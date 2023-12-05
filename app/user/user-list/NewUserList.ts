@@ -1,4 +1,5 @@
 import { msg } from "common-app-module";
+import { SoFiUserPublic } from "sofi-module";
 import UserList from "../user-list/UserList.js";
 
 export default class NewUserList extends UserList {
@@ -9,7 +10,7 @@ export default class NewUserList extends UserList {
     });
   }
 
-  protected fetchUsers(): void {
+  protected fetchUsers(): Promise<SoFiUserPublic[]> {
     throw new Error("Method not implemented.");
   }
 }

@@ -1,16 +1,13 @@
 import { Supabase, SupabaseService } from "common-app-module";
 import Krew, { KrewSelectQuery } from "../database-interface/Krew.js";
 
-class KrewService extends SupabaseService {
+class KrewService extends SupabaseService<Krew> {
   constructor() {
     super("krews", KrewSelectQuery, 50);
   }
 
   public async fetchOwnedKrews(owner: string) {
-    const data = await this.safeFetch<Krew[]>((b) =>
-      b.select(this.selectQuery).eq("owner", owner)
-    );
-    return data ?? [];
+    return await this.safeSelect((b) => b.eq("owner", owner));
   }
 
   public async trackPersonalEvents() {
