@@ -1,5 +1,5 @@
 import { DateUtil, DomNode, el, msg } from "common-app-module";
-import { SoFiUserPublic } from "sofi-module";
+import { PreviewUserPublic, SoFiUserPublic } from "sofi-module";
 import BuyKeyPopup from "../../key/BuyKeyPopup.js";
 import KrewService from "../../krew/KrewService.js";
 
@@ -15,11 +15,10 @@ export default class UserProfile extends DomNode {
   private connections: DomNode;
 
   constructor(
-    user: SoFiUserPublic | undefined,
+    previewUser: PreviewUserPublic | undefined,
     private displayClaimableFee = false,
   ) {
     super(".user-profile");
-
     this.append(
       this.info = el("section.info"),
       displayClaimableFee
@@ -29,7 +28,10 @@ export default class UserProfile extends DomNode {
       this.metrics = el("section.metrics"),
       this.connections = el("section.connections"),
     );
+    if (previewUser) this.renderUser(previewUser);
+  }
 
+  public set user(user: SoFiUserPublic | undefined) {
     if (user) {
       this.renderUser(user);
       if (user.wallet_address) {
@@ -40,18 +42,7 @@ export default class UserProfile extends DomNode {
     }
   }
 
-  public updateUser(user: SoFiUserPublic | undefined) {
-    if (user) {
-      this.renderUser(user);
-      if (user.wallet_address) {
-        this.fetchClaimableFee(user.wallet_address);
-        this.fetchPortfolioValue(user.wallet_address);
-        this.fetchKrews(user.wallet_address);
-      }
-    }
-  }
-
-  private renderUser(user: SoFiUserPublic) {
+  private renderUser(user: PreviewUserPublic & { created_at?: string }) {
     this.info.empty().append(
       el(".profile-image", {
         style: {
@@ -71,7 +62,7 @@ export default class UserProfile extends DomNode {
         el(
           "p",
           msg("user-profile-joined", {
-            date: DateUtil.format(user.created_at),
+            date: DateUtil.format(user.created_at ?? "-infinity"),
           }),
         ),
         el(

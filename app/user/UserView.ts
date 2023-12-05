@@ -1,7 +1,6 @@
 import { el, View, ViewParams } from "common-app-module";
 import { PreviewUserPublic } from "sofi-module";
 import Layout from "../layout/Layout.js";
-import KrewUserCacher from "./KrewUserCacher.js";
 import KrewUserService from "./KrewUserService.js";
 import UserDisplay from "./UserDisplay.js";
 
@@ -24,13 +23,8 @@ export default class UserView extends View {
 
   private async render(xUsername: string, previewUser?: PreviewUserPublic) {
     this.container.empty().append(
-      this.userDisplay = new UserDisplay(
-        KrewUserCacher.getByXUsername(xUsername),
-        previewUser,
-      ),
+      this.userDisplay = new UserDisplay(previewUser, false),
     );
-    this.userDisplay.updateUser(
-      await KrewUserService.fetchByXUsername(xUsername),
-    );
+    this.userDisplay.user = await KrewUserService.fetchByXUsername(xUsername);
   }
 }

@@ -2,7 +2,6 @@ import { el, msg, Router, Tabs, View, ViewParams } from "common-app-module";
 import { SoFiUserPublic } from "sofi-module";
 import Layout from "../../layout/Layout.js";
 import MaterialIcon from "../../MaterialIcon.js";
-import KrewUserCacher from "../KrewUserCacher.js";
 import KrewUserService from "../KrewUserService.js";
 import FollowerList from "./FollowerList.js";
 import FollowingList from "./FollowingList.js";
@@ -38,23 +37,13 @@ export default class UserConnectionsView extends View {
     let displayName = previewUserPublic?.display_name;
 
     if (!previewUserPublic) {
-      const cached = KrewUserCacher.getByXUsername(xUsername);
-      if (cached) {
+      const userPublic = await KrewUserService.fetchByXUsername(xUsername);
+      if (userPublic) {
         [userId, walletAddress, displayName] = [
-          cached.user_id,
-          cached.wallet_address,
-          cached.display_name,
+          userPublic.user_id,
+          userPublic.wallet_address,
+          userPublic.display_name,
         ];
-      } else {
-        const userPublic = await KrewUserService.fetchByXUsername(xUsername);
-        if (userPublic) {
-          [userId, walletAddress, displayName] = [
-            userPublic.user_id,
-            userPublic.wallet_address,
-            userPublic.display_name,
-          ];
-          KrewUserCacher.cache(userPublic);
-        }
       }
     }
 

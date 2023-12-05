@@ -19,30 +19,19 @@ export default class UserDisplay extends DomNode {
   private userLikedPostList: UserLikedPostList | undefined;
 
   constructor(
-    user: SoFiUserPublic | undefined,
-    previewUser?: PreviewUserPublic,
-    displayClaimableFee = false,
+    previewUser: PreviewUserPublic | undefined,
+    displayClaimableFee: boolean,
   ) {
     super(".user-display");
-    if (!user && previewUser) {
-      user = {
-        ...previewUser,
-        total_earned_trading_fees: "0",
-        follower_count: 0,
-        following_count: 0,
-        blocked: false,
-        created_at: "-infinity",
-      };
-    }
     this.append(
-      this.userProfile = new UserProfile(user, displayClaimableFee),
+      this.userProfile = new UserProfile(previewUser, displayClaimableFee),
       this.postsContainer = el(".posts-container"),
     );
     if (previewUser) this.renderPosts(previewUser.user_id);
   }
 
-  public async updateUser(user: SoFiUserPublic | undefined) {
-    this.userProfile.updateUser(user);
+  public set user(user: SoFiUserPublic | undefined) {
+    this.userProfile.user = user;
     if (user) this.renderPosts(user.user_id);
   }
 

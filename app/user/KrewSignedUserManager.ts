@@ -4,14 +4,11 @@ import { BrowserProvider, JsonRpcSigner } from "ethers";
 import { SignedUserManager, SoFiUserPublic } from "sofi-module";
 import EnvironmentManager from "../EnvironmentManager.js";
 import WalletManager from "../wallet/WalletManager.js";
-import KrewUserCacher from "./KrewUserCacher.js";
 import KrewUserService from "./KrewUserService.js";
 
 class KrewSignedUserManager extends SignedUserManager<SoFiUserPublic> {
   protected async fetchUser(userId: string) {
-    const user = await KrewUserService.fetchUser(userId);
-    if (user) KrewUserCacher.cache(user);
-    return user;
+    return await KrewUserService.fetchUser(userId);
   }
 
   public async signIn() {
@@ -41,7 +38,6 @@ class KrewSignedUserManager extends SignedUserManager<SoFiUserPublic> {
 
     if (this.user) {
       this.user.wallet_address = walletAddress;
-      KrewUserCacher.cache(this.user);
       this.fireEvent("walletLinked");
     }
   }
