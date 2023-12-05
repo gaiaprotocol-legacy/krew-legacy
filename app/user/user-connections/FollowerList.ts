@@ -3,7 +3,9 @@ import UserList from "../user-list/UserList.js";
 
 export default class FollowerList extends UserList {
   constructor(userId: string) {
-    super(".follower-list", msg("follower-list-empty-message"));
+    super(".follower-list", {
+      emptyMessage: msg("follower-list-empty-message"),
+    });
   }
 
   protected fetchUsers(): void {

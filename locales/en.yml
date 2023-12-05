@@ -96,6 +96,10 @@ holder-list-empty-message: No users holding key for you yet
 following-list-empty-message: Not following anyone yet
 follower-list-empty-message: No followers yet
 
+new-user-list-empty-message: No new users yet
+top-user-list-empty-message: No top users yet
+trending-user-list-empty-message: No trending users yet
+
 global-activity-list-empty-message: No global activities yet
 key-held-activity-list-empty-message: No activities you hold keys for yet
 

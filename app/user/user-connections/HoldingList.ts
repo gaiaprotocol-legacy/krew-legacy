@@ -3,7 +3,9 @@ import UserList from "../user-list/UserList.js";
 
 export default class HoldingList extends UserList {
   constructor(walletAddress: string) {
-    super(".holding-list", msg("holding-list-empty-message"));
+    super(".holding-list", {
+      emptyMessage: msg("holding-list-empty-message"),
+    });
   }
 
   protected fetchUsers(): void {
