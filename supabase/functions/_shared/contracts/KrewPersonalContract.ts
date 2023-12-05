@@ -17,6 +17,14 @@ export default class KrewPersonalContract extends Contract<KrewPersonal> {
     );
   }
 
+  public async getBuyPrice(krewId: bigint, amount: bigint) {
+    return await this.ethersContract.getBuyPrice(krewId, amount);
+  }
+
+  public async getBalance(krewId: bigint, walletAddress: string) {
+    return await this.ethersContract.holderBalance(krewId, walletAddress);
+  }
+
   public async getEvents(startBlock: number, endBlock: number) {
     if (!this.krewCreatedEventFilter || !this.tradeEventFilter) {
       this.krewCreatedEventFilter = await this.ethersContract.filters
