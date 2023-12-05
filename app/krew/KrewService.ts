@@ -1,5 +1,6 @@
 import { Supabase, SupabaseService } from "common-app-module";
 import Krew, { KrewSelectQuery } from "../database-interface/Krew.js";
+import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
 class KrewService extends SupabaseService<Krew> {
   constructor() {
@@ -20,6 +21,19 @@ class KrewService extends SupabaseService<Krew> {
   public async trackCommunalEvents() {
     const { error } = await Supabase.client.functions.invoke(
       "track-krew-communal-events",
+    );
+    if (error) throw error;
+  }
+
+  public async trackKeyPriceAndBalance(krew: string) {
+    const { error } = await Supabase.client.functions.invoke(
+      "track-key-price-and-balance",
+      {
+        body: {
+          krew,
+          walletAddress: KrewSignedUserManager.user?.wallet_address,
+        },
+      },
     );
     if (error) throw error;
   }

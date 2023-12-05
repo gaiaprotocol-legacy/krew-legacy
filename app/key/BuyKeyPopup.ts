@@ -129,5 +129,6 @@ export default class BuyKeyPopup extends Popup {
     } else if (this.krewType === KrewType.Communal) {
       await KrewService.trackCommunalEvents();
     }
+    await KrewService.trackKeyPriceAndBalance(this.krew.id);
   }
 }
