@@ -1,7 +1,7 @@
 import { msg } from "common-app-module";
-import KrewContractEvent from "../../database-interface/KrewContractEvent.js";
-import KrewContractEventService from "../KrewContractEventService.js";
+import KrewContractEvent from "../database-interface/KrewContractEvent.js";
 import ActivityList from "./ActivityList.js";
+import KrewContractEventService from "./KrewContractEventService.js";
 
 export default class GlobalActivityList extends ActivityList {
   constructor() {

@@ -12,6 +12,7 @@ export default class KeyHeldPostList extends PostList<KrewPost> {
       ".key-held-post-list",
       KrewPostService,
       {
+        storeName: "key-held-posts",
         signedUserId: KrewSignedUserManager.user?.user_id,
         emptyMessage: msg("key-held-post-list-empty-message"),
       },

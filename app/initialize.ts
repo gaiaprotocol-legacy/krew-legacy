@@ -17,6 +17,7 @@ import messages_ja from "../locales/ja.yml";
 import messages_zh from "../locales/zh.yml";
 import messages_zh_HK from "../locales/zh_HK.yml";
 import messages_zh_TW from "../locales/zh_TW.yml";
+import ActivityView from "./activity/ActivityView.js";
 import TopicChatRoomView from "./chat-topic/TopicChatRoomView.js";
 import ChatsView from "./chat/ChatsView.js";
 import Config from "./Config.js";
@@ -24,7 +25,6 @@ import KrewCommunalContract from "./contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "./contracts/KrewPersonalContract.js";
 import EnvironmentManager from "./EnvironmentManager.js";
 import ExploreView from "./explore/ExploreView.js";
-import KeysView from "./key/KeysView.js";
 import Layout from "./layout/Layout.js";
 import NotificationsView from "./notification/NotificationsView.js";
 import PostsView from "./post/PostsView.js";
@@ -83,14 +83,14 @@ export default async function initialize(config: Config) {
     "{xUsername}/followers",
   ]);*/
 
-  Router.route("keys", KeysView);
   Router.route("explore", ExploreView);
+  Router.route("activity", ActivityView);
   Router.route("notifications", NotificationsView);
 
   Router.route("{xUsername}", UserView, [
     "chats",
-    "keys",
     "explore",
+    "activity",
     "notifications",
   ]);
   Router.route(

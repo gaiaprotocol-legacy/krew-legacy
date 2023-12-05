@@ -1,11 +1,16 @@
 .post-display.sofi-component {
-    display: flex;
-    gap    : 10px;
-    cursor : pointer;
-    padding: 20px;
+    position: relative;
+    display : flex;
+    gap     : 10px;
+    cursor  : pointer;
+    padding : 20px;
 
     @media @phone {
         gap: 6px;
+    }
+
+    >main {
+        flex-grow: 1;
     }
 
     .author-profile-image {
@@ -30,7 +35,10 @@
     }
 
     button.owner-menu {
-        cursor: pointer;
+        position: absolute;
+        top     : 20px;
+        right   : 20px;
+        cursor  : pointer;
 
         &:active {}
     }

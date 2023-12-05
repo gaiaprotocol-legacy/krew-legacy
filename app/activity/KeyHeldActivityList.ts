@@ -1,8 +1,8 @@
 import { msg } from "common-app-module";
-import KrewContractEvent from "../../database-interface/KrewContractEvent.js";
-import KrewSignedUserManager from "../../user/KrewSignedUserManager.js";
-import KrewContractEventService from "../KrewContractEventService.js";
+import KrewContractEvent from "../database-interface/KrewContractEvent.js";
+import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import ActivityList from "./ActivityList.js";
+import KrewContractEventService from "./KrewContractEventService.js";
 
 export default class KeyHeldActivityList extends ActivityList {
   constructor() {

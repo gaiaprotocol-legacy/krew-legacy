@@ -1,5 +1,5 @@
 import { DomNode, ListLoadingBar, Store } from "common-app-module";
-import KrewContractEvent from "../../database-interface/KrewContractEvent.js";
+import KrewContractEvent from "../database-interface/KrewContractEvent.js";
 import ActivityListItem from "./ActivityListItem.js";
 
 export interface ActivityListOptions {

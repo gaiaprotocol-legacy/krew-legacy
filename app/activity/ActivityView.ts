@@ -1,10 +1,10 @@
 import { el, Tabs, View } from "common-app-module";
 import Layout from "../layout/Layout.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
-import GlobalActivityList from "./activity/GlobalActivityList.js";
-import KeyHeldActivityList from "./activity/KeyHeldActivityList.js";
+import GlobalActivityList from "./GlobalActivityList.js";
+import KeyHeldActivityList from "./KeyHeldActivityList.js";
 
-export default class KeysView extends View {
+export default class ActivityView extends View {
   private tabs: Tabs;
   private globalActivityList: GlobalActivityList;
   private keyHeldActivityList: KeyHeldActivityList | undefined;
@@ -13,7 +13,7 @@ export default class KeysView extends View {
     super();
     Layout.append(
       this.container = el(
-        ".keys-view",
+        ".activity-view",
         this.tabs = new Tabs(
           "activity-list-tabs",
           KrewSignedUserManager.walletLinked

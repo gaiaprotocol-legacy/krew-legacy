@@ -337,6 +337,7 @@ button.component.contained {
   padding: 0 30px;
 }
 .post-display.sofi-component {
+  position: relative;
   display: flex;
   gap: 10px;
   cursor: pointer;
@@ -346,6 +347,9 @@ button.component.contained {
   .post-display.sofi-component {
     gap: 6px;
   }
+}
+.post-display.sofi-component > main {
+  flex-grow: 1;
 }
 .post-display.sofi-component .author-profile-image {
   flex-shrink: 0;
@@ -376,6 +380,9 @@ button.component.contained {
   cursor: pointer;
 }
 .post-display.sofi-component button.owner-menu {
+  position: absolute;
+  top: 20px;
+  right: 20px;
   cursor: pointer;
 }
 .post-display.sofi-component .message {
@@ -400,9 +407,25 @@ button.component.contained {
   cursor: pointer;
   align-items: center;
 }
+.post-thread.sofi-component {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .post-thread.sofi-component > .post-display,
 .post-thread.sofi-component > .post-form {
+  padding: 20px;
   border-bottom: 1px solid var(--line-color);
+}
+.post-thread.sofi-component > .post-display.parent::before,
+.post-thread.sofi-component > .post-form.parent::before {
+  position: absolute;
+  content: '';
+  top: 64px;
+  left: 40px;
+  width: 2px;
+  height: calc(100% - 64px);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .post-list.sofi-component {
   position: relative;
@@ -1052,13 +1075,6 @@ p {
   font-weight: 500;
   text-transform: capitalize;
 }
-.keys-view {
-  max-width: 1000px;
-  min-height: 100px;
-  margin: 20px auto;
-  border-radius: 20px;
-  background-color: var(--bg2-color);
-}
 .buy-key-popup > main > .krew-image {
   flex-shrink: 0;
   width: 50px;
@@ -1095,6 +1111,13 @@ p {
   width: 100%;
   max-width: 320px;
   margin: 0 auto;
+}
+.activity-view {
+  max-width: 1000px;
+  min-height: 100px;
+  margin: 20px auto;
+  border-radius: 20px;
+  background-color: var(--bg2-color);
 }
 .activity-list {
   position: relative;
