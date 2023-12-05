@@ -1054,6 +1054,7 @@ p {
 }
 .keys-view {
   max-width: 1000px;
+  min-height: 100px;
   margin: 20px auto;
   border-radius: 20px;
   background-color: var(--bg2-color);
@@ -1095,8 +1096,15 @@ p {
   max-width: 320px;
   margin: 0 auto;
 }
+.activity-list {
+  position: relative;
+}
+.activity-list.hidden {
+  display: none;
+}
 .explore-view {
   max-width: 1000px;
+  min-height: 100px;
   margin: 20px auto;
   border-radius: 20px;
   background-color: var(--bg2-color);
@@ -1150,6 +1158,12 @@ p {
   align-items: center;
   justify-content: center;
   font-size: 18px;
+}
+.user-list {
+  position: relative;
+}
+.user-list.hidden {
+  display: none;
 }
 .switch-to-kroma-popup > main {
   display: flex;
