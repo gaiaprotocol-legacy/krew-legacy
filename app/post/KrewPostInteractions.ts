@@ -6,8 +6,8 @@ import PostCommentPopup from "./PostCommentPopup.js";
 import PostOwnerMenu from "./PostOwnerMenu.js";
 
 class KrewPostInteractions implements PostInteractions<KrewPost> {
-  public openPostView(postId: number) {
-    Router.go(`/post/${postId}`);
+  public openPostView(post: KrewPost) {
+    Router.go(`/post/${post.id}`, undefined, post);
   }
 
   public openAuthorProfile(author: Author) {

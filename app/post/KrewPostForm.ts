@@ -24,7 +24,7 @@ export default class KrewPostForm extends PostForm {
       message: msg("post-form-posted-snackbar-message"),
       action: {
         title: msg("post-form-posted-snackbar-button"),
-        click: () => Router.go(`/post/${post.id}`),
+        click: () => Router.go(`/post/${post.id}`, undefined, post),
       },
     });
 
