@@ -796,6 +796,15 @@ CREATE TABLE IF NOT EXISTS "public"."wallet_linking_nonces" (
 
 ALTER TABLE "public"."wallet_linking_nonces" OWNER TO "postgres";
 
+CREATE TABLE IF NOT EXISTS "public"."wallets" (
+    "wallet_address" "text" NOT NULL,
+    "total_earned_trading_fees" numeric DEFAULT '0'::numeric NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone
+);
+
+ALTER TABLE "public"."wallets" OWNER TO "postgres";
+
 ALTER TABLE ONLY "public"."topic_chat_messages"
     ADD CONSTRAINT "chat_messages_pkey" PRIMARY KEY ("id");
 
@@ -843,6 +852,9 @@ ALTER TABLE ONLY "public"."users_public"
 
 ALTER TABLE ONLY "public"."wallet_linking_nonces"
     ADD CONSTRAINT "wallet_linking_nonces_pkey" PRIMARY KEY ("user_id");
+
+ALTER TABLE ONLY "public"."wallets"
+    ADD CONSTRAINT "wallets_pkey" PRIMARY KEY ("wallet_address");
 
 CREATE TRIGGER "decrease_follow_count" AFTER DELETE ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_follow_count"();
 
@@ -1036,6 +1048,8 @@ CREATE POLICY "view everyone or only keyholders" ON "public"."posts" FOR SELECT 
 
 ALTER TABLE "public"."wallet_linking_nonces" ENABLE ROW LEVEL SECURITY;
 
+ALTER TABLE "public"."wallets" ENABLE ROW LEVEL SECURITY;
+
 GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
@@ -1204,6 +1218,10 @@ GRANT ALL ON TABLE "public"."users_public" TO "service_role";
 GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "anon";
 GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "authenticated";
 GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "service_role";
+
+GRANT ALL ON TABLE "public"."wallets" TO "anon";
+GRANT ALL ON TABLE "public"."wallets" TO "authenticated";
+GRANT ALL ON TABLE "public"."wallets" TO "service_role";
 
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "postgres";
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES  TO "anon";
