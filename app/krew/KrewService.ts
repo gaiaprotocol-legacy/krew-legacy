@@ -11,6 +11,16 @@ class KrewService extends SupabaseService<Krew> {
     return await this.safeSelect((b) => b.eq("owner", owner));
   }
 
+  public async fetchKeyHeldKrews() {
+    const { data, error } = await Supabase.client.rpc(
+      "get_key_held_krews",
+      { p_wallet_address: KrewSignedUserManager.user?.wallet_address },
+    );
+    if (error) throw error;
+    console.log(Supabase.safeResult<Krew[]>(data ?? []));
+    return Supabase.safeResult<Krew[]>(data ?? []);
+  }
+
   public async trackPersonalEvents() {
     const { error } = await Supabase.client.functions.invoke(
       "track-krew-personal-events",

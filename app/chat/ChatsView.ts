@@ -1,4 +1,5 @@
-import { el, msg, View } from "common-app-module";
+import { el, View } from "common-app-module";
+import KrewChatRoomList from "../chat-krew/KrewChatRoomList.js";
 import TopicChatRoomList from "../chat-topic/TopicChatRoomList.js";
 import Layout from "../layout/Layout.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
@@ -11,9 +12,9 @@ export default class ChatsView extends View {
       this.container = el(
         ".chats-view",
         new TopicChatRoomList(),
-        ...(!KrewSignedUserManager.signed ? [new LoginRequiredDisplay()] : [
-          //TODO: krew chat room list
-        ]),
+        !KrewSignedUserManager.signed
+          ? new LoginRequiredDisplay()
+          : new KrewChatRoomList(),
       ),
     );
   }

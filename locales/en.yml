@@ -22,6 +22,7 @@ delete-post-confirm-delete-button: Delete
 delete-post-confirm-deleting-button: Deleting...
 
 topic-chat-room-list-empty-message: No chat rooms for topics
+krew-chat-room-list-empty-message: No chat rooms for krews
 chat-message-list-empty-message: No messages yet
 notification-list-empty-message: No notifications yet
 
