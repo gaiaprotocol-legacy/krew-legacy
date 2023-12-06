@@ -36,7 +36,7 @@ class KrewChatMessageService extends MessageService<KrewChatMessage> {
 
   public async fetchMessages(krew: string) {
     return await this.safeSelect((b) =>
-      b.eq("krew", krew).order("created_at", { ascending: false })
+      b.eq("krew", krew).order("id", { ascending: false })
     );
   }
 }

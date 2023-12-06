@@ -36,7 +36,7 @@ class TopicChatMessageService extends MessageService<TopicChatMessage> {
 
   public async fetchMessages(topic: string) {
     return await this.safeSelect((b) =>
-      b.eq("topic", topic).order("created_at", { ascending: false })
+      b.eq("topic", topic).order("id", { ascending: false })
     );
   }
 }

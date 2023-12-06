@@ -7,6 +7,8 @@ import KrewPostService from "../../../post/KrewPostService.js";
 import KrewSignedUserManager from "../../KrewSignedUserManager.js";
 
 export default class UserLikedPostList extends PostList<KrewPost> {
+  private lastLikedAt: string | undefined;
+
   constructor(private userId: string) {
     super(
       ".user-liked-post-list",
@@ -20,14 +22,25 @@ export default class UserLikedPostList extends PostList<KrewPost> {
     );
   }
 
-  protected fetchPosts(): Promise<
+  protected async fetchPosts(): Promise<
     {
       fetchedPosts: { posts: KrewPost[]; mainPostId: number }[];
       repostedPostIds: number[];
       likedPostIds: number[];
     }
   > {
-    console.log(this.userId);
-    throw new Error("Method not implemented.");
+    const result = await KrewPostService.fetchLikedPosts(
+      this.userId,
+      this.lastLikedAt,
+    );
+    this.lastLikedAt = result.lastLikedAt;
+    return {
+      fetchedPosts: result.data.posts.map((p) => ({
+        posts: [p],
+        mainPostId: p.id,
+      })),
+      repostedPostIds: result.data.repostedPostIds,
+      likedPostIds: result.data.likedPostIds,
+    };
   }
 }
