@@ -872,6 +872,9 @@ p {
 .create-krew-popup {
   max-width: 800px !important;
 }
+.krew-list.hidden {
+  display: none;
+}
 .krew-list-item {
   position: relative;
   padding: 20px;
@@ -879,42 +882,65 @@ p {
   gap: 12px;
   align-items: center;
   border-bottom: 1px solid var(--line-color);
+  cursor: pointer;
 }
-.krew-list-item > header {
+.krew-list-item > .info {
+  flex-grow: 1;
   display: flex;
+  gap: 12px;
   align-items: center;
 }
-.krew-list-item > header > .trader-profile-image,
-.krew-list-item > header > .krew-image {
+.krew-list-item > .info > .krew-image {
   flex-shrink: 0;
   width: 50px;
   height: 50px;
   border-radius: 50%;
   background-color: #252525;
   background-size: cover;
-  cursor: pointer;
 }
 @media only screen and (max-width: 859px) {
-  .krew-list-item > header > .trader-profile-image,
-  .krew-list-item > header > .krew-image {
+  .krew-list-item > .info > .krew-image {
     width: 34px;
     height: 34px;
   }
 }
-.krew-list-item > header > .trader-profile-image {
-  margin-right: -8px;
-}
-.krew-list-item > .description {
+.krew-list-item > .info > .name {
   flex-grow: 1;
-  width: 0;
-}
-.krew-list-item > .description > a {
+  font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
 }
-.krew-list-item > .date {
-  color: #474B54;
+.krew-list-item > .metric-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.krew-list-item > .metric-container > section {
+  display: flex;
+  padding: 8px 16px 8px 8px;
+  gap: 12px;
+  align-items: center;
+  min-width: 150px;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
+}
+.krew-list-item > .metric-container > section.price {
+  grid-column: auto / span 2;
+}
+.krew-list-item > .metric-container > section > .icon-container {
+  padding: 8px;
+  display: flex;
+}
+.krew-list-item > .metric-container > section > .metric {
+  display: flex;
+  flex-direction: column;
+}
+.krew-list-item > .metric-container > section > .metric > h3 {
   font-size: 12px;
+  text-transform: capitalize;
+}
+.krew-list-item > .metric-container > section > .metric > .value {
+  font-weight: bold;
+  text-transform: capitalize;
 }
 .posts-view {
   position: relative;

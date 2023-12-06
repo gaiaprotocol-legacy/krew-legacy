@@ -42,5 +42,7 @@ export default class KrewListItem extends DomNode {
         ),
       ),
     );
+
+    //this.onDom("click", () => new KrewPopup(krew));
   }
 }
