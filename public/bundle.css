@@ -607,6 +607,13 @@ p {
     height: 34px;
   }
 }
+.comming-soon {
+  font-size: 12px;
+  color: #C55FFC;
+  border: 1px solid #C55FFC;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
 .krew-loading-animation {
   display: flex;
   justify-content: center;
@@ -839,6 +846,9 @@ p {
 .create-krew-form > .select-krew-type > section > h2 {
   font-size: 20px;
   color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .create-krew-form > .select-krew-type > section > p {
   height: 100px;

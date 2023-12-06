@@ -1,13 +1,9 @@
 import { Supabase } from "common-app-module";
-import {
-  SoFiUserPublic,
-  SoFiUserPublicSelectQuery,
-  SoFiUserService,
-} from "sofi-module";
+import { SoFiUserPublic, SoFiUserService } from "sofi-module";
 
 class KrewUserService extends SoFiUserService<SoFiUserPublic> {
   constructor() {
-    super("users_public", SoFiUserPublicSelectQuery, 50);
+    super("users_public", "*", 50);
   }
 
   public async fetchPortfolioValue(walletAddress: string): Promise<{

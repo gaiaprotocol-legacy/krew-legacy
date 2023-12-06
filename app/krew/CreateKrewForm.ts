@@ -33,7 +33,11 @@ export default class CreateKrewForm extends DomNode {
         ),
         this.communalSection = el(
           "section.communal",
-          el("h2", msg("create-krew-form-communal-krew-title")),
+          el(
+            "h2",
+            msg("create-krew-form-communal-krew-title"),
+            el("span.comming-soon", "Coming Soon"),
+          ),
           el("p", msg("create-krew-form-communal-krew-description")),
           el(
             "ul",
@@ -41,7 +45,7 @@ export default class CreateKrewForm extends DomNode {
             el("li", msg("create-krew-form-communal-krew-feature-2")),
             el("li", msg("create-krew-form-communal-krew-feature-3")),
           ),
-          { click: () => this.selectKrewType(KrewType.Communal) },
+          //{ click: () => this.selectKrewType(KrewType.Communal) },
         ),
       ),
       this.createButton = new Button({
