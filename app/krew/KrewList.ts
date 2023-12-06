@@ -50,6 +50,7 @@ export default abstract class KrewList extends DomNode {
   public show() {
     this.deleteClass("hidden");
     if (!this.refreshed) this.refresh();
+    return this;
   }
 
   public hide() {

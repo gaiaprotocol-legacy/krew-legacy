@@ -12,7 +12,7 @@ export default class KrewListItem extends DomNode {
         el(".krew-image", {
           style: { backgroundImage: `url(${krew.image_thumbnail})` },
         }),
-        el(".name", krew.name),
+        el(".name", krew.name ?? "Unnamed Krew"),
       ),
       el(
         ".metric-container",

@@ -7,6 +7,11 @@
     border-bottom: 1px solid var(--line-color);
     cursor       : pointer;
 
+    @container (width < 520px) {
+        flex-direction: column;
+        align-items   : flex-start;
+    }
+
     >.info {
         flex-grow  : 1;
         display    : flex;

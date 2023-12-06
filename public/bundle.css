@@ -822,6 +822,13 @@ p {
   z-index: 1;
   border-left: 1px solid var(--line-color);
 }
+.sidebar > h2 {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 20px;
+  margin: 0;
+  border-bottom: 1px solid var(--line-color);
+}
 .create-krew-form > h2 {
   font-size: 24px;
 }
@@ -872,6 +879,9 @@ p {
 .create-krew-popup {
   max-width: 800px !important;
 }
+.krew-list {
+  container-type: inline-size;
+}
 .krew-list.hidden {
   display: none;
 }
@@ -883,6 +893,12 @@ p {
   align-items: center;
   border-bottom: 1px solid var(--line-color);
   cursor: pointer;
+}
+@container (width < 520px) {
+  .krew-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 .krew-list-item > .info {
   flex-grow: 1;
