@@ -1,19 +1,21 @@
 import { el, Tabs, View, ViewParams } from "common-app-module";
 import { FollowingPostList, GlobalPostList } from "sofi-module";
-import KrewPost from "../database-interface/KrewPost.js";
+import KrewPost, { PostTarget } from "../database-interface/KrewPost.js";
+import KrewSelector from "../krew/KrewSelector.js";
 import KrewLoadingAnimation from "../KrewLoadingAnimation.js";
 import Layout from "../layout/Layout.js";
 import MaterialIcon from "../MaterialIcon.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
+import KeyHeldPostList from "./KeyHeldPostList.js";
 import KrewPostForm from "./KrewPostForm.js";
 import KrewPostInteractions from "./KrewPostInteractions.js";
 import KrewPostService from "./KrewPostService.js";
 import PostPopup from "./PostPopup.js";
 import PostTargetSelector from "./PostTargetSelector.js";
-import KeyHeldPostList from "./KeyHeldPostList.js";
 
 export default class PostsView extends View {
   private targetSelector: PostTargetSelector;
+  private krewSelector: KrewSelector;
   private form: KrewPostForm;
   private tabs: Tabs | undefined;
   private globalPostList: GlobalPostList<KrewPost>;
@@ -30,7 +32,11 @@ export default class PostsView extends View {
           "main",
           el(
             ".form-container",
-            this.targetSelector = new PostTargetSelector(),
+            el(
+              "header",
+              this.targetSelector = new PostTargetSelector(),
+              this.krewSelector = new KrewSelector().hide(),
+            ),
             this.form = new KrewPostForm(),
           ),
           el(
@@ -83,7 +89,16 @@ export default class PostsView extends View {
 
     this.targetSelector.on(
       "change",
-      (target: number) => this.form.target = target,
+      (target: number) => {
+        this.form.target = target;
+        if (target === PostTarget.KEY_HOLDERS) this.krewSelector.show();
+        else this.form.krew = undefined;
+      },
+    );
+
+    this.krewSelector.on(
+      "change",
+      (krew: string) => this.form.krew = krew,
     );
 
     if (!this.tabs) {

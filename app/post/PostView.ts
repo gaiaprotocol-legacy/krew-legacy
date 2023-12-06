@@ -7,6 +7,7 @@ import KrewPostService from "./KrewPostService.js";
 
 export default class PostView extends View {
   private postDisplay: KrewPostDisplay | undefined;
+  private lastCommentId: number | undefined;
 
   constructor(params: ViewParams, uri: string, data?: any) {
     super();
@@ -22,9 +23,14 @@ export default class PostView extends View {
     this.container.empty().append(
       this.postDisplay = new KrewPostDisplay(postId, previewPost),
     );
-    this.postDisplay.data = await KrewPostService.fetchPost(
+
+    const data = await KrewPostService.fetchPost(
       postId,
+      this.lastCommentId,
       KrewSignedUserManager.user?.user_id,
     );
+
+    this.postDisplay.data = data;
+    this.lastCommentId = data.posts[data.posts.length - 1]?.id;
   }
 }

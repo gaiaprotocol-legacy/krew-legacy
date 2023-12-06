@@ -6,6 +6,7 @@ import KrewPostService from "./KrewPostService.js";
 
 export default class KrewPostForm extends PostForm {
   public target: number = PostTarget.EVERYONE;
+  public krew: string | undefined;
 
   constructor(
     private parentPostId?: number,

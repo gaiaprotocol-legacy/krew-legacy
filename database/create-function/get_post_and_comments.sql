@@ -1,4 +1,30 @@
-CREATE OR REPLACE FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer DEFAULT 50, "signed_user_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "depth" integer)
+CREATE OR REPLACE FUNCTION "public"."get_post_and_comments"(
+        "p_post_id" bigint,
+        "last_comment_id" int8 DEFAULT NULL,
+        "max_comment_count" integer DEFAULT 50,
+        "signed_user_id" "uuid" DEFAULT NULL::"uuid"
+    ) RETURNS TABLE(
+        "id" bigint,
+        "target" smallint,
+        "krew" "text",
+        "author" "uuid",
+        "author_display_name" "text",
+        "author_profile_image" "text",
+        "author_profile_image_thumbnail" "text",
+        "author_x_username" "text",
+        "message" "text",
+        "translated" "jsonb",
+        "rich" "jsonb",
+        "parent" bigint,
+        "comment_count" integer,
+        "repost_count" integer,
+        "like_count" integer,
+        "created_at" timestamp with time zone,
+        "updated_at" timestamp with time zone,
+        "liked" boolean,
+        "reposted" boolean,
+        "depth" integer
+    )
     LANGUAGE "sql"
     AS $$
 WITH RECURSIVE ancestors AS (
@@ -109,7 +135,8 @@ comments AS (
     INNER JOIN 
         users_public u ON p.author = u.user_id
     WHERE 
-        p.parent = p_post_id
+        p.parent = p_post_id AND
+        last_comment_id IS NULL OR p.id < last_comment_id
     ORDER BY p.id
     LIMIT max_comment_count
 )
@@ -119,8 +146,8 @@ SELECT * FROM comments
 ORDER BY depth, id;
 $$;
 
-ALTER FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
+ALTER FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
 
-GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "anon";
-GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "service_role";
+GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "service_role";

@@ -2,6 +2,7 @@ import { DomNode } from "common-app-module";
 import { PostThread } from "sofi-module";
 import KrewPost from "../database-interface/KrewPost.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
+import KrewPostForm from "./KrewPostForm.js";
 import KrewPostInteractions from "./KrewPostInteractions.js";
 
 export default class KrewPostDisplay extends DomNode {
@@ -9,14 +10,19 @@ export default class KrewPostDisplay extends DomNode {
     super(".post-display");
     if (preview) {
       this.append(
-        new PostThread([preview], {
-          inView: true,
-          mainPostId: preview.id,
-          repostedPostIds: [],
-          likedPostIds: [],
-          newPostIds: [],
-          signedUserId: KrewSignedUserManager.user?.user_id,
-        }, KrewPostInteractions),
+        new PostThread(
+          [preview],
+          {
+            inView: true,
+            mainPostId: preview.id,
+            repostedPostIds: [],
+            likedPostIds: [],
+            newPostIds: [],
+            signedUserId: KrewSignedUserManager.user?.user_id,
+          },
+          KrewPostInteractions,
+          new KrewPostForm(),
+        ),
       );
     }
   }
@@ -27,14 +33,19 @@ export default class KrewPostDisplay extends DomNode {
     likedPostIds: number[];
   }) {
     this.empty().append(
-      new PostThread(data.posts, {
-        inView: true,
-        mainPostId: this.postId,
-        repostedPostIds: data.repostedPostIds,
-        likedPostIds: data.likedPostIds,
-        newPostIds: [],
-        signedUserId: KrewSignedUserManager.user?.user_id,
-      }, KrewPostInteractions),
+      new PostThread(
+        data.posts,
+        {
+          inView: true,
+          mainPostId: this.postId,
+          repostedPostIds: data.repostedPostIds,
+          likedPostIds: data.likedPostIds,
+          newPostIds: [],
+          signedUserId: KrewSignedUserManager.user?.user_id,
+        },
+        KrewPostInteractions,
+        new KrewPostForm(),
+      ),
     );
   }
 }

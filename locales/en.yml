@@ -29,6 +29,7 @@ notification-list-empty-message: No notifications yet
 new-krew-list-empty-message: No new krews yet
 top-krew-list-empty-message: No top krews yet
 trending-krew-list-empty-message: No trending krews yet
+key-held-krew-list-empty-message: No krews you hold keys for yet
 search-krew-list-empty-message: No krews found
 
 activity-list-item-created-krew-text: "{user} created {krew} krew."
