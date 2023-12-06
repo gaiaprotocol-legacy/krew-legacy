@@ -569,6 +569,27 @@ $$;
 
 ALTER FUNCTION "public"."set_user_metadata_to_public"() OWNER TO "postgres";
 
+CREATE OR REPLACE FUNCTION "public"."update_key_holder_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  IF old.last_fetched_balance = 0 AND new.last_fetched_balance > 0 THEN
+    update krews
+    set
+      key_holder_count = key_holder_count + 1
+    where
+      id = new.krew;
+  ELSIF old.last_fetched_balance > 0 AND new.last_fetched_balance = 0 THEN
+    update krews
+    set
+      key_holder_count = key_holder_count - 1
+    where
+      id = new.krew;
+  END IF;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."update_key_holder_count"() OWNER TO "postgres";
+
 SET default_tablespace = '';
 
 SET default_table_access_method = "heap";
@@ -899,6 +920,8 @@ CREATE TRIGGER "set_total_key_balances_updated_at" BEFORE UPDATE ON "public"."to
 
 CREATE TRIGGER "set_users_public_updated_at" BEFORE UPDATE ON "public"."users_public" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
+CREATE TRIGGER "update_key_holder_count" AFTER UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."update_key_holder_count"();
+
 ALTER TABLE ONLY "public"."follows"
     ADD CONSTRAINT "follows_followee_id_fkey" FOREIGN KEY ("followee_id") REFERENCES "public"."users_public"("user_id");
 
@@ -1139,6 +1162,10 @@ GRANT ALL ON FUNCTION "public"."set_updated_at"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "anon";
 GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "service_role";
 
 GRANT ALL ON TABLE "public"."topic_chat_messages" TO "anon";
 GRANT ALL ON TABLE "public"."topic_chat_messages" TO "authenticated";
