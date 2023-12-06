@@ -130,6 +130,45 @@ $$;
 
 ALTER FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
+CREATE OR REPLACE FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image_thumbnail" "text", "created_at" timestamp with time zone)
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        a.block_number,
+        a.log_index,
+        a.event_type,
+        a.args,
+        a.wallet_address,
+        u.user_id as user_id,
+        u.display_name as user_display_name,
+        u.profile_image as user_profile_image,
+        u.profile_image_thumbnail as user_profile_image_thumbnail,
+        u.x_username as user_x_username,
+        a.krew,
+        k.id AS krew_id,
+        k.name AS krew_name,
+        k.image_thumbnail AS krew_image_thumbnail,
+        a.created_at
+    FROM 
+        krew_contract_events a
+    LEFT JOIN 
+        users_public u ON a.wallet_address = u.wallet_address
+    LEFT JOIN
+        krews k ON a.krew = k.id
+    WHERE 
+        (a.event_type = 0 OR a.event_type = 1)
+        AND (last_created_at IS NULL OR a.created_at < last_created_at)
+    ORDER BY 
+        a.created_at DESC
+    LIMIT 
+        max_count;
+END
+$$;
+
+ALTER FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."get_global_posts"("last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50, "signed_user_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
     LANGUAGE "plpgsql"
     AS $$
@@ -179,7 +218,7 @@ $$;
 
 ALTER FUNCTION "public"."get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image_thumbnail" "text", "created_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image_thumbnail" "text", "created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -190,6 +229,11 @@ BEGIN
         a.event_type,
         a.args,
         a.wallet_address,
+        u.user_id as user_id,
+        u.display_name as user_display_name,
+        u.profile_image as user_profile_image,
+        u.profile_image_thumbnail as user_profile_image_thumbnail,
+        u.x_username as user_x_username,
         a.krew,
         k.id AS krew_id,
         k.name AS krew_name,
@@ -199,6 +243,8 @@ BEGIN
         krew_contract_events a
     INNER JOIN 
         krew_key_holders skh ON a.wallet_address = skh.wallet_address
+    LEFT JOIN 
+        users_public u ON a.wallet_address = u.wallet_address
     LEFT JOIN
         krews k ON a.krew = k.id
     WHERE 
@@ -1181,6 +1227,10 @@ GRANT ALL ON FUNCTION "public"."decrease_repost_count"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone, "max_count" integer) TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") TO "anon";
 GRANT ALL ON FUNCTION "public"."get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") TO "authenticated";

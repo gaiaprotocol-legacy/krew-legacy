@@ -18,6 +18,7 @@ import messages_zh from "../locales/zh.yml";
 import messages_zh_HK from "../locales/zh_HK.yml";
 import messages_zh_TW from "../locales/zh_TW.yml";
 import ActivityView from "./activity/ActivityView.js";
+import BlockTimeManager from "./BlockTimeManager.js";
 import KrewChatRoomView from "./chat-krew/KrewChatRoomView.js";
 import TopicChatRoomView from "./chat-topic/TopicChatRoomView.js";
 import ChatsView from "./chat/ChatsView.js";
@@ -62,6 +63,7 @@ export default async function initialize(config: Config) {
 
   await SplashLoader.load(el("img", { src: "/images/logo-transparent.png" }), [
     KrewSignedUserManager.fetchUserOnInit(),
+    BlockTimeManager.init(),
   ]);
 
   Router.route("**", Layout, ["test/**"]);

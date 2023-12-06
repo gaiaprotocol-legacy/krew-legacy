@@ -17,7 +17,7 @@ export default interface KrewContractEvent {
     name?: string;
     image_thumbnail?: string;
   };
-  user: Author;
+  user?: Author;
   created_at: string;
 }
 
