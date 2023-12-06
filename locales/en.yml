@@ -29,6 +29,7 @@ notification-list-empty-message: No notifications yet
 new-krew-list-empty-message: No new krews yet
 top-krew-list-empty-message: No top krews yet
 trending-krew-list-empty-message: No trending krews yet
+search-krew-list-empty-message: No krews found
 
 activity-list-item-created-krew-text: "{user} created {krew} krew."
 activity-list-item-bought-key-text: "{user} bought {amount} {krew} key for {price} ETH."
@@ -108,6 +109,7 @@ follower-list-empty-message: No followers yet
 new-user-list-empty-message: No new users yet
 top-user-list-empty-message: No top users yet
 trending-user-list-empty-message: No trending users yet
+search-user-list-empty-message: No users found
 
 global-activity-list-empty-message: No global activities yet
 key-held-activity-list-empty-message: No activities you hold keys for yet
@@ -121,5 +123,6 @@ user-comment-post-list-empty-message: No comments from this user yet
 user-repost-list-empty-message: No reposts from this user yet
 user-liked-post-list-empty-message: No liked posts from this user yet
 key-held-post-list-empty-message: No posts you hold keys for yet
+search-post-list-empty-message: No posts found
 
 user-profile-joined: Joined {date}

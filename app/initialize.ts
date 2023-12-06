@@ -30,6 +30,7 @@ import ExploreView from "./explore/ExploreView.js";
 import Layout from "./layout/Layout.js";
 import NotificationsView from "./notification/NotificationsView.js";
 import PostsView from "./post/PostsView.js";
+import SearchView from "./search/SearchView.js";
 import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
 import UserConnectionsView from "./user/user-connections/UserConnectionsView.js";
 import UserView from "./user/UserView.js";
@@ -87,12 +88,14 @@ export default async function initialize(config: Config) {
   ]);
 
   Router.route("explore", ExploreView);
+  Router.route("search", SearchView);
   Router.route("activity", ActivityView);
   Router.route("notifications", NotificationsView);
 
   Router.route("{xUsername}", UserView, [
     "chats",
     "explore",
+    "search",
     "activity",
     "notifications",
   ]);
