@@ -14,6 +14,7 @@ import Krew from "../database-interface/Krew.js";
 import KrewType from "../database-interface/KrewType.js";
 import KrewService from "../krew/KrewService.js";
 import KeyBoughtPopup from "./KeyBoughtPopup.js";
+import KrewUtil from "../krew/KrewUtil.js";
 
 export default class BuyKeyPopup extends Popup {
   private priceDisplay: DomNode;
@@ -30,7 +31,7 @@ export default class BuyKeyPopup extends Popup {
           el(
             "h1",
             msg("buy-key-popup-title", {
-              krew: krew.name ?? "Krew",
+              krew: KrewUtil.getName(krew),
             }),
           ),
         ),
@@ -76,7 +77,7 @@ export default class BuyKeyPopup extends Popup {
             tag: ".buy",
             click: () => this.buyKeys(),
             title: msg("buy-key-popup-buy-button", {
-              krew: krew.name ?? "Krew",
+              krew: KrewUtil.getName(krew),
             }),
           }),
         ),
@@ -144,7 +145,7 @@ export default class BuyKeyPopup extends Popup {
       this.delete();
     } catch (e) {
       this.buyButton.title = msg("buy-key-popup-buy-button", {
-        krew: this.krew.name ?? "Krew",
+        krew: KrewUtil.getName(this.krew),
       });
       throw e;
     }

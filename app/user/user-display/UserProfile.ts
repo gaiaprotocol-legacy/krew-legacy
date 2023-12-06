@@ -1,32 +1,77 @@
-import { DateUtil, DomNode, el, msg } from "common-app-module";
+import { DateUtil, DomNode, el, msg, Router } from "common-app-module";
 import { PreviewUserPublic, SoFiUserPublic } from "sofi-module";
-import BuyKeyPopup from "../../key/BuyKeyPopup.js";
 import KrewService from "../../krew/KrewService.js";
+import MaterialIcon from "../../MaterialIcon.js";
+import KrewUserService from "../KrewUserService.js";
+import OwnedKrewListItem from "./OwnedKrewListItem.js";
 
 export default class UserProfile extends DomNode {
-  private claimableFeeFetched = false;
+  private feesEarnedFetched = false;
   private portfolioValueFetched = false;
   private krewsFetched = false;
 
-  private info: DomNode;
+  private infoContainer: DomNode;
   private claimableFee: DomNode | undefined;
-  private krews: DomNode;
-  private metrics: DomNode;
-  private connections: DomNode;
+  private krewList: DomNode;
+
+  private feesEarnedDisplay: DomNode;
+  private portfolioValueDisplay: DomNode;
+
+  private holdingDisplay: DomNode;
+  private followingDisplay: DomNode;
+  private followersDisplay: DomNode;
 
   constructor(
+    xUsername: string,
     previewUser: PreviewUserPublic | undefined,
-    private displayClaimableFee = false,
+    private feeClaimable = false,
   ) {
     super(".user-profile");
     this.append(
-      this.info = el("section.info"),
-      displayClaimableFee
-        ? this.claimableFee = el("section.claimable-fee")
-        : undefined,
-      this.krews = el("section.krews"),
-      this.metrics = el("section.metrics"),
-      this.connections = el("section.connections"),
+      this.infoContainer = el(".info-container"),
+      this.krewList = el(".krew-list"),
+      el(
+        ".metrics-container",
+        el(
+          "section.earned",
+          el(".icon-container", new MaterialIcon("savings")),
+          el(
+            ".metric",
+            el("h3", "Fees Earned"),
+            this.feesEarnedDisplay = el(".value", "..."),
+          ),
+        ),
+        el(
+          "section.portfolio-value",
+          el(".icon-container", new MaterialIcon("account_balance")),
+          el(
+            ".metric",
+            el("h3", "Portfolio Value"),
+            this.portfolioValueDisplay = el(".value", "..."),
+          ),
+        ),
+      ),
+      el(
+        ".connections-container",
+        el(
+          "a.holding",
+          this.holdingDisplay = el(".value", "..."),
+          el("h3", "Holding"),
+          { click: () => Router.go(`/${xUsername}/holding`) },
+        ),
+        el(
+          "a.following",
+          this.followingDisplay = el(".value", "..."),
+          el("h3", "Following"),
+          { click: () => Router.go(`/${xUsername}/following`) },
+        ),
+        el(
+          "a.followers",
+          this.followersDisplay = el(".value", "..."),
+          el("h3", "Followers"),
+          { click: () => Router.go(`/${xUsername}/followers`) },
+        ),
+      ),
     );
     if (previewUser) this.renderUser(previewUser);
   }
@@ -35,7 +80,7 @@ export default class UserProfile extends DomNode {
     if (user) {
       this.renderUser(user);
       if (user.wallet_address) {
-        this.fetchClaimableFee(user.wallet_address);
+        this.fetchFeesEarned(user.wallet_address);
         this.fetchPortfolioValue(user.wallet_address);
         this.fetchKrews(user.wallet_address);
       }
@@ -43,7 +88,7 @@ export default class UserProfile extends DomNode {
   }
 
   private renderUser(user: PreviewUserPublic & { created_at?: string }) {
-    this.info.empty().append(
+    this.infoContainer.empty().append(
       el(".profile-image", {
         style: {
           backgroundImage: `url(${user.profile_image})`,
@@ -76,9 +121,9 @@ export default class UserProfile extends DomNode {
     );
   }
 
-  private async fetchClaimableFee(walletAddress: string) {
-    if (!this.displayClaimableFee || this.claimableFeeFetched) return;
-    this.claimableFeeFetched = true;
+  private async fetchFeesEarned(walletAddress: string) {
+    if (this.feesEarnedFetched) return;
+    this.feesEarnedFetched = true;
 
     //TODO:
   }
@@ -87,22 +132,20 @@ export default class UserProfile extends DomNode {
     if (this.portfolioValueFetched) return;
     this.portfolioValueFetched = true;
 
-    //TODO:
+    const result = await KrewUserService.fetchPortfolioValue(walletAddress);
+    console.log(result);
   }
 
   private async fetchKrews(walletAddress: string) {
     if (this.krewsFetched) return;
     this.krewsFetched = true;
 
-    this.krews.empty();
+    this.krewList.empty();
 
     const krews = await KrewService.fetchOwnedKrews(walletAddress, undefined);
     for (const krew of krews) {
-      this.krews.append(
-        el("h1", krew.id),
-        el("a", "buy", {
-          click: () => new BuyKeyPopup(krew),
-        }),
+      this.krewList.append(
+        new OwnedKrewListItem(krew, this.feeClaimable),
       );
     }
   }

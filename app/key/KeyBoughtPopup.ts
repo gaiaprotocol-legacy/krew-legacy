@@ -9,6 +9,7 @@ import {
   Router,
 } from "common-app-module";
 import Krew from "../database-interface/Krew.js";
+import KrewUtil from "../krew/KrewUtil.js";
 import animationData from "./firecracker-animation.json" assert {
   type: "json"
 };
@@ -32,7 +33,7 @@ export default class KeyBoughtPopup extends Popup {
           el(
             "p",
             msg("key-bought-popup-message", {
-              krew: krew.name ?? "Krew",
+              krew: KrewUtil.getName(krew),
             }),
           ),
         ),

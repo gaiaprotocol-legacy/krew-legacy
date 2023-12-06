@@ -11,7 +11,11 @@ export default class ProfileView extends View {
     Layout.append(
       this.container = el(
         ".profile-view",
-        this.userDisplay = new UserDisplay(undefined, true),
+        this.userDisplay = new UserDisplay(
+          KrewSignedUserManager.user?.x_username ?? "",
+          undefined,
+          true,
+        ),
       ),
     );
     this.userDisplay.user = KrewSignedUserManager.user;

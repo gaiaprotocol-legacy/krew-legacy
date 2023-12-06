@@ -1,6 +1,7 @@
 import { el, Router } from "common-app-module";
 import ChatRoomListItem from "../chat/ChatRoomListItem.js";
 import Krew from "../database-interface/Krew.js";
+import KrewUtil from "../krew/KrewUtil.js";
 
 export default class KrewChatRoomListItem extends ChatRoomListItem {
   constructor(krew: Krew) {
@@ -13,7 +14,7 @@ export default class KrewChatRoomListItem extends ChatRoomListItem {
       }),
       el(
         ".info",
-        el("h3", krew.name ?? "Untitled Krew"),
+        el("h3", KrewUtil.getName(krew)),
         this.lastMessageDisplay,
       ),
     ).onDom(

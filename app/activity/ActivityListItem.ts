@@ -5,6 +5,7 @@ import BlockTimeManager from "../BlockTimeManager.js";
 import KrewContractEvent, {
   EventType,
 } from "../database-interface/KrewContractEvent.js";
+import KrewUtil from "../krew/KrewUtil.js";
 
 export default class ActivityListItem extends DomNode {
   constructor(event: KrewContractEvent) {
@@ -19,7 +20,7 @@ export default class ActivityListItem extends DomNode {
       click: () => Router.go(`/${event.user?.x_username}`),
     });
 
-    const krew = el("a", event.krew.name, {
+    const krew = el("a", KrewUtil.getName(event.krew), {
       //TODO: click: () => new KrewPopup(event.krew),
     });
 

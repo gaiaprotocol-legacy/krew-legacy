@@ -2,6 +2,7 @@ import { DomNode, el } from "common-app-module";
 import { ethers } from "ethers";
 import MaterialIcon from "../MaterialIcon.js";
 import Krew from "../database-interface/Krew.js";
+import KrewUtil from "./KrewUtil.js";
 
 export default class KrewListItem extends DomNode {
   constructor(krew: Krew) {
@@ -12,7 +13,7 @@ export default class KrewListItem extends DomNode {
         el(".krew-image", {
           style: { backgroundImage: `url(${krew.image_thumbnail})` },
         }),
-        el(".name", krew.name ?? "Unnamed Krew"),
+        el(".name", KrewUtil.getName(krew)),
       ),
       el(
         ".metric-container",

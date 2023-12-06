@@ -19,7 +19,7 @@ export default class UserView extends View {
 
   private async render(xUsername: string, previewUser?: PreviewUserPublic) {
     this.container.empty().append(
-      this.userDisplay = new UserDisplay(previewUser, false),
+      this.userDisplay = new UserDisplay(xUsername, previewUser, false),
     );
     this.userDisplay.user = await KrewUserService.fetchByXUsername(xUsername);
   }

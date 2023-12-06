@@ -19,12 +19,17 @@ export default class UserDisplay extends DomNode {
   private userLikedPostList: UserLikedPostList | undefined;
 
   constructor(
+    xUsername: string,
     previewUser: PreviewUserPublic | undefined,
-    displayClaimableFee: boolean,
+    feeClaimable: boolean,
   ) {
     super(".user-display");
     this.append(
-      this.userProfile = new UserProfile(previewUser, displayClaimableFee),
+      this.userProfile = new UserProfile(
+        xUsername,
+        previewUser,
+        feeClaimable,
+      ),
       this.postsContainer = el(".posts-container"),
     );
     if (previewUser) this.renderPosts(previewUser.user_id);

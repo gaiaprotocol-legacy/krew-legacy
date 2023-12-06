@@ -1,6 +1,7 @@
 import { DomNode, el, ListLoadingBar, Store } from "common-app-module";
 import Krew from "../database-interface/Krew.js";
 import KrewService from "./KrewService.js";
+import KrewUtil from "./KrewUtil.js";
 
 export default class KrewSelector extends DomNode {
   private store: Store;
@@ -29,7 +30,7 @@ export default class KrewSelector extends DomNode {
     if (cached) {
       for (const krew of cached) {
         this.select.append(
-          el("option", krew.name ?? "Unknown", { value: krew.id }),
+          el("option", KrewUtil.getName(krew), { value: krew.id }),
         );
       }
     }
@@ -45,7 +46,7 @@ export default class KrewSelector extends DomNode {
       this.select.empty();
       for (const krew of krews) {
         this.select.append(
-          el("option", krew.name ?? "Unknown", { value: krew.id }),
+          el("option", KrewUtil.getName(krew), { value: krew.id }),
         );
       }
       this.lastCreatedAt = krews[krews.length - 1]?.created_at;

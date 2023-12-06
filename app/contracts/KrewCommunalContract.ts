@@ -32,6 +32,10 @@ class KrewCommunalContract extends Contract<KrewCommunal>
     return (await this.viewContract.holders(krewId, walletAddress)).balance;
   }
 
+  public async getClaimableFee(walletAddress: string) {
+    return await this.viewContract.claimableHolderFee(walletAddress);
+  }
+
   public async createKrew() {
     const writeContract = await this.getWriteContract();
     const tx = await writeContract.createKrew();
