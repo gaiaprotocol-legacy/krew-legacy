@@ -19,8 +19,6 @@ end;$$;
 
 ALTER FUNCTION "public"."update_key_holder_count"() OWNER TO "postgres";
 
-CREATE TRIGGER "update_key_holder_count" AFTER UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."update_key_holder_count"();
-
 GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "anon";
 GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "service_role";

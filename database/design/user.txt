@@ -15,6 +15,7 @@ users_public
 
 wallets
 	wallet_address - text - pk
+	total_key_balance - int8 - 0
 	total_earned_trading_fees - numeric - 0
 	created_at - timestampz - now()
 	updated_at - timestampz - nullable
@@ -29,9 +30,3 @@ follows
 	follower_id - uuid, fk to users_public.user_id - auth.uid() - pk
 	followee_id - uuid, fk to users_public.user_id - pk
 	followed_at - timestampz - now()
-
-total_key_balances
-	wallet_address - text - pk
-	total_key_balance - int8 - 0
-	created_at - timestampz - now()
-	updated_at - timestampz - nullable

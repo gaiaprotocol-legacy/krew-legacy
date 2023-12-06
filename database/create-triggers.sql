@@ -39,4 +39,10 @@ CREATE TRIGGER "set_total_key_balances_updated_at" BEFORE UPDATE ON "public"."to
 
 CREATE TRIGGER "set_users_public_updated_at" BEFORE UPDATE ON "public"."users_public" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
+CREATE TRIGGER "set_wallets_updated_at" BEFORE UPDATE ON "public"."wallets" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+CREATE TRIGGER "set_tracked_event_blocks_updated_at" BEFORE UPDATE ON "public"."tracked_event_blocks" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
 CREATE TRIGGER "parse_krew_contract_event" AFTER INSERT ON "public"."krew_contract_events" FOR EACH ROW EXECUTE FUNCTION "public"."parse_krew_contract_event"();
+
+CREATE TRIGGER "update_key_holder_count" AFTER UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."update_key_holder_count"();
