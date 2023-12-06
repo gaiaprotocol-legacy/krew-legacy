@@ -775,8 +775,8 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "updated_at" timestamp with time zone,
     "owner" "text",
     "name" "text",
-    "profile_image" "text",
-    "profile_image_thumbnail" "text",
+    "image" "text",
+    "image_thumbnail" "text",
     "metadata" "jsonb",
     "supply" numeric DEFAULT '1'::numeric NOT NULL
 );

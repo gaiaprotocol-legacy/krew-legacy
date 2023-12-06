@@ -19,7 +19,11 @@ export default class KrewChatRoomListItem extends ChatRoomListItem {
     ).onDom(
       "click",
       () =>
-        Router.go(`/${krew.id.substring(0, 1)}/${krew.id.substring(2)}/chat`),
+        Router.go(
+          `/${krew.id.substring(0, 1)}/${krew.id.substring(2)}`,
+          undefined,
+          krew,
+        ),
     );
   }
 }

@@ -18,6 +18,7 @@ import messages_zh from "../locales/zh.yml";
 import messages_zh_HK from "../locales/zh_HK.yml";
 import messages_zh_TW from "../locales/zh_TW.yml";
 import ActivityView from "./activity/ActivityView.js";
+import KrewChatRoomView from "./chat-krew/KrewChatRoomView.js";
 import TopicChatRoomView from "./chat-topic/TopicChatRoomView.js";
 import ChatsView from "./chat/ChatsView.js";
 import Config from "./Config.js";
@@ -74,14 +75,14 @@ export default async function initialize(config: Config) {
     "{xUsername}/followers",
   ]);
   Router.route(["chats", "chat/general"], TopicChatRoomView);
-  /*Router.route("{t}/{krewId}", KrewChatRoomView, [
+  Router.route("{t}/{krewId}", KrewChatRoomView, [
     "chat/general",
     "post/{postId}",
     "{xUsername}/holding",
     "{xUsername}/holders",
     "{xUsername}/following",
     "{xUsername}/followers",
-  ]);*/
+  ]);
 
   Router.route("explore", ExploreView);
   Router.route("activity", ActivityView);
