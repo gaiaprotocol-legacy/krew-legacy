@@ -9,11 +9,7 @@ export default class UserView extends View {
 
   constructor(params: ViewParams, uri: string, data?: any) {
     super();
-    Layout.append(
-      this.container = el(
-        ".user-view",
-      ),
-    );
+    Layout.append(this.container = el(".user-view"));
     this.render(params.xUsername!, data);
   }
 
