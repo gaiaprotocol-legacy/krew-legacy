@@ -8,13 +8,36 @@ class KrewContractEventService extends SupabaseService<KrewContractEvent> {
     super("krew_contract_events", KrewContractEventSelectQuery, 100);
   }
 
-  public async fetchGlobalEvents() {
-    return await this.safeSelect((b) =>
-      b.in("event_type", [0, 1]).order("block_number", { ascending: false })
-        .order("log_index", {
-          ascending: false,
-        })
+  protected enhanceEventData(events: KrewContractEvent[]): KrewContractEvent[] {
+    const _events = Supabase.safeResult<KrewContractEvent[]>(events);
+    for (const event of _events as any) {
+      event.krew = {
+        id: event.krew_id,
+        name: event.krew_name,
+        image_thumbnail: event.krew_image_thumbnail,
+      };
+      event.user = !event.user_id ? undefined : {
+        user_id: event.user_id,
+        display_name: event.user_display_name,
+        profile_image: event.user_profile_image,
+        profile_image_thumbnail: event.user_profile_image_thumbnail,
+        x_username: event.user_x_username,
+      };
+    }
+    return _events;
+  }
+
+  public async fetchGlobalEvents(lastCreatedAt?: string) {
+    let { data, error } = await Supabase.client.rpc(
+      "get_global_krew_contract_events",
+      {
+        last_created_at: lastCreatedAt,
+        max_count: this.fetchLimit,
+      },
     );
+    if (error) throw error;
+    if (!data) data = [];
+    return this.enhanceEventData(data);
   }
 
   public async fetchKeyHeldEvents(
@@ -31,16 +54,7 @@ class KrewContractEventService extends SupabaseService<KrewContractEvent> {
     );
     if (error) throw error;
     if (!data) data = [];
-
-    for (const event of data) {
-      event.krew = {
-        id: event.krew_id,
-        name: event.krew_name,
-        image_thumbnail: event.krew_image_thumbnail,
-      };
-    }
-
-    return data ?? [];
+    return this.enhanceEventData(data);
   }
 }
 

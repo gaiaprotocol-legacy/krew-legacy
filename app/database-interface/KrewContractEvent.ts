@@ -1,6 +1,9 @@
+import { Author } from "sofi-module";
+
 export enum EventType {
   KrewCreated,
   Trade,
+  ClaimFee,
 }
 
 export default interface KrewContractEvent {
@@ -14,6 +17,7 @@ export default interface KrewContractEvent {
     name?: string;
     image_thumbnail?: string;
   };
+  user: Author;
   created_at: string;
 }
 

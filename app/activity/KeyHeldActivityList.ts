@@ -16,6 +16,8 @@ export default class KeyHeldActivityList extends ActivityList {
   }
 
   protected async fetchActivities(): Promise<KrewContractEvent[]> {
+    return [];
+
     if (KrewSignedUserManager.walletLinked) {
       return await KrewContractEventService.fetchKeyHeldEvents(
         KrewSignedUserManager.user!.wallet_address!,

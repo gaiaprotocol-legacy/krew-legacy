@@ -20,7 +20,7 @@ export default abstract class ActivityList extends DomNode {
     const cachedEvents = this.store.get<KrewContractEvent[]>("cached-events");
     if (cachedEvents && cachedEvents.length > 0) {
       for (const e of cachedEvents) {
-        this.append(new ActivityListItem(e));
+        //this.append(new ActivityListItem(e));
       }
     }
   }
