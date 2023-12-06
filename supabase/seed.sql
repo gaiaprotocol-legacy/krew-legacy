@@ -377,10 +377,11 @@ $$;
 
 ALTER FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer DEFAULT 50, "signed_user_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "depth" integer)
-    LANGUAGE "sql"
+CREATE OR REPLACE FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "like_created_at" timestamp with time zone)
+    LANGUAGE "plpgsql"
     AS $$
-WITH RECURSIVE ancestors AS (
+BEGIN
+    RETURN QUERY
     SELECT 
         p.id,
         p.target,
@@ -399,108 +400,26 @@ WITH RECURSIVE ancestors AS (
         p.like_count,
         p.created_at,
         p.updated_at,
-        CASE 
-            WHEN signed_user_id IS NOT NULL THEN 
-                EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = signed_user_id)
-            ELSE FALSE 
-        END AS liked,
-        CASE 
-            WHEN signed_user_id IS NOT NULL THEN 
-                EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = signed_user_id)
-            ELSE FALSE 
-        END AS reposted,
-        0 AS depth
+        EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = p_user_id) AS liked,
+        EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = p_user_id) AS reposted,
+        pl.created_at AS like_created_at
     FROM 
-        posts p
+        post_likes pl
+    INNER JOIN 
+        posts p ON pl.post_id = p.id
     INNER JOIN 
         users_public u ON p.author = u.user_id
     WHERE 
-        p.id = p_post_id
-
-    UNION
-
-    SELECT 
-        p.id,
-        p.target,
-        p.krew,
-        p.author,
-        u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.x_username,
-        p.message,
-        p.translated,
-        p.rich,
-        p.parent,
-        p.comment_count,
-        p.repost_count,
-        p.like_count,
-        p.created_at,
-        p.updated_at,
-        CASE 
-            WHEN signed_user_id IS NOT NULL THEN 
-                EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = signed_user_id)
-            ELSE FALSE 
-        END AS liked,
-        CASE 
-            WHEN signed_user_id IS NOT NULL THEN 
-                EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = signed_user_id)
-            ELSE FALSE 
-        END AS reposted,
-        a.depth - 1 AS depth
-    FROM 
-        posts p
-    INNER JOIN 
-        users_public u ON p.author = u.user_id
-    JOIN 
-        ancestors a ON p.id = a.parent
-),
-comments AS (
-    SELECT 
-        p.id,
-        p.target,
-        p.krew,
-        p.author,
-        u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.x_username,
-        p.message,
-        p.translated,
-        p.rich,
-        p.parent,
-        p.comment_count,
-        p.repost_count,
-        p.like_count,
-        p.created_at,
-        p.updated_at,
-        CASE 
-            WHEN signed_user_id IS NOT NULL THEN 
-                EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = signed_user_id)
-            ELSE FALSE 
-        END AS liked,
-        CASE 
-            WHEN signed_user_id IS NOT NULL THEN 
-                EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = signed_user_id)
-            ELSE FALSE 
-        END AS reposted,
-        1 AS depth
-    FROM 
-        posts p
-    INNER JOIN 
-        users_public u ON p.author = u.user_id
-    WHERE 
-        p.parent = p_post_id
-    ORDER BY p.id
-    LIMIT max_comment_count
-)
-SELECT * FROM ancestors
-UNION ALL
-SELECT * FROM comments
-ORDER BY depth, id;
+        pl.user_id = p_user_id
+        AND (last_liked_at IS NULL OR pl.created_at > last_liked_at)
+    ORDER BY 
+        pl.created_at ASC
+    LIMIT 
+        max_count;
+END;
 $$;
 
-ALTER FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
+ALTER FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint DEFAULT NULL::bigint, "max_comment_count" integer DEFAULT 50, "signed_user_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "depth" integer)
     LANGUAGE "sql"
@@ -625,6 +544,134 @@ ORDER BY depth, id;
 $$;
 
 ALTER FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."get_reposts"("p_user_id" "uuid", "last_reposted_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "repost_created_at" timestamp with time zone)
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        p.id,
+        p.target,
+        p.krew,
+        p.author,
+        u.display_name,
+        u.profile_image,
+        u.profile_image_thumbnail,
+        u.x_username,
+        p.message,
+        p.translated,
+        p.rich,
+        p.parent,
+        p.comment_count,
+        p.repost_count,
+        p.like_count,
+        p.created_at,
+        p.updated_at,
+        EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = p_user_id) AS liked,
+        EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = p_user_id) AS reposted,
+        r.created_at
+    FROM 
+        reposts r
+    INNER JOIN 
+        posts p ON r.post_id = p.id
+    INNER JOIN 
+        users_public u ON p.author = u.user_id
+    WHERE 
+        r.user_id = p_user_id
+        AND (last_reposted_at IS NULL OR r.created_at > last_reposted_at)
+    ORDER BY 
+        r.created_at ASC
+    LIMIT 
+        max_count;
+END;
+$$;
+
+ALTER FUNCTION "public"."get_reposts"("p_user_id" "uuid", "last_reposted_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."get_user_comment_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        p.id,
+        p.target,
+        p.krew,
+        p.author,
+        u.display_name,
+        u.profile_image,
+        u.profile_image_thumbnail,
+        u.x_username,
+        p.message,
+        p.translated,
+        p.rich,
+        p.parent,
+        p.comment_count,
+        p.repost_count,
+        p.like_count,
+        p.created_at,
+        p.updated_at,
+        EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = p_user_id) AS liked,
+        EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = p_user_id) AS reposted
+    FROM 
+        posts p
+    INNER JOIN 
+        users_public u ON p.author = u.user_id
+    WHERE 
+        p.author = p_user_id
+        AND p.parent IS NOT NULL
+        AND (last_post_id IS NULL OR p.id < last_post_id)
+    ORDER BY 
+        p.id DESC
+    LIMIT 
+        max_count;
+END;
+$$;
+
+ALTER FUNCTION "public"."get_user_comment_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        p.id,
+        p.target,
+        p.krew,
+        p.author,
+        u.display_name,
+        u.profile_image,
+        u.profile_image_thumbnail,
+        u.x_username,
+        p.message,
+        p.translated,
+        p.rich,
+        p.parent,
+        p.comment_count,
+        p.repost_count,
+        p.like_count,
+        p.created_at,
+        p.updated_at,
+        EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = p_user_id) AS liked,
+        EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = p_user_id) AS reposted
+    FROM 
+        posts p
+    INNER JOIN 
+        users_public u ON p.author = u.user_id
+    WHERE 
+        p.author = p_user_id
+        AND p.parent IS NULL
+        AND (last_post_id IS NULL OR p.id < last_post_id)
+    ORDER BY 
+        p.id DESC
+    LIMIT 
+        max_count;
+END;
+$$;
+
+ALTER FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."increase_follow_count"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
@@ -1540,13 +1587,25 @@ GRANT ALL ON FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_walle
 GRANT ALL ON FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) TO "service_role";
 
-GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "anon";
-GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "service_role";
+GRANT ALL ON FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone, "max_count" integer) TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "anon";
 GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."get_reposts"("p_user_id" "uuid", "last_reposted_at" timestamp with time zone, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_reposts"("p_user_id" "uuid", "last_reposted_at" timestamp with time zone, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_reposts"("p_user_id" "uuid", "last_reposted_at" timestamp with time zone, "max_count" integer) TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."get_user_comment_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_user_comment_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_user_comment_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."increase_follow_count"() TO "anon";
 GRANT ALL ON FUNCTION "public"."increase_follow_count"() TO "authenticated";

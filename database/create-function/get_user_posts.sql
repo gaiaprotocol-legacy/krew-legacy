@@ -1,29 +1,6 @@
-CREATE OR REPLACE FUNCTION get_user_posts(
-    p_user_id uuid,
-    last_post_id int8 DEFAULT NULL,
-    max_count int DEFAULT 50
-)
-RETURNS TABLE (
-    id int8,
-    target int2,
-    krew text,
-    author uuid,
-    author_display_name text,
-    author_profile_image text,
-    author_profile_image_thumbnail text,
-    author_x_username text,
-    message text,
-    translated jsonb,
-    rich jsonb,
-    parent int8,
-    comment_count int4,
-    repost_count int4,
-    like_count int4,
-    created_at timestamp with time zone,
-    updated_at timestamp with time zone,
-    liked boolean,
-    reposted boolean
-) AS $$
+CREATE OR REPLACE FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+    LANGUAGE "plpgsql"
+    AS $$
 BEGIN
     RETURN QUERY
     SELECT 
@@ -59,4 +36,10 @@ BEGIN
     LIMIT 
         max_count;
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
+ALTER FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
+
+GRANT ALL ON FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "service_role";
