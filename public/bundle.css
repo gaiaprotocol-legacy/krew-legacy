@@ -872,6 +872,50 @@ p {
 .create-krew-popup {
   max-width: 800px !important;
 }
+.krew-list-item {
+  position: relative;
+  padding: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid var(--line-color);
+}
+.krew-list-item > header {
+  display: flex;
+  align-items: center;
+}
+.krew-list-item > header > .trader-profile-image,
+.krew-list-item > header > .krew-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+  cursor: pointer;
+}
+@media only screen and (max-width: 859px) {
+  .krew-list-item > header > .trader-profile-image,
+  .krew-list-item > header > .krew-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.krew-list-item > header > .trader-profile-image {
+  margin-right: -8px;
+}
+.krew-list-item > .description {
+  flex-grow: 1;
+  width: 0;
+}
+.krew-list-item > .description > a {
+  font-weight: bold;
+  cursor: pointer;
+}
+.krew-list-item > .date {
+  color: #474B54;
+  font-size: 12px;
+}
 .posts-view {
   position: relative;
   height: 100%;
@@ -1150,11 +1194,6 @@ p {
   align-items: center;
   border-bottom: 1px solid var(--line-color);
 }
-@media only screen and (max-width: 859px) {
-  .activity-list-item {
-    display: block;
-  }
-}
 .activity-list-item > header {
   display: flex;
   align-items: center;
@@ -1197,6 +1236,7 @@ p {
   margin: 20px auto;
   border-radius: 20px;
   background-color: var(--bg2-color);
+  overflow: hidden;
 }
 .user-view {
   padding: 32px;

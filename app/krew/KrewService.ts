@@ -7,6 +7,24 @@ class KrewService extends SupabaseService<Krew> {
     super("krews", KrewSelectQuery, 50);
   }
 
+  public async fetchNewKrews() {
+    return await this.safeSelect((b) =>
+      b.order("created_at", { ascending: false })
+    );
+  }
+
+  public async fetchTopKrews() {
+    return await this.safeSelect((b) =>
+      b.order("last_fetched_key_price", { ascending: false })
+    );
+  }
+
+  public async fetchTrendingKrews() {
+    return await this.safeSelect((b) =>
+      b.order("last_key_purchased_at", { ascending: false })
+    );
+  }
+
   public async fetchOwnedKrews(owner: string) {
     return await this.safeSelect((b) => b.eq("owner", owner));
   }

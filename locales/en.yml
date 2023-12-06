@@ -26,6 +26,10 @@ krew-chat-room-list-empty-message: No chat rooms for krews
 chat-message-list-empty-message: No messages yet
 notification-list-empty-message: No notifications yet
 
+new-krew-list-empty-message: No new krews yet
+top-krew-list-empty-message: No top krews yet
+trending-krew-list-empty-message: No trending krews yet
+
 activity-list-item-created-krew-text: "{user} created {krew} krew."
 activity-list-item-bought-key-text: "{user} bought {amount} {krew} key for {price} ETH."
 activity-list-item-sold-key-text: "{user} sold {amount} {krew} key for {price} ETH."
