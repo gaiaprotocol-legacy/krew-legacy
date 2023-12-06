@@ -648,7 +648,6 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "id" "text" NOT NULL,
     "last_fetched_key_price" numeric DEFAULT '68750000000000'::numeric NOT NULL,
     "total_trading_key_volume" numeric DEFAULT '0'::numeric NOT NULL,
-    "total_earned_trading_fees" numeric DEFAULT '0'::numeric NOT NULL,
     "is_key_price_up" boolean,
     "last_message" "text",
     "last_message_sent_at" timestamp with time zone DEFAULT '-infinity'::timestamp with time zone NOT NULL,
@@ -773,7 +772,6 @@ ALTER TABLE "public"."tracked_event_blocks" ALTER COLUMN "contract_type" ADD GEN
 CREATE TABLE IF NOT EXISTS "public"."users_public" (
     "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
     "wallet_address" "text",
-    "total_earned_trading_fees" numeric DEFAULT '0'::numeric NOT NULL,
     "display_name" "text",
     "profile_image" "text",
     "profile_image_thumbnail" "text",

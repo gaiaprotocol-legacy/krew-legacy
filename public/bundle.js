@@ -1499,7 +1499,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   KrewSelectQuery: () => (/* binding */ KrewSelectQuery)\n/* harmony export */ });\nconst KrewSelectQuery = \"*, supply::text, last_fetched_key_price::text, total_trading_key_volume::text, total_earned_trading_fees::text\";\n\n\n//# sourceURL=webpack:///./app/database-interface/Krew.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   KrewSelectQuery: () => (/* binding */ KrewSelectQuery)\n/* harmony export */ });\nconst KrewSelectQuery = \"*, supply::text, last_fetched_key_price::text, total_trading_key_volume::text\";\n\n\n//# sourceURL=webpack:///./app/database-interface/Krew.ts?");
 
 /***/ }),
 

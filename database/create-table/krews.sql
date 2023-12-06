@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "supply" numeric DEFAULT '1'::numeric NOT NULL,
     "last_fetched_key_price" numeric DEFAULT '68750000000000'::numeric NOT NULL,
     "total_trading_key_volume" numeric DEFAULT '0'::numeric NOT NULL,
-    "total_earned_trading_fees" numeric DEFAULT '0'::numeric NOT NULL,
     "is_key_price_up" boolean,
     "last_message" "text",
     "last_message_sent_at" timestamp with time zone DEFAULT '-infinity'::timestamp with time zone NOT NULL,

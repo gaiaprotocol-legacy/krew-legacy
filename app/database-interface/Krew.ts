@@ -8,7 +8,6 @@ export default interface Krew {
   supply: string;
   last_fetched_key_price: string;
   total_trading_key_volume: string;
-  total_earned_trading_fees: string;
   is_key_price_up?: boolean;
   last_message?: string;
   last_message_sent_at: string;
@@ -19,4 +18,4 @@ export default interface Krew {
 }
 
 export const KrewSelectQuery =
-  "*, supply::text, last_fetched_key_price::text, total_trading_key_volume::text, total_earned_trading_fees::text";
+  "*, supply::text, last_fetched_key_price::text, total_trading_key_volume::text";

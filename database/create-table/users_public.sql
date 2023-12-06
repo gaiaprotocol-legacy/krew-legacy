@@ -1,7 +1,6 @@
 CREATE TABLE IF NOT EXISTS "public"."users_public" (
     "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
     "wallet_address" "text",
-    "total_earned_trading_fees" numeric DEFAULT '0'::numeric NOT NULL,
     "display_name" "text",
     "profile_image" "text",
     "profile_image_thumbnail" "text",
