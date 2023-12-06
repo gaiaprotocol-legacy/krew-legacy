@@ -398,17 +398,21 @@ ALTER FUNCTION "public"."notify_repost_event"() OWNER TO "postgres";
 CREATE OR REPLACE FUNCTION "public"."parse_krew_contract_event"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$DECLARE
-    v_sender UUID;
     v_receiver UUID;
+    v_triggerer UUID;
     v_wallet_address text;
     owner_data RECORD;
 begin
+    -- create krew
     IF new.event_type = 0 THEN
+
         IF position('p_' in new.krew) = 1 THEN
+
             SELECT display_name, profile_image, profile_image_thumbnail, metadata 
             INTO owner_data
             FROM users_public 
             WHERE wallet_address = new.wallet_address;
+
             IF FOUND THEN
                 insert into krews (
                     id, owner, display_name, profile_image, profile_image_thumbnail, metadata
@@ -422,6 +426,7 @@ begin
                     new.krew, new.wallet_address
                 );
             END IF;
+
         ELSIF position('c_' in new.krew) = 1 THEN
             insert into krews (
                 id
@@ -429,65 +434,123 @@ begin
                 new.krew
             );
         END IF;
+
         insert into krew_key_holders (
             krew, wallet_address, last_fetched_balance
         ) values (
             new.krew, new.wallet_address, 1
         );
-        insert into notifications (
-            user_id, krew, type
+
+        -- update total key balance
+        insert into wallets (
+            wallet_address, total_key_balance
         ) values (
-            (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address),
-            new.krew, 0
-        );
+            new.wallet_address, 1
+        ) on conflict (wallet_address) do update
+        set
+            total_key_balance = total_key_balance + 1;
+
+        -- notify
+        v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
+
+        IF v_receiver IS NOT NULL THEN
+            insert into notifications (
+                user_id, krew, type
+            ) values (
+                v_receiver, new.krew, 0
+            );
+        END IF;
+
+    -- trade
     ELSIF new.event_type = 1 THEN
+
         update krews set
-            supply = new.args[9]::numeric
+            supply = new.args[9]::numeric,
+            is_key_price_up = new.args[3] = 'true'
         where
             id = new.krew;
+
         insert into krew_key_holders (
             krew, wallet_address
         ) values (
             new.krew, new.wallet_address
         ) on conflict (krew, wallet_address) do nothing;
+
+        -- update balance
         IF new.args[3] = 'true' THEN
             update krew_key_holders set
                 last_fetched_balance = last_fetched_balance + new.args[4]::int8
             where
                 krew = new.krew and
                 wallet_address = new.wallet_address;
+
+            insert into wallets (
+                wallet_address, total_key_balance
+            ) values (
+                new.wallet_address, new.args[4]::int8
+            ) on conflict (wallet_address) do update
+            set
+                total_key_balance = total_key_balance + new.args[4]::int8;
         ELSE
             update krew_key_holders set
                 last_fetched_balance = last_fetched_balance - new.args[4]::int8
             where
                 krew = new.krew and
                 wallet_address = new.wallet_address;
+
+            update wallets set
+                total_key_balance = total_key_balance - new.args[4]::int8
+            where
+                wallet_address = new.wallet_address;
         END IF;
+
+        -- notify
+
         IF position('p_' in new.krew) = 1 THEN
-            v_sender := (SELECT user_id FROM users_public WHERE wallet_address = (
+
+            v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = (
                 SELECT owner FROM krews WHERE id = new.krew
             ));
-            v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
-            IF v_sender != v_receiver THEN
+            v_triggerer := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
+
+            IF v_receiver IS NOT NULL AND v_receiver != v_triggerer THEN
                 insert into notifications (
                     user_id, triggerer, krew, amount, type
                 ) values (
-                    v_sender, v_receiver, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 1 ELSE 2 END
+                    v_receiver, v_triggerer, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 1 ELSE 2 END
                 );
             END IF;
+
         ELSIF position('c_' in new.krew) = 1 THEN
+
             FOR v_wallet_address IN SELECT wallet_address FROM krew_key_holders WHERE krew = new.krew LOOP
-                v_sender := (SELECT user_id FROM users_public WHERE wallet_address = v_wallet_address);
-                v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
-                IF v_sender != v_receiver THEN
+                v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = v_wallet_address);
+                v_triggerer := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
+
+                IF v_receiver IS NOT NULL AND v_receiver != v_triggerer THEN
                     insert into notifications (
                         user_id, triggerer, krew, amount, type
                     ) values (
-                        v_sender, v_receiver, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 1 ELSE 2 END
+                        v_receiver, v_triggerer, new.krew, new.args[4]::int8, CASE WHEN new.args[3] = 'true' THEN 1 ELSE 2 END
                     );
                 END IF;
+
             END LOOP;
         END IF;
+
+    -- claim fees
+    ELSIF new.event_type = 2 THEN
+
+        insert into wallets (
+            wallet_address
+        ) values (
+            new.wallet_address
+        ) on conflict (wallet_address) do nothing;
+
+        update wallets set
+            total_earned_trading_fees = total_earned_trading_fees + new.args[2]::numeric
+        where
+            wallet_address = new.wallet_address;
     END IF;
     RETURN NULL;
 end;$$;
@@ -765,15 +828,6 @@ CREATE TABLE IF NOT EXISTS "public"."topics" (
 
 ALTER TABLE "public"."topics" OWNER TO "postgres";
 
-CREATE TABLE IF NOT EXISTS "public"."total_key_balances" (
-    "wallet_address" "text" NOT NULL,
-    "total_key_balance" bigint DEFAULT '0'::bigint NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone
-);
-
-ALTER TABLE "public"."total_key_balances" OWNER TO "postgres";
-
 CREATE TABLE IF NOT EXISTS "public"."tracked_event_blocks" (
     "contract_type" smallint NOT NULL,
     "block_number" bigint NOT NULL,
@@ -822,7 +876,8 @@ CREATE TABLE IF NOT EXISTS "public"."wallets" (
     "wallet_address" "text" NOT NULL,
     "total_earned_trading_fees" numeric DEFAULT '0'::numeric NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone
+    "updated_at" timestamp with time zone,
+    "total_key_balance" bigint DEFAULT '0'::bigint NOT NULL
 );
 
 ALTER TABLE "public"."wallets" OWNER TO "postgres";
@@ -859,9 +914,6 @@ ALTER TABLE ONLY "public"."reposts"
 
 ALTER TABLE ONLY "public"."topics"
     ADD CONSTRAINT "topics_pkey" PRIMARY KEY ("topic");
-
-ALTER TABLE ONLY "public"."total_key_balances"
-    ADD CONSTRAINT "total_key_balances_pkey" PRIMARY KEY ("wallet_address");
 
 ALTER TABLE ONLY "public"."tracked_event_blocks"
     ADD CONSTRAINT "tracked_event_blocks_pkey" PRIMARY KEY ("contract_type");
@@ -916,9 +968,11 @@ CREATE TRIGGER "set_topic_last_message" AFTER INSERT ON "public"."topic_chat_mes
 
 CREATE TRIGGER "set_topics_updated_at" BEFORE UPDATE ON "public"."topics" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
-CREATE TRIGGER "set_total_key_balances_updated_at" BEFORE UPDATE ON "public"."total_key_balances" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+CREATE TRIGGER "set_tracked_event_blocks_updated_at" BEFORE UPDATE ON "public"."tracked_event_blocks" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
 CREATE TRIGGER "set_users_public_updated_at" BEFORE UPDATE ON "public"."users_public" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+CREATE TRIGGER "set_wallets_updated_at" BEFORE UPDATE ON "public"."wallets" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
 CREATE TRIGGER "update_key_holder_count" AFTER UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."update_key_holder_count"();
 
@@ -1034,8 +1088,6 @@ ALTER TABLE "public"."topic_chat_messages" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE "public"."topics" ENABLE ROW LEVEL SECURITY;
 
-ALTER TABLE "public"."total_key_balances" ENABLE ROW LEVEL SECURITY;
-
 ALTER TABLE "public"."tracked_event_blocks" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE "public"."users_public" ENABLE ROW LEVEL SECURITY;
@@ -1055,8 +1107,6 @@ CREATE POLICY "view everyone" ON "public"."reposts" FOR SELECT USING (true);
 CREATE POLICY "view everyone" ON "public"."topic_chat_messages" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."topics" FOR SELECT USING (true);
-
-CREATE POLICY "view everyone" ON "public"."total_key_balances" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."users_public" FOR SELECT USING (true);
 
@@ -1226,10 +1276,6 @@ GRANT ALL ON TABLE "public"."reposts" TO "service_role";
 GRANT ALL ON TABLE "public"."topics" TO "anon";
 GRANT ALL ON TABLE "public"."topics" TO "authenticated";
 GRANT ALL ON TABLE "public"."topics" TO "service_role";
-
-GRANT ALL ON TABLE "public"."total_key_balances" TO "anon";
-GRANT ALL ON TABLE "public"."total_key_balances" TO "authenticated";
-GRANT ALL ON TABLE "public"."total_key_balances" TO "service_role";
 
 GRANT ALL ON TABLE "public"."tracked_event_blocks" TO "anon";
 GRANT ALL ON TABLE "public"."tracked_event_blocks" TO "authenticated";
