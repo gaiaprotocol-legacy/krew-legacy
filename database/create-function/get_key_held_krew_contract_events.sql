@@ -21,7 +21,8 @@ BEGIN
     LEFT JOIN
         krews k ON a.krew = k.id
     WHERE 
-        skh.wallet_address = p_wallet_address
+        (a.event_type = 0 OR a.event_type = 1)
+        AND skh.wallet_address = p_wallet_address
         AND skh.last_fetched_balance > 0
         AND (last_created_at IS NULL OR a.created_at < last_created_at)
     ORDER BY 

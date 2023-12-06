@@ -118,6 +118,20 @@ begin
 
             END LOOP;
         END IF;
+
+    -- claim fees
+    ELSIF new.event_type = 2 THEN
+
+        insert into wallets (
+            wallet_address
+        ) values (
+            new.wallet_address
+        ) on conflict (wallet_address) do nothing;
+
+        update wallets set
+            total_earned_trading_fees = total_earned_trading_fees + new.args[2]::numeric
+        where
+            wallet_address = new.wallet_address;
     END IF;
     RETURN NULL;
 end;$$;

@@ -10,9 +10,10 @@ class KrewContractEventService extends SupabaseService<KrewContractEvent> {
 
   public async fetchGlobalEvents() {
     return await this.safeSelect((b) =>
-      b.order("block_number", { ascending: false }).order("log_index", {
-        ascending: false,
-      })
+      b.in("event_type", [0, 1]).order("block_number", { ascending: false })
+        .order("log_index", {
+          ascending: false,
+        })
     );
   }
 

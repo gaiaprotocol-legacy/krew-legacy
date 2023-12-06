@@ -246,9 +246,14 @@ export interface KrewPersonalInterface extends Interface {
 }
 
 export namespace ClaimKrewFeeEvent {
-  export type InputTuple = [krew: BigNumberish, fee: BigNumberish];
-  export type OutputTuple = [krew: bigint, fee: bigint];
+  export type InputTuple = [
+    owner: AddressLike,
+    krew: BigNumberish,
+    fee: BigNumberish
+  ];
+  export type OutputTuple = [owner: string, krew: bigint, fee: bigint];
   export interface OutputObject {
+    owner: string;
     krew: bigint;
     fee: bigint;
   }
@@ -755,7 +760,7 @@ export interface KrewPersonal extends BaseContract {
   >;
 
   filters: {
-    "ClaimKrewFee(uint256,uint256)": TypedContractEvent<
+    "ClaimKrewFee(address,uint256,uint256)": TypedContractEvent<
       ClaimKrewFeeEvent.InputTuple,
       ClaimKrewFeeEvent.OutputTuple,
       ClaimKrewFeeEvent.OutputObject

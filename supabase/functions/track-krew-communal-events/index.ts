@@ -32,6 +32,10 @@ serveWithOptions(async () => {
       event_type = 1;
       wallet_address = event.args[0];
       krew = "c_" + event.args[1];
+    } else if (eventTopic === contract.claimHolderFeeEventFilter?.[0]) {
+      event_type = 2;
+      wallet_address = event.args[0];
+      krew = "c_" + event.args[1];
     }
 
     const { error: saveEventError } = await supabase

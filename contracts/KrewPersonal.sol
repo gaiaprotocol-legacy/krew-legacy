@@ -47,7 +47,7 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 additionalFee,
         uint256 supply
     );
-    event ClaimKrewFee(uint256 indexed krew, uint256 fee);
+    event ClaimKrewFee(address indexed owner, uint256 indexed krew, uint256 fee);
 
     function initialize(
         address payable _protocolFeeDestination,
@@ -221,6 +221,6 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
         payable(msg.sender).sendValue(fee);
 
-        emit ClaimKrewFee(krew, fee);
+        emit ClaimKrewFee(msg.sender, krew, fee);
     }
 }
