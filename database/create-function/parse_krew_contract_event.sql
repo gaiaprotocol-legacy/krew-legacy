@@ -18,7 +18,7 @@ begin
 
             IF FOUND THEN
                 insert into krews (
-                    id, owner, display_name, profile_image, profile_image_thumbnail, metadata
+                    id, owner, name, image, image_thumbnail, metadata
                 ) values (
                     new.krew, new.wallet_address, owner_data.display_name, owner_data.profile_image, owner_data.profile_image_thumbnail, owner_data.metadata
                 );

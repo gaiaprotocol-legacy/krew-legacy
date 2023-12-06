@@ -2,8 +2,8 @@ krews
 	id - text - pk
 	owner - text - nullable
 	name - text - nullable
-	profile_image - text - nullable
-	profile_image_thumbnail - text - nullable
+	image - text - nullable
+	image_thumbnail - text - nullable
 	metadata - jsonb - nullable
 	supply - numeric - 1
 	last_fetched_key_price - numeric - 68750000000000

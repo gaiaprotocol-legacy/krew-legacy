@@ -12,10 +12,10 @@ export default interface KrewContractEvent {
   krew: {
     id: string;
     name?: string;
-    profile_image_thumbnail?: string;
+    image_thumbnail?: string;
   };
   created_at: string;
 }
 
 export const KrewContractEventSelectQuery =
-  "*, krew(id, name, profile_image_thumbnail)";
+  "*, krew(id, name, image_thumbnail)";

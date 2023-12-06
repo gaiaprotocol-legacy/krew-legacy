@@ -2,6 +2,7 @@ import { ListLoadingBar, msg } from "common-app-module";
 import ChatRoomList from "../chat/ChatRoomList.js";
 import Krew from "../database-interface/Krew.js";
 import KrewService from "../krew/KrewService.js";
+import KrewChatRoomListItem from "./KrewChatRoomListItem.js";
 
 export default class KrewChatRoomList extends ChatRoomList {
   constructor() {
@@ -13,7 +14,7 @@ export default class KrewChatRoomList extends ChatRoomList {
     const cachedKrews = this.store.get<Krew[]>("cached-krews");
     if (cachedKrews && cachedKrews.length > 0) {
       for (const k of cachedKrews) {
-        //this.append(new TopicChatRoomListItem(k));
+        this.append(new KrewChatRoomListItem(k));
       }
     }
 
@@ -29,7 +30,7 @@ export default class KrewChatRoomList extends ChatRoomList {
     if (!this.deleted) {
       this.empty();
       for (const k of krews) {
-        //this.append(new KrewChatRoomListItem(k));
+        this.append(new KrewChatRoomListItem(k));
       }
     }
   }

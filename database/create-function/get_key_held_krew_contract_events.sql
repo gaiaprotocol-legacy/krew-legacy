@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_profile_image_thumbnail" "text", "created_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image_thumbnail" "text", "created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -12,7 +12,7 @@ BEGIN
         a.krew,
         k.id AS krew_id,
         k.name AS krew_name,
-        k.profile_image_thumbnail AS krew_profile_image_thumbnail,
+        k.image_thumbnail AS krew_image_thumbnail,
         a.created_at
     FROM 
         krew_contract_events a

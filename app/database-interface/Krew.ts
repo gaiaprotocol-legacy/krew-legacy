@@ -2,8 +2,8 @@ export default interface Krew {
   id: string;
   owner?: string;
   name?: string;
-  profile_image?: string;
-  profile_image_thumbnail?: string;
+  image?: string;
+  image_thumbnail?: string;
   metadata?: {};
   supply: string;
   last_fetched_key_price: string;

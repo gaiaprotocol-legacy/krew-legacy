@@ -179,7 +179,7 @@ $$;
 
 ALTER FUNCTION "public"."get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_profile_image_thumbnail" "text", "created_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image_thumbnail" "text", "created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -193,7 +193,7 @@ BEGIN
         a.krew,
         k.id AS krew_id,
         k.name AS krew_name,
-        k.profile_image_thumbnail AS krew_profile_image_thumbnail,
+        k.image_thumbnail AS krew_image_thumbnail,
         a.created_at
     FROM 
         krew_contract_events a
@@ -215,7 +215,7 @@ $$;
 
 ALTER FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text") RETURNS TABLE("id" "text", "name" "text", "profile_image" "text", "profile_image_thumbnail" "text", "metadata" "jsonb", "supply" "text", "last_fetched_key_price" "text", "total_trading_key_volume" "text", "is_key_price_up" boolean, "last_message" "text", "last_message_sent_at" timestamp with time zone, "key_holder_count" integer, "last_key_purchased_at" timestamp with time zone, "created_at" timestamp with time zone, "updated_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text") RETURNS TABLE("id" "text", "name" "text", "image" "text", "image_thumbnail" "text", "metadata" "jsonb", "supply" "text", "last_fetched_key_price" "text", "total_trading_key_volume" "text", "is_key_price_up" boolean, "last_message" "text", "last_message_sent_at" timestamp with time zone, "key_holder_count" integer, "last_key_purchased_at" timestamp with time zone, "created_at" timestamp with time zone, "updated_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -223,8 +223,8 @@ BEGIN
     SELECT
         k.id,
         k.name,
-        k.profile_image,
-        k.profile_image_thumbnail,
+        k.image,
+        k.image_thumbnail,
         k.metadata,
         k.supply::TEXT,
         k.last_fetched_key_price::TEXT,
@@ -448,7 +448,7 @@ begin
 
             IF FOUND THEN
                 insert into krews (
-                    id, owner, display_name, profile_image, profile_image_thumbnail, metadata
+                    id, owner, name, image, image_thumbnail, metadata
                 ) values (
                     new.krew, new.wallet_address, owner_data.display_name, owner_data.profile_image, owner_data.profile_image_thumbnail, owner_data.metadata
                 );
