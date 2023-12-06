@@ -24,7 +24,7 @@ export default class KrewChatRoomList extends ChatRoomList {
   private async refresh() {
     this.append(new ListLoadingBar());
 
-    const krews = await KrewService.fetchKeyHeldKrews();
+    const krews = await KrewService.fetchKeyHeldKrews(undefined);
     this.store.set("cached-krews", krews);
 
     if (!this.deleted) {

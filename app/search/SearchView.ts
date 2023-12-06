@@ -12,6 +12,8 @@ export default class SearchView extends View {
 
   constructor() {
     super();
+    const query = new URLSearchParams(location.search).get("q");
+
     Layout.append(
       this.container = el(
         ".search-view",
@@ -25,9 +27,9 @@ export default class SearchView extends View {
           id: "user",
           label: "User",
         }]),
-        this.postList = new SearchPostList(),
-        this.krewList = new SearchKrewList(),
-        this.userList = new SearchUserList(),
+        this.postList = new SearchPostList(query!),
+        this.krewList = new SearchKrewList(query!),
+        this.userList = new SearchUserList(query!),
       ),
     );
 
@@ -41,5 +43,14 @@ export default class SearchView extends View {
       else if (id === "krew") this.krewList.show();
       else if (id === "user") this.userList.show();
     }).init();
+  }
+
+  public changeParams(): void {
+    const query = new URLSearchParams(location.search).get("q")!;
+    [
+      this.postList,
+      this.krewList,
+      this.userList,
+    ].forEach((list) => list.query = query);
   }
 }

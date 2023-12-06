@@ -96,7 +96,7 @@ export default class UserProfile extends DomNode {
 
     this.krews.empty();
 
-    const krews = await KrewService.fetchOwnedKrews(walletAddress);
+    const krews = await KrewService.fetchOwnedKrews(walletAddress, undefined);
     for (const krew of krews) {
       this.krews.append(
         el("h1", krew.id),

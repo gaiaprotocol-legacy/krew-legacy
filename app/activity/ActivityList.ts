@@ -8,9 +8,9 @@ export interface ActivityListOptions {
 }
 
 export default abstract class ActivityList extends DomNode {
-  protected store: Store;
-  protected lastCreatedAt: string | undefined;
+  private store: Store;
   private refreshed = false;
+  protected lastCreatedAt: string | undefined;
 
   constructor(tag: string, options: ActivityListOptions) {
     super(tag + ".activity-list");

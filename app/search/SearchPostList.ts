@@ -7,7 +7,7 @@ import KrewPostService from "../post/KrewPostService.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
 export default class SearchPostList extends PostList<KrewPost> {
-  constructor() {
+  constructor(private _query: string) {
     super(
       ".search-post-list",
       KrewPostService,
@@ -20,6 +20,15 @@ export default class SearchPostList extends PostList<KrewPost> {
     );
   }
 
+  public set query(query: string) {
+    this._query = query;
+    this.refresh();
+  }
+
+  public get query(): string {
+    return this._query;
+  }
+
   protected async fetchPosts(): Promise<
     {
       fetchedPosts: { posts: KrewPost[]; mainPostId: number }[];
@@ -28,9 +37,8 @@ export default class SearchPostList extends PostList<KrewPost> {
     }
   > {
     if (KrewSignedUserManager.user?.wallet_address) {
-      const result = await KrewPostService.fetchKeyHeldPosts(
-        KrewSignedUserManager.user.user_id,
-        KrewSignedUserManager.user.wallet_address,
+      const result = await KrewPostService.findPosts(
+        this.query,
         this.lastPostId,
       );
       return {

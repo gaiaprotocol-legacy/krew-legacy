@@ -12,6 +12,6 @@ export default class NewKrewList extends KrewList {
   }
 
   protected async fetchKrews(): Promise<Krew[]> {
-    return await KrewService.fetchNewKrews();
+    return await KrewService.fetchNewKrews(this.lastCreatedAt);
   }
 }

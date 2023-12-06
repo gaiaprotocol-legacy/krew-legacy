@@ -10,6 +10,7 @@ export interface KrewListOptions {
 export default abstract class KrewList extends DomNode {
   private store: Store | undefined;
   private refreshed = false;
+  protected lastCreatedAt: string | undefined;
 
   constructor(tag: string, options: KrewListOptions) {
     super(tag + ".krew-list");
@@ -32,7 +33,7 @@ export default abstract class KrewList extends DomNode {
     new KrewListItem(krew).appendTo(this);
   }
 
-  private async refresh() {
+  protected async refresh() {
     this.append(new ListLoadingBar());
 
     const krews = await this.fetchKrews();
@@ -43,6 +44,7 @@ export default abstract class KrewList extends DomNode {
       for (const krew of krews) {
         this.addKrewItem(krew);
       }
+      this.lastCreatedAt = krews[krews.length - 1]?.created_at;
       this.refreshed = true;
     }
   }

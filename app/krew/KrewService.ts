@@ -4,39 +4,68 @@ import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
 class KrewService extends SupabaseService<Krew> {
   constructor() {
-    super("krews", KrewSelectQuery, 50);
+    super("krews", KrewSelectQuery, 1000);
   }
 
-  public async fetchNewKrews() {
+  public async fetchNewKrews(lastCreatedAt: string | undefined) {
     return await this.safeSelect((b) =>
-      b.order("created_at", { ascending: false })
+      b.order("created_at", { ascending: false }).gt(
+        "created_at",
+        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
+      )
     );
   }
 
-  public async fetchTopKrews() {
+  public async fetchTopKrews(lastCreatedAt: string | undefined) {
     return await this.safeSelect((b) =>
-      b.order("last_fetched_key_price", { ascending: false })
+      b.order("last_fetched_key_price", { ascending: false }).gt(
+        "created_at",
+        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
+      )
     );
   }
 
-  public async fetchTrendingKrews() {
+  public async fetchTrendingKrews(lastCreatedAt: string | undefined) {
     return await this.safeSelect((b) =>
-      b.order("last_key_purchased_at", { ascending: false })
+      b.order("last_key_purchased_at", { ascending: false }).gt(
+        "created_at",
+        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
+      )
     );
   }
 
-  public async fetchOwnedKrews(owner: string) {
-    return await this.safeSelect((b) => b.eq("owner", owner));
+  public async fetchOwnedKrews(
+    owner: string,
+    lastCreatedAt: string | undefined,
+  ) {
+    return await this.safeSelect((b) =>
+      b.eq("owner", owner).gt(
+        "created_at",
+        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
+      )
+    );
   }
 
-  public async fetchKeyHeldKrews() {
+  public async fetchKeyHeldKrews(lastCreatedAt: string | undefined) {
     const { data, error } = await Supabase.client.rpc(
       "get_key_held_krews",
-      { p_wallet_address: KrewSignedUserManager.user?.wallet_address },
+      {
+        p_wallet_address: KrewSignedUserManager.user?.wallet_address,
+        last_created_at: lastCreatedAt,
+        max_count: this.fetchLimit,
+      },
     );
     if (error) throw error;
-    console.log(Supabase.safeResult<Krew[]>(data ?? []));
     return Supabase.safeResult<Krew[]>(data ?? []);
+  }
+
+  public async findKrews(query: string, lastCreatedAt: string | undefined) {
+    return await this.safeSelect((b) =>
+      b.or(`name.ilike.%${query}%`).gt(
+        "created_at",
+        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
+      )
+    );
   }
 
   public async trackPersonalEvents() {

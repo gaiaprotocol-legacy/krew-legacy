@@ -32,7 +32,7 @@ export default abstract class UserList extends DomNode {
     new UserListItem(user).appendTo(this);
   }
 
-  private async refresh() {
+  protected async refresh() {
     this.append(new ListLoadingBar());
 
     const users = await this.fetchUsers();
