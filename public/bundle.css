@@ -1134,12 +1134,62 @@ p {
   margin: 20px auto;
   border-radius: 20px;
   background-color: var(--bg2-color);
+  overflow: hidden;
 }
 .activity-list {
   position: relative;
 }
 .activity-list.hidden {
   display: none;
+}
+.activity-list-item {
+  position: relative;
+  padding: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid var(--line-color);
+}
+@media only screen and (max-width: 859px) {
+  .activity-list-item {
+    display: block;
+  }
+}
+.activity-list-item > header {
+  display: flex;
+  align-items: center;
+}
+.activity-list-item > header > .trader-profile-image,
+.activity-list-item > header > .krew-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+  cursor: pointer;
+}
+@media only screen and (max-width: 859px) {
+  .activity-list-item > header > .trader-profile-image,
+  .activity-list-item > header > .krew-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.activity-list-item > header > .trader-profile-image {
+  margin-right: -8px;
+}
+.activity-list-item > .description {
+  flex-grow: 1;
+  width: 0;
+}
+.activity-list-item > .description > a {
+  font-weight: bold;
+  cursor: pointer;
+}
+.activity-list-item > .date {
+  color: #474B54;
+  font-size: 12px;
 }
 .explore-view {
   max-width: 1000px;

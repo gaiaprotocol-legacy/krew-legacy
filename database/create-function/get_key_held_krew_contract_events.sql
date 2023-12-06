@@ -47,6 +47,7 @@ BEGIN
         krews k ON a.krew = k.id
     WHERE 
         (a.event_type = 0 OR a.event_type = 1)
+        AND skh.krew = a.krew
         AND skh.wallet_address = p_wallet_address
         AND skh.last_fetched_balance > 0
         AND (last_created_at IS NULL OR a.created_at < last_created_at)
