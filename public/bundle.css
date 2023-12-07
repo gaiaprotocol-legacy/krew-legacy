@@ -1299,6 +1299,9 @@ p {
 .user-view {
   padding: 32px;
 }
+.user-display > .posts-container {
+  margin-top: 32px;
+}
 .login-required {
   background-color: var(--bg2-color);
   border: 1px solid var(--line-color);
@@ -1313,30 +1316,30 @@ p {
   flex-direction: column;
   gap: 12px;
 }
-.user-profile > section.info {
+.user-profile > .info-container {
   display: flex;
   align-items: center;
   gap: 32px;
 }
-.user-profile > section.info > .profile-image {
+.user-profile > .info-container > .profile-image {
   width: 180px;
   height: 180px;
   border-radius: 32px;
 }
-.user-profile > section.info > .info > h2 {
+.user-profile > .info-container > .info > h2 {
   font-size: 32px;
   color: #fff;
 }
-.user-profile > section.info > .info > h3 {
+.user-profile > .info-container > .info > h3 {
   margin-top: 8px;
 }
-.user-profile > section.info > .info > p {
+.user-profile > .info-container > .info > p {
   margin-top: 16px;
 }
-.user-profile > section.info > .info > footer {
+.user-profile > .info-container > .info > footer {
   margin-top: 8px;
 }
-.user-profile > section.info > .info > footer > a {
+.user-profile > .info-container > .info > footer > a {
   width: 32px;
   height: 32px;
   border-radius: 8px;
@@ -1345,6 +1348,55 @@ p {
   align-items: center;
   justify-content: center;
   font-size: 18px;
+}
+.user-profile > .krew-list,
+.user-profile > .metrics-container,
+.user-profile > .connections-container {
+  margin-top: 16px;
+}
+.user-profile > .krew-list::after,
+.user-profile > .metrics-container::after,
+.user-profile > .connections-container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.user-profile > .metrics-container > section {
+  float: left;
+  margin-right: 16px;
+  display: flex;
+  padding: 8px 16px 8px 8px;
+  gap: 12px;
+  align-items: center;
+  min-width: 150px;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
+}
+.user-profile > .metrics-container > section > .icon-container {
+  padding: 8px;
+  display: flex;
+}
+.user-profile > .metrics-container > section > .metric {
+  display: flex;
+  flex-direction: column;
+}
+.user-profile > .metrics-container > section > .metric > h3 {
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.user-profile > .metrics-container > section > .metric > .value {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.user-profile > .connections-container > a {
+  float: left;
+  margin-right: 16px;
+  display: flex;
+  gap: 4px;
+}
+.user-profile > .connections-container > a > .value {
+  font-weight: bold;
+  color: #fff;
 }
 .user-list {
   position: relative;
@@ -1384,6 +1436,14 @@ p {
   flex-grow: 1;
   font-size: 16px;
   font-weight: bold;
+}
+.owned-krew-list-item {
+  float: left;
+  margin-right: 16px;
+  padding: 8px 16px 8px 8px;
+  min-width: 150px;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
 }
 .switch-to-kroma-popup > main {
   display: flex;
