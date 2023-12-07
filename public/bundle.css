@@ -248,6 +248,53 @@ button.component.contained {
   background-color: rgba(37, 211, 102, 0.5);
   animation: list-loading-bar-loading 2s linear infinite;
 }
+.upload-preview-area {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 10px 10px 0 10px;
+  border-radius: 5px;
+}
+.upload-preview-area:empty {
+  display: none;
+}
+.upload-preview-area::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.upload-preview-area > .preview {
+  float: left;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.upload-preview-area > .preview.image {
+  background-size: cover;
+  background-position: center;
+}
+.upload-preview-area > .preview.file {
+  padding: 10px;
+  display: flex;
+  align-items: end;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.upload-preview-area > .preview > button.x {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 5px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+}
 .chat-message-display {
   border-radius: 0 16px 16px 16px;
   border: 1px solid var(--line-color);
@@ -309,13 +356,12 @@ button.component.contained {
   border-radius: 16px 0 16px 16px;
 }
 .chat-message-form {
-  border-top: 1px solid var(--line-color);
-  height: 90px;
   display: flex;
   flex-direction: column;
 }
 .chat-message-form > main {
-  flex-grow: 1;
+  border-top: 1px solid var(--line-color);
+  height: 90px;
   display: flex;
 }
 .chat-message-form > main > section.rich {
@@ -510,6 +556,7 @@ button.component.contained {
   min-height: 100px;
 }
 .post-form.sofi-component > footer {
+  margin-top: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1467,8 +1514,12 @@ p {
 .activity-view {
   padding: 20px;
 }
+@media only screen and (max-width: 859px) {
+  .activity-view {
+    padding: 12px;
+  }
+}
 .activity-view > main {
-  padding: 12px;
   max-width: 1000px;
   min-height: 100px;
   margin: 0 auto;
@@ -1529,8 +1580,12 @@ p {
 .explore-view {
   padding: 20px;
 }
+@media only screen and (max-width: 859px) {
+  .explore-view {
+    padding: 12px;
+  }
+}
 .explore-view > main {
-  padding: 12px;
   max-width: 1000px;
   min-height: 100px;
   margin: 0 auto;
