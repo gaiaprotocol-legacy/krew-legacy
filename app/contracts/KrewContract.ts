@@ -6,7 +6,7 @@ export default interface KrewContract {
   getBuyPriceAfterFee(krewId: bigint, amount: bigint): Promise<bigint>;
   getSellPriceAfterFee(krewId: bigint, amount: bigint): Promise<bigint>;
   getBalance(krewId: bigint, walletAddress: string): Promise<bigint>;
-  getClaimableFee(walletAddress: string): Promise<bigint>;
+  getClaimableFee(krewId: bigint, walletAddress: string): Promise<bigint>;
   createKrew(): Promise<bigint>;
   buyKeys(
     krewId: bigint,
