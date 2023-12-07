@@ -74,11 +74,11 @@ export default class CreateKrewForm extends DomNode {
       if (this.krewType === KrewType.Personal) {
         const krewId = await KrewPersonalContract.createKrew();
         await KrewService.trackPersonalEvents();
-        this.fireEvent("krewCreated", KrewType.Personal, krewId);
+        this.fireEvent("krewCreated", "p_" + krewId);
       } else if (this.krewType === KrewType.Communal) {
         const krewId = await KrewCommunalContract.createKrew();
         await KrewService.trackCommunalEvents();
-        this.fireEvent("krewCreated", KrewType.Communal, krewId);
+        this.fireEvent("krewCreated", "c_" + krewId);
       }
     } catch (e) {
       console.error(e);

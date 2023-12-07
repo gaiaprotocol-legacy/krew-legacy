@@ -1,6 +1,6 @@
-import { Component, Popup, Router } from "common-app-module";
-import KrewType from "../database-interface/KrewType.js";
+import { Component, Popup } from "common-app-module";
 import CreateKrewForm from "../krew/CreateKrewForm.js";
+import EditKrewPopup from "../krew/EditKrewPopup.js";
 
 export default class AddPopup extends Popup {
   private form: CreateKrewForm;
@@ -15,12 +15,8 @@ export default class AddPopup extends Popup {
       ),
     );
 
-    this.form.on("krewCreated", (type, id) => {
-      Router.go(
-        `/krew/${
-          type === KrewType.Personal ? "personal" : "communal"
-        }/${id}/edit`,
-      );
+    this.form.on("krewCreated", (krewId) => {
+      new EditKrewPopup(krewId);
       this.delete();
     });
   }
