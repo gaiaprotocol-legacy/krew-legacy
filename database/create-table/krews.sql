@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "owner" "text",
     "name" "text",
     "image" "text",
-    "image_thumbnail" "text",
     "metadata" "jsonb",
     "supply" numeric DEFAULT '1'::numeric NOT NULL,
     "last_fetched_key_price" numeric DEFAULT '68750000000000'::numeric NOT NULL,

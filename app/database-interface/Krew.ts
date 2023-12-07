@@ -3,8 +3,9 @@ export default interface Krew {
   owner?: string;
   name?: string;
   image?: string;
-  image_thumbnail?: string;
-  metadata?: {};
+  metadata?: {
+    description?: string;
+  };
   supply: string;
   last_fetched_key_price: string;
   total_trading_key_volume: string;

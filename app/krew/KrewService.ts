@@ -1,10 +1,57 @@
-import { Supabase, SupabaseService } from "common-app-module";
+import {
+  Rich,
+  Supabase,
+  SupabaseService,
+  UploadManager,
+} from "common-app-module";
 import Krew, { KrewSelectQuery } from "../database-interface/Krew.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
 class KrewService extends SupabaseService<Krew> {
   constructor() {
     super("krews", KrewSelectQuery, 1000);
+  }
+
+  private async uploadKrewImage(file: File): Promise<Rich> {
+    const rich: Rich = { files: [] };
+    if (KrewSignedUserManager.user) {
+      const url = await UploadManager.uploadAttachment(
+        "krew_images",
+        KrewSignedUserManager.user.user_id,
+        file,
+        60 * 60 * 24 * 30,
+      );
+      rich.files?.push({
+        url,
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+      });
+    }
+    return rich;
+  }
+
+  public async updateKrew(
+    krewId: string,
+    name: string,
+    description: string,
+    krewImage: File | undefined,
+  ) {
+    const data: Partial<Krew> = {
+      id: krewId,
+      name,
+      metadata: {
+        description,
+      },
+    };
+    if (krewImage) {
+      data.image = await UploadManager.uploadFile(
+        "krew_images",
+        krewId,
+        krewImage,
+      );
+    }
+    await this.safeUpdate(data);
   }
 
   public async fetchNewKrews(lastCreatedAt: string | undefined) {

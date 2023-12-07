@@ -12,7 +12,7 @@ class TopicChatMessageService extends MessageService<TopicChatMessage> {
     const rich: Rich = { files: [] };
     await Promise.all(files.map(async (file) => {
       if (KrewSignedUserManager.user) {
-        const url = await UploadManager.uploadImage(
+        const url = await UploadManager.uploadAttachment(
           "topic_chat_upload_files",
           KrewSignedUserManager.user.user_id,
           file,

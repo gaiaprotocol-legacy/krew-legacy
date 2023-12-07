@@ -39,7 +39,7 @@ export default class BuyKeyPopup extends Popup {
           "main",
           el(".krew-image", {
             style: {
-              backgroundImage: `url(${krew.image_thumbnail})`,
+              backgroundImage: `url(${krew.image})`,
             },
           }),
           el(

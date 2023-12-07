@@ -16,7 +16,7 @@ export default class OwnedKrewListItem extends DomNode {
       el(
         "main",
         el(".krew-image", {
-          style: { backgroundImage: `url(${krew.image_thumbnail})` },
+          style: { backgroundImage: `url(${krew.image})` },
         }),
         el(
           ".info",

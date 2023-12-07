@@ -14,7 +14,7 @@ class KrewContractEventService extends SupabaseService<KrewContractEvent> {
       event.krew = {
         id: event.krew_id,
         name: event.krew_name,
-        image_thumbnail: event.krew_image_thumbnail,
+        image: event.krew_image,
       };
       event.user = !event.user_id ? undefined : {
         user_id: event.user_id,

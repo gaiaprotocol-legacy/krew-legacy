@@ -12,7 +12,7 @@ class KrewPostService extends PostService<KrewPost> {
     const rich: Rich = { files: [] };
     await Promise.all(files.map(async (file) => {
       if (KrewSignedUserManager.user) {
-        const url = await UploadManager.uploadImage(
+        const url = await UploadManager.uploadAttachment(
           "post_upload_files",
           KrewSignedUserManager.user.user_id,
           file,

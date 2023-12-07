@@ -28,7 +28,7 @@ export default class KrewPopup extends Popup {
           "header",
           el(".krew-image", {
             style: {
-              backgroundImage: `url(${previewKrew?.image_thumbnail})`,
+              backgroundImage: `url(${previewKrew?.image})`,
             },
           }),
           el("h1", previewKrew ? KrewUtil.getName(previewKrew) : "..."),

@@ -77,4 +77,35 @@
             }
         }
     }
+
+    &.in-view {
+        display: block;
+        cursor : default;
+
+        >header {
+            display    : flex;
+            gap        : 12px;
+            align-items: center;
+            font-size  : 16px;
+
+            >.author {
+                padding-top   : 0;
+                flex-direction: column;
+                gap           : 4px;
+            }
+        }
+
+        .message {
+            margin-top: 12px;
+            font-size : 16px;
+
+            @media @phone {
+                font-size: 14px;
+            }
+        }
+
+        .actions {
+            margin-top: 20px;
+        }
+    }
 }

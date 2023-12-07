@@ -13,7 +13,7 @@ export default class ActivityListItem extends DomNode {
     super(".activity-list-item");
 
     const krewImage = el(".krew-image", {
-      style: { backgroundImage: `url(${event.krew.image_thumbnail})` },
+      style: { backgroundImage: `url(${event.krew.image})` },
       click: () => new KrewPopup(event.krew.id, event.krew),
     });
 

@@ -110,6 +110,11 @@ export default class UserProfile extends DomNode {
         this.fetchFeesEarned(user.wallet_address);
         this.fetchPortfolioValue(user.wallet_address);
         this.fetchKrews(user.wallet_address);
+      } else {
+        this.krewList.empty();
+        this.feesEarnedDisplay.text = "0";
+        this.holdingDisplay.text = "0";
+        this.portfolioValueDisplay.text = "0";
       }
     }
   }

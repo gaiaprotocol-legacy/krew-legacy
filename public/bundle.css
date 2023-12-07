@@ -407,6 +407,33 @@ button.component.contained {
   cursor: pointer;
   align-items: center;
 }
+.post-display.sofi-component.in-view {
+  display: block;
+  cursor: default;
+}
+.post-display.sofi-component.in-view > header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 16px;
+}
+.post-display.sofi-component.in-view > header > .author {
+  padding-top: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+.post-display.sofi-component.in-view .message {
+  margin-top: 12px;
+  font-size: 16px;
+}
+@media only screen and (max-width: 859px) {
+  .post-display.sofi-component.in-view .message {
+    font-size: 14px;
+  }
+}
+.post-display.sofi-component.in-view .actions {
+  margin-top: 20px;
+}
 .post-thread.sofi-component {
   display: flex;
   flex-direction: column;

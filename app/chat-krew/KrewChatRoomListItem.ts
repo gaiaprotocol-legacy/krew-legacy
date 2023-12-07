@@ -9,7 +9,7 @@ export default class KrewChatRoomListItem extends ChatRoomListItem {
     this.append(
       el(".image", {
         style: {
-          backgroundImage: `url(${krew.image_thumbnail})`,
+          backgroundImage: `url(${krew.image})`,
         },
       }),
       el(

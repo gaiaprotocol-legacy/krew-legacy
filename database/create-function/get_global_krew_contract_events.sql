@@ -15,7 +15,7 @@ CREATE OR REPLACE FUNCTION "public"."get_global_krew_contract_events"(
         "krew" "text",
         "krew_id" "text",
         "krew_name" "text",
-        "krew_image_thumbnail" "text",
+        "krew_image" "text",
         "created_at" timestamp with time zone
     ) LANGUAGE "plpgsql" AS $$
 BEGIN
@@ -34,7 +34,7 @@ BEGIN
         a.krew,
         k.id AS krew_id,
         k.name AS krew_name,
-        k.image_thumbnail AS krew_image_thumbnail,
+        k.image AS krew_image,
         a.created_at
     FROM 
         krew_contract_events a

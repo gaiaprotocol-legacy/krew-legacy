@@ -19,4 +19,4 @@ export default interface KrewContractEvent {
 }
 
 export const KrewContractEventSelectQuery =
-  "*, krew(id, name, image_thumbnail)";
+  "*, krew(id, name, image)";
