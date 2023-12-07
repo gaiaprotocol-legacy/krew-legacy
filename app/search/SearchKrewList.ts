@@ -12,6 +12,7 @@ export default class SearchKrewList extends KrewList {
 
   public set query(query: string) {
     this._query = query;
+    this.lastCreatedAt = undefined;
     this.refresh();
   }
 

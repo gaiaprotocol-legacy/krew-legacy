@@ -12,6 +12,6 @@ export default class NewUserList extends UserList {
   }
 
   protected async fetchUsers(): Promise<SoFiUserPublic[]> {
-    return await KrewUserService.fetchNewUsers();
+    return await KrewUserService.fetchNewUsers(this.lastCreatedAt);
   }
 }

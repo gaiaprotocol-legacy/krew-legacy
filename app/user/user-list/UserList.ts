@@ -10,6 +10,7 @@ export interface UserListOptions {
 export default abstract class UserList extends DomNode {
   private store: Store | undefined;
   private refreshed = false;
+  protected lastCreatedAt: string | undefined;
 
   constructor(tag: string, options: UserListOptions) {
     super(tag + ".user-list");
@@ -43,6 +44,7 @@ export default abstract class UserList extends DomNode {
       for (const user of users) {
         this.addUserItem(user);
       }
+      this.lastCreatedAt = users[users.length - 1]?.created_at;
       this.refreshed = true;
     }
   }

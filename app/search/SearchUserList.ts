@@ -12,6 +12,7 @@ export default class SearchUserList extends UserList {
 
   public set query(query: string) {
     this._query = query;
+    this.lastCreatedAt = undefined;
     this.refresh();
   }
 
@@ -20,6 +21,6 @@ export default class SearchUserList extends UserList {
   }
 
   protected async fetchUsers(): Promise<SoFiUserPublic[]> {
-    return await KrewUserService.findUsers(this.query);
+    return await KrewUserService.findUsers(this.query, this.lastCreatedAt);
   }
 }

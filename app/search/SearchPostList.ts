@@ -22,6 +22,7 @@ export default class SearchPostList extends PostList<KrewPost> {
 
   public set query(query: string) {
     this._query = query;
+    this.lastPostId = undefined;
     this.refresh();
   }
 
@@ -40,6 +41,7 @@ export default class SearchPostList extends PostList<KrewPost> {
       const result = await KrewPostService.findPosts(
         this.query,
         this.lastPostId,
+        KrewSignedUserManager.user.user_id,
       );
       return {
         fetchedPosts: result.posts.map((p) => ({
