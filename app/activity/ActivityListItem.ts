@@ -5,6 +5,7 @@ import BlockTimeManager from "../BlockTimeManager.js";
 import KrewContractEvent, {
   EventType,
 } from "../database-interface/KrewContractEvent.js";
+import KrewPopup from "../krew/KrewPopup.js";
 import KrewUtil from "../krew/KrewUtil.js";
 
 export default class ActivityListItem extends DomNode {
@@ -13,7 +14,7 @@ export default class ActivityListItem extends DomNode {
 
     const krewImage = el(".krew-image", {
       style: { backgroundImage: `url(${event.krew.image_thumbnail})` },
-      //TODO: click: () => new KrewPopup(event.krew),
+      click: () => new KrewPopup(event.krew.id, event.krew),
     });
 
     const user = el("a", event.user?.display_name, {
@@ -21,7 +22,7 @@ export default class ActivityListItem extends DomNode {
     });
 
     const krew = el("a", KrewUtil.getName(event.krew), {
-      //TODO: click: () => new KrewPopup(event.krew),
+      click: () => new KrewPopup(event.krew.id, event.krew),
     });
 
     const date = el(

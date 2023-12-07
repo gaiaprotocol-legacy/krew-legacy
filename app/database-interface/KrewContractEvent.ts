@@ -1,4 +1,5 @@
 import { Author } from "sofi-module";
+import PreviewKrew from "./PreviewKrew.js";
 
 export enum EventType {
   KrewCreated,
@@ -12,11 +13,7 @@ export default interface KrewContractEvent {
   event_type: EventType;
   args: string;
   wallet_address: string;
-  krew: {
-    id: string;
-    name?: string;
-    image_thumbnail?: string;
-  };
+  krew: PreviewKrew;
   user?: Author;
   created_at: string;
 }

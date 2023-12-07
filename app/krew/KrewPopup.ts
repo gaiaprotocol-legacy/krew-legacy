@@ -1,16 +1,14 @@
-import { Component, el, Icon, Popup } from "common-app-module";
-import { ethers } from "ethers";
-import Krew from "../database-interface/Krew.js";
+import { Component, DomNode, el, Popup } from "common-app-module";
+import PreviewKrew from "../database-interface/PreviewKrew.js";
 import MaterialIcon from "../MaterialIcon.js";
 import EditKrewPopup from "./EditKrewPopup.js";
 import KrewUtil from "./KrewUtil.js";
 
 export default class KrewPopup extends Popup {
-  private krew: Krew | undefined;
+  private editButton: DomNode;
 
-  constructor(private krewId: string, previewKrew?: Krew) {
+  constructor(private krewId: string, previewKrew?: PreviewKrew) {
     super({ barrierDismissible: true });
-    this.krew = previewKrew;
 
     this.append(
       new Component(
@@ -23,8 +21,8 @@ export default class KrewPopup extends Popup {
             },
           }),
           el("h1", previewKrew ? KrewUtil.getName(previewKrew) : undefined),
-          this.editButton = el("a.hidden", new Icon("edit"), {
-            click: () => new EditKrewPopup(krewId, this.krew),
+          this.editButton = el("a.hidden", new MaterialIcon("edit"), {
+            click: () => new EditKrewPopup(krewId, previewKrew),
           }),
         ),
         el(
@@ -35,10 +33,7 @@ export default class KrewPopup extends Popup {
             el(
               ".metric",
               el("h3", "Holders"),
-              el(
-                ".value",
-                previewKrew ? String(previewKrew.key_holder_count) : "...",
-              ),
+              el(".value", "..."),
             ),
           ),
           el(
@@ -47,13 +42,7 @@ export default class KrewPopup extends Popup {
             el(
               ".metric",
               el("h3", "Price"),
-              el(
-                ".value",
-                previewKrew
-                  ? ethers.formatEther(previewKrew.last_fetched_key_price) +
-                    " ETH"
-                  : "...",
-              ),
+              el(".value", "..."),
             ),
           ),
         ),
@@ -63,9 +52,14 @@ export default class KrewPopup extends Popup {
     );
 
     this.fetchKrew();
+    this.fetchBalance();
   }
 
   private fetchKrew() {
+    //TODO:
+  }
+
+  private fetchBalance() {
     //TODO:
   }
 }

@@ -2,6 +2,7 @@ import { DomNode, el } from "common-app-module";
 import { ethers } from "ethers";
 import MaterialIcon from "../MaterialIcon.js";
 import Krew from "../database-interface/Krew.js";
+import KrewPopup from "./KrewPopup.js";
 import KrewUtil from "./KrewUtil.js";
 
 export default class KrewListItem extends DomNode {
@@ -44,6 +45,6 @@ export default class KrewListItem extends DomNode {
       ),
     );
 
-    //this.onDom("click", () => new KrewPopup(krew));
+    this.onDom("click", () => new KrewPopup(krew.id, krew));
   }
 }

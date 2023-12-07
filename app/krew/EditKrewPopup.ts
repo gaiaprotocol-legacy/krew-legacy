@@ -1,14 +1,13 @@
 import { Component, el, Popup } from "common-app-module";
 import Krew from "../database-interface/Krew.js";
+import PreviewKrew from "../database-interface/PreviewKrew.js";
 
 export default class EditKrewPopup extends Popup {
   private krew: Krew | undefined;
 
-  constructor(private krewId: string, previewKrew?: Krew) {
+  constructor(private krewId: string, previewKrew?: PreviewKrew) {
     super({ barrierDismissible: true });
-    this.krew = previewKrew;
 
-    super({ barrierDismissible: true });
     this.append(
       new Component(
         ".popup.edit-krew-popup",
