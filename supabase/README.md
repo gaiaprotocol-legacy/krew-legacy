@@ -21,8 +21,8 @@ select
     '*/10 * * * *',
     $$
     select net.http_get(
-        'https://sfwnwiuxgehxbyystchq.supabase.co/functions/v1/track-krew-personal-events',
-        headers := '{"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmd253aXV4Z2VoeGJ5eXN0Y2hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDAyMTA5OTYsImV4cCI6MjAxNTc4Njk5Nn0.iQ9aIdYmqKOdeAXonb6LFy9DLSVMlWycxleueEIOZes"}'::JSONB
+        'https://nvpcdfjnookurpbeixkt.supabase.co/functions/v1/track-krew-personal-events',
+        headers := '{"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52cGNkZmpub29rdXJwYmVpeGt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5NTkyNTUsImV4cCI6MjAxNzUzNTI1NX0.55I5dRBCvMR1DoZ94Nf0PASTyLRURHWcP8-uGP1zlns"}'::JSONB
     ) AS request_id;
     $$
   );
@@ -33,8 +33,8 @@ select
     '1,11,21,31,41,51 * * * *',
     $$
     select net.http_get(
-        'https://sfwnwiuxgehxbyystchq.supabase.co/functions/v1/track-krew-communal-events',
-        headers := '{"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmd253aXV4Z2VoeGJ5eXN0Y2hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDAyMTA5OTYsImV4cCI6MjAxNTc4Njk5Nn0.iQ9aIdYmqKOdeAXonb6LFy9DLSVMlWycxleueEIOZes"}'::JSONB
+        'https://nvpcdfjnookurpbeixkt.supabase.co/functions/v1/track-krew-communal-events',
+        headers := '{"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52cGNkZmpub29rdXJwYmVpeGt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5NTkyNTUsImV4cCI6MjAxNzUzNTI1NX0.55I5dRBCvMR1DoZ94Nf0PASTyLRURHWcP8-uGP1zlns"}'::JSONB
     ) AS request_id;
     $$
   );
