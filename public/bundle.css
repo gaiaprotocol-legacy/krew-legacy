@@ -907,6 +907,120 @@ p {
 .create-krew-popup {
   max-width: 800px !important;
 }
+.edit-krew-popup > header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.edit-krew-popup > header > .krew-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+  cursor: pointer;
+}
+@media only screen and (max-width: 859px) {
+  .edit-krew-popup > header > .krew-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.edit-krew-popup > main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.edit-krew-popup > main > input,
+.edit-krew-popup > main > textarea {
+  padding: 8px;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
+}
+.edit-krew-popup > main > input::placeholder,
+.edit-krew-popup > main > textarea::placeholder {
+  color: #474B54;
+  font-size: 12px;
+  font-style: italic;
+}
+.edit-krew-popup > main > textarea {
+  height: 100px;
+}
+.krew-popup > header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.krew-popup > header > .krew-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+}
+@media only screen and (max-width: 859px) {
+  .krew-popup > header > .krew-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.krew-popup > header > a.edit {
+  cursor: pointer;
+}
+.krew-popup > header > a.edit.hidden {
+  display: none;
+}
+.krew-popup > .metric-container {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.krew-popup > .metric-container > section {
+  flex-grow: 1;
+  width: 50%;
+  display: flex;
+  padding: 8px 16px 8px 8px;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
+}
+.krew-popup > .metric-container > section.price {
+  grid-column: auto / span 2;
+}
+.krew-popup > .metric-container > section > .icon-container {
+  padding: 4px;
+  display: flex;
+}
+.krew-popup > .metric-container > section > .metric {
+  display: flex;
+  flex-direction: column;
+}
+.krew-popup > .metric-container > section > .metric > h3 {
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.krew-popup > .metric-container > section > .metric > .value {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+.krew-popup > .balance-container {
+  margin-top: 16px;
+  display: flex;
+  padding: 8px 16px 8px 8px;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
+}
+.krew-popup > .balance-container > .balance {
+  flex-grow: 1;
+}
 .krew-list {
   container-type: inline-size;
 }
@@ -968,9 +1082,8 @@ p {
 .krew-list-item > .metric-container > section {
   display: flex;
   padding: 8px 16px 8px 8px;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
-  min-width: 150px;
   border: 1px solid var(--line-color);
   border-radius: 8px;
 }
@@ -978,7 +1091,7 @@ p {
   grid-column: auto / span 2;
 }
 .krew-list-item > .metric-container > section > .icon-container {
-  padding: 8px;
+  padding: 4px;
   display: flex;
 }
 .krew-list-item > .metric-container > section > .metric {
@@ -990,8 +1103,10 @@ p {
   text-transform: capitalize;
 }
 .krew-list-item > .metric-container > section > .metric > .value {
+  font-size: 12px;
   font-weight: bold;
   text-transform: capitalize;
+  white-space: nowrap;
 }
 .krew-selector.hidden {
   display: none;
@@ -1252,6 +1367,38 @@ p {
 .buy-key-popup > main > table > tr > td {
   text-align: right;
 }
+.sell-key-popup > main > .krew-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+  width: 140px;
+  height: 140px;
+  margin: 16px auto;
+}
+@media only screen and (max-width: 859px) {
+  .sell-key-popup > main > .krew-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.sell-key-popup > main > table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 16px;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px var(--line-color);
+}
+.sell-key-popup > main > table > tr > th,
+.sell-key-popup > main > table > tr > td {
+  padding: 16px;
+  border-bottom: 1px solid var(--line-color);
+}
+.sell-key-popup > main > table > tr > td {
+  text-align: right;
+}
 .key-bought-popup > main > .lottie-animation {
   width: 100%;
   max-width: 320px;
@@ -1475,6 +1622,7 @@ p {
   min-width: 150px;
   border: 1px solid var(--line-color);
   border-radius: 8px;
+  cursor: pointer;
 }
 .owned-krew-list-item > main {
   display: flex;

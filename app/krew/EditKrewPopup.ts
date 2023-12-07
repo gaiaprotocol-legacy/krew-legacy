@@ -13,10 +13,13 @@ import KrewService from "./KrewService.js";
 
 export default class EditKrewPopup extends Popup {
   private krew: Krew | undefined;
+  private krewImage: File | undefined;
 
+  private krewImageDisplay: DomNode<HTMLDivElement>;
   private nameInput: DomNode<HTMLInputElement>;
   private descriptionTextArea: DomNode<HTMLTextAreaElement>;
-  private uploadInput: DomNode<HTMLInputElement>;
+  private uploadImageInput: DomNode<HTMLInputElement>;
+  private saveButton: Button;
 
   constructor(private krewId: string, previewKrew?: PreviewKrew) {
     super({ barrierDismissible: true });
@@ -26,25 +29,37 @@ export default class EditKrewPopup extends Popup {
         ".popup.edit-krew-popup",
         el(
           "header",
-          el(".krew-image", {
+          this.krewImageDisplay = el(".krew-image", {
             style: {
               backgroundImage: `url(${previewKrew?.image})`,
             },
+            click: () => this.uploadImageInput.domElement.click(),
           }),
-          el("h1", "Edit Krew"),
+          this.uploadImageInput = el("input.upload", {
+            type: "file",
+            change: () => {
+              const files = this.uploadImageInput.domElement.files;
+              this.krewImage = files?.[0];
+              if (this.krewImage) {
+                this.krewImageDisplay.style({
+                  backgroundImage: `url(${
+                    URL.createObjectURL(
+                      this.krewImage,
+                    )
+                  })`,
+                });
+              }
+            },
+          }),
         ),
         el(
           "main",
-          this.nameInput = el("input"),
-          this.descriptionTextArea = el("textarea"),
-          this.uploadInput = el("input.upload", {
-            type: "file",
-            change: () => {
-              const files = this.uploadInput.domElement.files;
-              if (files) {
-                console.log(files);
-              }
-            },
+          this.nameInput = el("input", {
+            placeholder: "Name",
+            value: previewKrew?.name,
+          }),
+          this.descriptionTextArea = el("textarea", {
+            placeholder: "Description",
           }),
         ),
         el(
@@ -55,7 +70,7 @@ export default class EditKrewPopup extends Popup {
             click: () => this.delete(),
             title: msg("cancel-button"),
           }),
-          new Button({
+          this.saveButton = new Button({
             tag: ".save",
             title: msg("edit-krew-popup-save-button"),
             click: () => this.updateKrew(),
@@ -67,11 +82,29 @@ export default class EditKrewPopup extends Popup {
     this.fetchKrew();
   }
 
-  private fetchKrew() {
-    //TODO:
+  private async fetchKrew() {
+    this.krew = await KrewService.fetchKrew(this.krewId);
+    if (this.krew) {
+      this.nameInput.domElement.value = this.krew.name ?? "";
+      this.descriptionTextArea.domElement.value =
+        this.krew.metadata?.description ?? "";
+    }
   }
 
   private async updateKrew() {
-    //await KrewService.updateKrew();
+    this.saveButton.title = el(".loading-spinner");
+
+    try {
+      await KrewService.updateKrew(
+        this.krewId,
+        this.nameInput.domElement.value,
+        this.descriptionTextArea.domElement.value,
+        this.krewImage,
+      );
+    } catch (e) {
+      console.error(e);
+    }
+
+    if (!this.deleted) this.delete();
   }
 }

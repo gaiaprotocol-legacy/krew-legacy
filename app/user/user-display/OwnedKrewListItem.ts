@@ -4,6 +4,7 @@ import KrewCommunalContract from "../../contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "../../contracts/KrewPersonalContract.js";
 import Krew from "../../database-interface/Krew.js";
 import BuyKeyPopup from "../../key/BuyKeyPopup.js";
+import KrewPopup from "../../krew/KrewPopup.js";
 import KrewUtil from "../../krew/KrewUtil.js";
 import KrewSignedUserManager from "../KrewSignedUserManager.js";
 
@@ -57,6 +58,8 @@ export default class OwnedKrewListItem extends DomNode {
     );
 
     if (feeClaimable) this.fetchClaimableFee();
+
+    this.onDom("click", () => new KrewPopup(krew.id, krew));
   }
 
   private async fetchClaimableFee() {

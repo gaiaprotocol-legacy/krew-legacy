@@ -130,7 +130,7 @@ $$;
 
 ALTER FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image_thumbnail" "text", "created_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text", "created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -149,7 +149,7 @@ BEGIN
         a.krew,
         k.id AS krew_id,
         k.name AS krew_name,
-        k.image_thumbnail AS krew_image_thumbnail,
+        k.image AS krew_image,
         a.created_at
     FROM 
         krew_contract_events a
@@ -218,7 +218,7 @@ $$;
 
 ALTER FUNCTION "public"."get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image_thumbnail" "text", "created_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text", "created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -237,7 +237,7 @@ BEGIN
         a.krew,
         k.id AS krew_id,
         k.name AS krew_name,
-        k.image_thumbnail AS krew_image_thumbnail,
+        k.image AS krew_image,
         a.created_at
     FROM 
         krew_contract_events a
@@ -295,7 +295,7 @@ $$;
 
 ALTER FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 1000) RETURNS TABLE("id" "text", "name" "text", "image" "text", "image_thumbnail" "text", "metadata" "jsonb", "supply" "text", "last_fetched_key_price" "text", "total_trading_key_volume" "text", "is_key_price_up" boolean, "last_message" "text", "last_message_sent_at" timestamp with time zone, "key_holder_count" integer, "last_key_purchased_at" timestamp with time zone, "created_at" timestamp with time zone, "updated_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 1000) RETURNS TABLE("id" "text", "name" "text", "image" "text", "metadata" "jsonb", "supply" "text", "last_fetched_key_price" "text", "total_trading_key_volume" "text", "is_key_price_up" boolean, "last_message" "text", "last_message_sent_at" timestamp with time zone, "key_holder_count" integer, "last_key_purchased_at" timestamp with time zone, "created_at" timestamp with time zone, "updated_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -304,7 +304,6 @@ BEGIN
         k.id,
         k.name,
         k.image,
-        k.image_thumbnail,
         k.metadata,
         k.supply::TEXT,
         k.last_fetched_key_price::TEXT,
@@ -421,7 +420,7 @@ $$;
 
 ALTER FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_owned_krews"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 1000) RETURNS TABLE("id" "text", "name" "text", "image" "text", "image_thumbnail" "text", "metadata" "jsonb", "supply" "text", "last_fetched_key_price" "text", "total_trading_key_volume" "text", "is_key_price_up" boolean, "last_message" "text", "last_message_sent_at" timestamp with time zone, "key_holder_count" integer, "last_key_purchased_at" timestamp with time zone, "created_at" timestamp with time zone, "updated_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_owned_krews"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 1000) RETURNS TABLE("id" "text", "name" "text", "image" "text", "metadata" "jsonb", "supply" "text", "last_fetched_key_price" "text", "total_trading_key_volume" "text", "is_key_price_up" boolean, "last_message" "text", "last_message_sent_at" timestamp with time zone, "key_holder_count" integer, "last_key_purchased_at" timestamp with time zone, "created_at" timestamp with time zone, "updated_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -430,7 +429,6 @@ BEGIN
         k.id,
         k.name,
         k.image,
-        k.image_thumbnail,
         k.metadata,
         k.supply::TEXT,
         k.last_fetched_key_price::TEXT,
@@ -906,9 +904,9 @@ begin
 
             IF FOUND THEN
                 insert into krews (
-                    id, owner, name, image, image_thumbnail, metadata
+                    id, owner, name, image, metadata
                 ) values (
-                    new.krew, new.wallet_address, owner_data.display_name, owner_data.profile_image, owner_data.profile_image_thumbnail, owner_data.metadata
+                    new.krew, new.wallet_address, owner_data.display_name, owner_data.profile_image_thumbnail, owner_data.metadata
                 );
             ELSE
                 insert into krews (
@@ -1234,7 +1232,6 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "owner" "text",
     "name" "text",
     "image" "text",
-    "image_thumbnail" "text",
     "metadata" "jsonb",
     "supply" numeric DEFAULT '1'::numeric NOT NULL
 );
@@ -1522,6 +1519,12 @@ CREATE POLICY "can unfollow only follower" ON "public"."follows" FOR DELETE TO "
 CREATE POLICY "can unlike only authed" ON "public"."post_likes" FOR DELETE TO "authenticated" USING (("user_id" = "auth"."uid"()));
 
 CREATE POLICY "can unrepost only authed" ON "public"."reposts" FOR DELETE TO "authenticated" USING (("user_id" = "auth"."uid"()));
+
+CREATE POLICY "can update only holder or owner" ON "public"."krews" FOR UPDATE TO "authenticated" USING (("owner" = ( SELECT "users_public"."wallet_address"
+   FROM "public"."users_public"
+  WHERE ("users_public"."user_id" = "auth"."uid"())))) WITH CHECK (("owner" = ( SELECT "users_public"."wallet_address"
+   FROM "public"."users_public"
+  WHERE ("users_public"."user_id" = "auth"."uid"()))));
 
 CREATE POLICY "can view only holder or owner" ON "public"."krew_chat_messages" FOR SELECT TO "authenticated" USING (((( SELECT "krews"."owner"
    FROM "public"."krews"

@@ -7,12 +7,22 @@ import {
   msg,
   Popup,
 } from "common-app-module";
+import { ethers } from "ethers";
+import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
+import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
+import Krew from "../database-interface/Krew.js";
 import PreviewKrew from "../database-interface/PreviewKrew.js";
+import BuyKeyPopup from "../key/BuyKeyPopup.js";
+import SellKeyPopup from "../key/SellKeyPopup.js";
 import MaterialIcon from "../MaterialIcon.js";
+import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import EditKrewPopup from "./EditKrewPopup.js";
+import KrewService from "./KrewService.js";
 import KrewUtil from "./KrewUtil.js";
 
 export default class KrewPopup extends Popup {
+  private krew: Krew | undefined;
+
   private editButton: DomNode;
   private holderCountDisplay: DomNode;
   private priceDisplay: DomNode;
@@ -32,7 +42,7 @@ export default class KrewPopup extends Popup {
             },
           }),
           el("h1", previewKrew ? KrewUtil.getName(previewKrew) : "..."),
-          this.editButton = el("a.hidden", new MaterialIcon("edit"), {
+          this.editButton = el("a.edit.hidden", new MaterialIcon("edit"), {
             click: () => {
               new EditKrewPopup(krewId, previewKrew);
               this.delete();
@@ -60,7 +70,22 @@ export default class KrewPopup extends Popup {
             ),
           ),
         ),
-        this.balanceDisplay = el(".balance", "..."),
+        el(
+          ".balance-container",
+          el(
+            ".balance",
+            el("h3", "Your Balance"),
+            this.balanceDisplay = el(".value", "..."),
+          ),
+          new Button({
+            title: "Buy",
+            click: () => this.buyKey(),
+          }),
+          new Button({
+            title: "Sell",
+            click: () => this.sellKey(),
+          }),
+        ),
         el(
           "footer",
           new Button({
@@ -77,11 +102,48 @@ export default class KrewPopup extends Popup {
     this.fetchBalance();
   }
 
-  private fetchKrew() {
-    //TODO:
+  private async fetchKrew() {
+    this.krew = await KrewService.fetchKrew(this.krewId);
+    if (this.krew) {
+      this.holderCountDisplay.text = this.krew.key_holder_count.toString();
+      this.priceDisplay.text = ethers.formatEther(
+        this.krew.last_fetched_key_price,
+      );
+
+      if (this.krew.owner === KrewSignedUserManager.user?.wallet_address) {
+        this.editButton.deleteClass("hidden");
+      }
+    }
   }
 
-  private fetchBalance() {
-    //TODO:
+  private async fetchBalance() {
+    const walletAddress = KrewSignedUserManager.user?.wallet_address;
+    if (walletAddress) {
+      if (this.krewId.startsWith("p_")) {
+        this.balanceDisplay.text = String(
+          await KrewPersonalContract.getBalance(
+            BigInt(this.krewId.substring(2)),
+            walletAddress,
+          ),
+        );
+      } else if (this.krewId.startsWith("c_")) {
+        this.balanceDisplay.text = String(
+          await KrewCommunalContract.getBalance(
+            BigInt(this.krewId.substring(2)),
+            walletAddress,
+          ),
+        );
+      }
+    } else {
+      this.balanceDisplay.text = "0";
+    }
+  }
+
+  private async buyKey() {
+    if (this.krew) new BuyKeyPopup(this.krew);
+  }
+
+  private async sellKey() {
+    if (this.krew) new SellKeyPopup(this.krew);
   }
 }

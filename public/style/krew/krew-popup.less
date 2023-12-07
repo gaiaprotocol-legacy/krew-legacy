@@ -1,40 +1,31 @@
-.krew-list-item {
-    position     : relative;
-    padding      : 20px;
-    display      : flex;
-    gap          : 12px;
-    align-items  : center;
-    border-bottom: 1px solid var(--line-color);
-    cursor       : pointer;
-
-    @container (width < 520px) {
-        flex-direction: column;
-        align-items   : flex-start;
-    }
-
-    >.info {
-        flex-grow  : 1;
+.krew-popup {
+    >header {
         display    : flex;
-        gap        : 12px;
         align-items: center;
+        gap        : 12px;
 
         >.krew-image {
             .profile-image();
         }
 
-        >.name {
-            flex-grow  : 1;
-            font-size  : 16px;
-            font-weight: bold;
+        >a.edit {
+            cursor: pointer;
+
+            &.hidden {
+                display: none;
+            }
         }
     }
 
     >.metric-container {
+        margin-top : 16px;
         display    : flex;
         gap        : 12px;
         align-items: center;
 
         >section {
+            flex-grow    : 1;
+            width        : 50%;
             display      : flex;
             padding      : 8px 16px 8px 8px;
             gap          : 8px;
@@ -67,6 +58,20 @@
                     white-space   : nowrap;
                 }
             }
+        }
+    }
+
+    >.balance-container {
+        margin-top   : 16px;
+        display      : flex;
+        padding      : 8px 16px 8px 8px;
+        gap          : 8px;
+        align-items  : center;
+        border       : 1px solid var(--line-color);
+        border-radius: 8px;
+
+        >.balance {
+            flex-grow: 1;
         }
     }
 }
