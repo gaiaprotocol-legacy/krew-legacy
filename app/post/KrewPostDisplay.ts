@@ -6,11 +6,13 @@ import KrewPostForm from "./KrewPostForm.js";
 import KrewPostInteractions from "./KrewPostInteractions.js";
 
 export default class KrewPostDisplay extends DomNode {
+  private thread: PostThread<KrewPost> | undefined;
+
   constructor(private postId: number, preview: KrewPost | undefined) {
     super(".post-display");
     if (preview) {
       this.append(
-        new PostThread(
+        this.thread = new PostThread(
           [preview],
           {
             inView: true,
@@ -21,7 +23,11 @@ export default class KrewPostDisplay extends DomNode {
             signedUserId: KrewSignedUserManager.user?.user_id,
           },
           KrewPostInteractions,
-          new KrewPostForm(),
+          new KrewPostForm(
+            postId,
+            undefined,
+            (post) => this.thread?.addComment(post),
+          ),
         ),
       );
     }
@@ -33,7 +39,7 @@ export default class KrewPostDisplay extends DomNode {
     likedPostIds: number[];
   }) {
     this.empty().append(
-      new PostThread(
+      this.thread = new PostThread(
         data.posts,
         {
           inView: true,
@@ -44,7 +50,11 @@ export default class KrewPostDisplay extends DomNode {
           signedUserId: KrewSignedUserManager.user?.user_id,
         },
         KrewPostInteractions,
-        new KrewPostForm(),
+        new KrewPostForm(
+          this.postId,
+          undefined,
+          (post) => this.thread?.addComment(post),
+        ),
       ),
     );
   }

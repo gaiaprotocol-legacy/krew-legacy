@@ -8,7 +8,7 @@ import {
   Router,
 } from "common-app-module";
 import { ethers } from "ethers";
-import { PreviewUserPublic, SoFiUserPublic } from "sofi-module";
+import { FollowService, PreviewUserPublic, SoFiUserPublic } from "sofi-module";
 import KrewService from "../../krew/KrewService.js";
 import MaterialIcon from "../../MaterialIcon.js";
 import WalletDataService from "../../wallet/WalletDataService.js";
@@ -20,8 +20,10 @@ export default class UserProfile extends DomNode {
   private portfolioValueFetched = false;
   private krewsFetched = false;
 
+  private userId: string | undefined;
+
   private infoContainer: DomNode;
-  private claimableFee: DomNode | undefined;
+  private followButton: Button | undefined;
   private krewList: DomNode;
 
   private feesEarnedDisplay: DomNode;
@@ -37,6 +39,7 @@ export default class UserProfile extends DomNode {
     private feeClaimable = false,
   ) {
     super(".user-profile");
+
     this.append(
       this.infoContainer = el(".info-container"),
       this.krewList = el(".krew-list", new ListLoadingBar()),
@@ -83,11 +86,21 @@ export default class UserProfile extends DomNode {
         ),
       ),
     );
+
     if (previewUser) this.renderUser(previewUser);
+
+    this.onDelegate(FollowService, ["follow", "unfollow"], (userId) => {
+      if (this.followButton && userId === this.userId) {
+        this.followButton.text = FollowService.isFollowing(userId)
+          ? "Unfollow"
+          : "Follow";
+      }
+    });
   }
 
   public set user(user: SoFiUserPublic | undefined) {
     if (user) {
+      this.userId = user.user_id;
       this.renderUser(user);
 
       this.followingDisplay.text = String(user.following_count);
@@ -126,9 +139,11 @@ export default class UserProfile extends DomNode {
         ),
         el(
           "footer",
-          new Button({
-            title: "Follow",
-            //click: () =>
+          this.followButton = new Button({
+            title: FollowService.isFollowing(user.user_id)
+              ? "Unfollow"
+              : "Follow",
+            click: () => FollowService.toggleFollow(user.user_id),
           }),
           el("a", "𝕏", {
             href: `https://twitter.com/${user.x_username}`,
