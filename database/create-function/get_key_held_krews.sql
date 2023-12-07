@@ -38,8 +38,8 @@ BEGIN
 END;
 $$;
 
-ALTER FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text") OWNER TO "postgres";
+ALTER FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text", "last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
-GRANT ALL ON FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text") TO "anon";
-GRANT ALL ON FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text") TO "service_role";
+GRANT ALL ON FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "service_role";
