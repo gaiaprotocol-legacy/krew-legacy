@@ -1461,8 +1461,12 @@ p {
 .activity-view {
   padding: 20px;
 }
+@media only screen and (max-width: 859px) {
+  .activity-view {
+    padding: 12px;
+  }
+}
 .activity-view > main {
-  padding: 12px;
   max-width: 1000px;
   min-height: 100px;
   margin: 0 auto;
@@ -1523,8 +1527,12 @@ p {
 .explore-view {
   padding: 20px;
 }
+@media only screen and (max-width: 859px) {
+  .explore-view {
+    padding: 12px;
+  }
+}
 .explore-view > main {
-  padding: 12px;
   max-width: 1000px;
   min-height: 100px;
   margin: 0 auto;
