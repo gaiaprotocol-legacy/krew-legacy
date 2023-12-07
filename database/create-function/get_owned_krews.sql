@@ -25,11 +25,14 @@ BEGIN
         k.updated_at
     FROM 
         public.krews k
-    INNER JOIN 
+    LEFT JOIN 
         public.krew_key_holders kh ON k.id = kh.krew
     WHERE 
-        kh.wallet_address = p_wallet_address
-        AND kh.last_fetched_balance > 0
+        (
+            (k.id LIKE 'p_%' AND k.owner = p_wallet_address)
+            OR
+            (k.id LIKE 'c_%' AND kh.wallet_address = p_wallet_address AND kh.last_fetched_balance > 0)
+        )
         AND (last_created_at IS NULL OR k.created_at < last_created_at)
     ORDER BY 
         k.created_at DESC
