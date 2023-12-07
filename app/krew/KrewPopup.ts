@@ -1,4 +1,12 @@
-import { Component, DomNode, el, Popup } from "common-app-module";
+import {
+  Button,
+  ButtonType,
+  Component,
+  DomNode,
+  el,
+  msg,
+  Popup,
+} from "common-app-module";
 import PreviewKrew from "../database-interface/PreviewKrew.js";
 import MaterialIcon from "../MaterialIcon.js";
 import EditKrewPopup from "./EditKrewPopup.js";
@@ -6,6 +14,9 @@ import KrewUtil from "./KrewUtil.js";
 
 export default class KrewPopup extends Popup {
   private editButton: DomNode;
+  private holderCountDisplay: DomNode;
+  private priceDisplay: DomNode;
+  private balanceDisplay: DomNode;
 
   constructor(private krewId: string, previewKrew?: PreviewKrew) {
     super({ barrierDismissible: true });
@@ -20,9 +31,12 @@ export default class KrewPopup extends Popup {
               backgroundImage: `url(${previewKrew?.image_thumbnail})`,
             },
           }),
-          el("h1", previewKrew ? KrewUtil.getName(previewKrew) : undefined),
+          el("h1", previewKrew ? KrewUtil.getName(previewKrew) : "..."),
           this.editButton = el("a.hidden", new MaterialIcon("edit"), {
-            click: () => new EditKrewPopup(krewId, previewKrew),
+            click: () => {
+              new EditKrewPopup(krewId, previewKrew);
+              this.delete();
+            },
           }),
         ),
         el(
@@ -33,7 +47,7 @@ export default class KrewPopup extends Popup {
             el(
               ".metric",
               el("h3", "Holders"),
-              el(".value", "..."),
+              this.holderCountDisplay = el(".value", "..."),
             ),
           ),
           el(
@@ -42,12 +56,20 @@ export default class KrewPopup extends Popup {
             el(
               ".metric",
               el("h3", "Price"),
-              el(".value", "..."),
+              this.priceDisplay = el(".value", "..."),
             ),
           ),
         ),
-        el(".balance", "..."),
-        el("footer"),
+        this.balanceDisplay = el(".balance", "..."),
+        el(
+          "footer",
+          new Button({
+            type: ButtonType.Text,
+            tag: ".cancel",
+            click: () => this.delete(),
+            title: msg("cancel-button"),
+          }),
+        ),
       ),
     );
 

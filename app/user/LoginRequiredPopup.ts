@@ -24,12 +24,12 @@ export default class LoginRequiredPopup extends Popup {
           "footer",
           new Button({
             type: ButtonType.Text,
-            tag: ".cancel-button",
+            tag: ".cancel",
             click: () => this.delete(),
             title: msg("cancel-button"),
           }),
           new Button({
-            tag: ".login-button",
+            tag: ".login",
             click: () => KrewSignedUserManager.signIn(),
             title: msg("login-required-login-button"),
           }),

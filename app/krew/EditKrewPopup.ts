@@ -1,4 +1,11 @@
-import { Component, el, Popup } from "common-app-module";
+import {
+  Button,
+  ButtonType,
+  Component,
+  el,
+  msg,
+  Popup,
+} from "common-app-module";
 import Krew from "../database-interface/Krew.js";
 import PreviewKrew from "../database-interface/PreviewKrew.js";
 
@@ -23,7 +30,20 @@ export default class EditKrewPopup extends Popup {
         el(
           "main",
         ),
-        el("footer"),
+        el(
+          "footer",
+          new Button({
+            type: ButtonType.Text,
+            tag: ".cancel",
+            click: () => this.delete(),
+            title: msg("cancel-button"),
+          }),
+          new Button({
+            tag: ".save",
+            title: msg("edit-krew-popup-save-button"),
+            //click: () => {
+          }),
+        ),
       ),
     );
 
