@@ -16,4 +16,5 @@ export default interface KrewContract {
     krewId: bigint,
     amount: bigint,
   ): Promise<ethers.ContractTransactionReceipt | null>;
+  claimFee(krewId: bigint): Promise<ethers.ContractTransactionReceipt | null>;
 }

@@ -67,6 +67,12 @@ class KrewCommunalContract extends Contract<KrewCommunal>
     const tx = await writeContract.sellKeys(krewId, amount, "0x");
     return tx.wait();
   }
+
+  public async claimFee(krewId: bigint) {
+    const writeContract = await this.getWriteContract();
+    const tx = await writeContract.claimHolderFee(krewId);
+    return tx.wait();
+  }
 }
 
 export default new KrewCommunalContract();

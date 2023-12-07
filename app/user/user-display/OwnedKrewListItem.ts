@@ -83,6 +83,14 @@ export default class OwnedKrewListItem extends DomNode {
   }
 
   private async claimFee() {
-    //TODO:
+    if (this.krew.id.startsWith("p_")) {
+      await KrewPersonalContract.claimFee(
+        BigInt(this.krew.id.substring(2)),
+      );
+    } else if (this.krew.id.startsWith("c_")) {
+      await KrewCommunalContract.claimFee(
+        BigInt(this.krew.id.substring(2)),
+      );
+    }
   }
 }
