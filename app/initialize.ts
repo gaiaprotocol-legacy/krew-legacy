@@ -82,9 +82,9 @@ export default async function initialize(config: Config) {
     "{xUsername}/following",
     "{xUsername}/followers",
   ]);
-  Router.route(["chats", "chat/general"], TopicChatRoomView);
+  Router.route(["chats", "chat/{topic}"], TopicChatRoomView);
   Router.route("{t}/{krewId}", KrewChatRoomView, [
-    "chat/general",
+    "chat/{topic}",
     "post/{postId}",
     "{xUsername}/holding",
     "{xUsername}/holders",

@@ -8,14 +8,19 @@ import TopicChatRoomHeader from "./TopicChatRoomHeader.js";
 export default class TopicChatRoomView extends ChatRoomView {
   constructor(params: ViewParams) {
     super(".topic-chat-room-view");
-    this.render(params.topic ?? "general");
+    this.render(params.topic);
   }
 
   public changeParams(params: ViewParams): void {
-    this.render(params.topic ?? "general");
+    this.render(params.topic);
   }
 
-  private async render(topic: string) {
+  private async render(topic: string | undefined) {
+    console.log(topic);
+    this.container.deleteClass("mobile-hidden");
+    if (!topic) this.container.addClass("mobile-hidden");
+    topic = topic ? topic.toLowerCase() : "general";
+
     const header = new TopicChatRoomHeader(topic);
     const list = new TopicChatMessageList(topic);
     const form = new TopicChatMessageForm(topic);

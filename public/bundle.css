@@ -698,6 +698,7 @@ p {
   top: 0;
   z-index: 1;
   border-right: 1px solid var(--line-color);
+  background-color: var(--bg-color);
 }
 @media only screen and (max-width: 859px) {
   .nav-bar {
@@ -771,6 +772,11 @@ p {
   align-items: center;
   gap: 24px;
 }
+@media only screen and (max-width: 859px) {
+  .title-bar {
+    padding-right: 12px;
+  }
+}
 .title-bar > h1 {
   flex-shrink: 0;
   display: flex;
@@ -793,6 +799,11 @@ p {
   height: 100%;
   flex-grow: 1;
   margin-left: 30px;
+}
+@media only screen and (max-width: 859px) {
+  .title-bar > .title-bar-search-form {
+    margin-left: 12px;
+  }
 }
 .title-bar > button.noti {
   display: flex;
@@ -818,6 +829,7 @@ p {
 }
 .title-bar-search-form > label > input {
   flex-grow: 1;
+  width: 100%;
   max-width: 320px;
   height: 100%;
 }
@@ -849,6 +861,11 @@ p {
   top: 0;
   z-index: 1;
   border-left: 1px solid var(--line-color);
+}
+@media only screen and (max-width: 859px) {
+  .sidebar {
+    display: none;
+  }
 }
 .sidebar > h2 {
   font-size: 20px;
@@ -1140,7 +1157,7 @@ p {
   }
 }
 .posts-view > main {
-  padding: 20px 0;
+  padding: 20px;
   height: 100%;
   overflow-y: auto;
 }
@@ -1170,6 +1187,7 @@ p {
   margin-top: 20px;
   border-radius: 20px;
   background-color: var(--bg2-color);
+  overflow: hidden;
 }
 .posts-view > button.post {
   position: absolute;
@@ -1261,6 +1279,7 @@ p {
   height: calc(100% - 65px);
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-color);
 }
 @media only screen and (max-width: 859px) {
   .chat-room-view {
@@ -1318,6 +1337,17 @@ p {
   padding: 16px;
   display: flex;
   align-items: center;
+  gap: 8px;
+}
+.topic-chat-room-header > button.back {
+  display: none;
+}
+@media only screen and (max-width: 859px) {
+  .topic-chat-room-header > button.back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 .topic-chat-room-header > h1 {
   font-size: 22px;
@@ -1327,6 +1357,29 @@ p {
 .topic-chat-room-list-item > h3 {
   color: #FFF;
   font-size: 18px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.krew-chat-room-header {
+  height: 90px;
+  border-bottom: 1px solid var(--line-color);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.krew-chat-room-header > button.back {
+  display: none;
+}
+@media only screen and (max-width: 859px) {
+  .krew-chat-room-header > button.back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.krew-chat-room-header > h1 {
+  font-size: 22px;
   font-weight: 500;
   text-transform: capitalize;
 }
