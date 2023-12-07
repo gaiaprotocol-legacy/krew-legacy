@@ -1338,6 +1338,8 @@ p {
 }
 .user-profile > .info-container > .info > footer {
   margin-top: 8px;
+  display: flex;
+  gap: 8px;
 }
 .user-profile > .info-container > .info > footer > a {
   width: 32px;
@@ -1364,6 +1366,7 @@ p {
 .user-profile > .metrics-container > section {
   float: left;
   margin-right: 16px;
+  margin-bottom: 16px;
   display: flex;
   padding: 8px 16px 8px 8px;
   gap: 12px;
@@ -1391,6 +1394,7 @@ p {
 .user-profile > .connections-container > a {
   float: left;
   margin-right: 16px;
+  margin-bottom: 16px;
   display: flex;
   gap: 4px;
 }
@@ -1440,14 +1444,61 @@ p {
 .owned-krew-list-item {
   float: left;
   margin-right: 16px;
-  padding: 8px;
+  margin-bottom: 16px;
   min-width: 150px;
   border: 1px solid var(--line-color);
   border-radius: 8px;
 }
-.owned-krew-list-item > footer {
-  margin-top: 8px;
+.owned-krew-list-item > main {
   display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+}
+.owned-krew-list-item > main > .krew-image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+}
+@media only screen and (max-width: 859px) {
+  .owned-krew-list-item > main > .krew-image {
+    width: 34px;
+    height: 34px;
+  }
+}
+.owned-krew-list-item > main > .info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.owned-krew-list-item > main > .info > .name {
+  font-size: 16px;
+  font-weight: bold;
+}
+.owned-krew-list-item > main > .info > .metric-container {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.owned-krew-list-item > main > .info > .metric-container > .metric {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+.owned-krew-list-item > main > .info > .metric-container > .metric > .value {
+  font-weight: bold;
+  color: #fff;
+}
+.owned-krew-list-item > footer {
+  border-top: 1px solid var(--line-color);
+  background-color: var(--bg2-color);
+  padding: 8px;
+  display: flex;
+  justify-content: flex-end;
   gap: 8px;
 }
 .switch-to-kroma-popup > main {

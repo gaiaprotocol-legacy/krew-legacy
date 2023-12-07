@@ -1,7 +1,17 @@
-import { DateUtil, DomNode, el, msg, Router } from "common-app-module";
+import {
+  Button,
+  DateUtil,
+  DomNode,
+  el,
+  ListLoadingBar,
+  msg,
+  Router,
+} from "common-app-module";
+import { ethers } from "ethers";
 import { PreviewUserPublic, SoFiUserPublic } from "sofi-module";
 import KrewService from "../../krew/KrewService.js";
 import MaterialIcon from "../../MaterialIcon.js";
+import WalletDataService from "../../wallet/WalletDataService.js";
 import KrewUserService from "../KrewUserService.js";
 import OwnedKrewListItem from "./OwnedKrewListItem.js";
 
@@ -29,7 +39,7 @@ export default class UserProfile extends DomNode {
     super(".user-profile");
     this.append(
       this.infoContainer = el(".info-container"),
-      this.krewList = el(".krew-list"),
+      this.krewList = el(".krew-list", new ListLoadingBar()),
       el(
         ".metrics-container",
         el(
@@ -79,6 +89,10 @@ export default class UserProfile extends DomNode {
   public set user(user: SoFiUserPublic | undefined) {
     if (user) {
       this.renderUser(user);
+
+      this.followingDisplay.text = String(user.following_count);
+      this.followersDisplay.text = String(user.follower_count);
+
       if (user.wallet_address) {
         this.fetchFeesEarned(user.wallet_address);
         this.fetchPortfolioValue(user.wallet_address);
@@ -112,6 +126,10 @@ export default class UserProfile extends DomNode {
         ),
         el(
           "footer",
+          new Button({
+            title: "Follow",
+            //click: () =>
+          }),
           el("a", "𝕏", {
             href: `https://twitter.com/${user.x_username}`,
             target: "_blank",
@@ -125,24 +143,31 @@ export default class UserProfile extends DomNode {
     if (this.feesEarnedFetched) return;
     this.feesEarnedFetched = true;
 
-    //TODO:
+    const walletData = await WalletDataService.fetch(walletAddress);
+    this.feesEarnedDisplay.text = walletData
+      ? ethers.formatEther(
+        walletData.total_earned_trading_fees,
+      )
+      : "0";
+    this.holdingDisplay.text = walletData
+      ? String(walletData.total_key_balance)
+      : "0";
   }
 
   private async fetchPortfolioValue(walletAddress: string) {
     if (this.portfolioValueFetched) return;
     this.portfolioValueFetched = true;
 
-    const result = await KrewUserService.fetchPortfolioValue(walletAddress);
-    console.log(result);
+    const value = await KrewUserService.fetchPortfolioValue(walletAddress);
+    this.portfolioValueDisplay.text = ethers.formatEther(value);
   }
 
   private async fetchKrews(walletAddress: string) {
     if (this.krewsFetched) return;
     this.krewsFetched = true;
 
-    this.krewList.empty();
-
     const krews = await KrewService.fetchOwnedKrews(walletAddress, undefined);
+    this.krewList.empty();
     for (const krew of krews) {
       this.krewList.append(
         new OwnedKrewListItem(krew, this.feeClaimable),
