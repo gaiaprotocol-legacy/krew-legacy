@@ -1168,6 +1168,7 @@ p {
 }
 @media only screen and (max-width: 859px) {
   .posts-view > main {
+    padding: 12px;
     height: auto;
     overflow-y: visible;
   }
@@ -1467,6 +1468,7 @@ p {
   padding: 20px;
 }
 .activity-view > main {
+  padding: 12px;
   max-width: 1000px;
   min-height: 100px;
   margin: 0 auto;
@@ -1528,6 +1530,7 @@ p {
   padding: 20px;
 }
 .explore-view > main {
+  padding: 12px;
   max-width: 1000px;
   min-height: 100px;
   margin: 0 auto;
