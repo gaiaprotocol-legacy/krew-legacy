@@ -23,6 +23,12 @@ ALTER TABLE ONLY "public"."krews"
 
 ALTER TABLE "public"."krews" ENABLE ROW LEVEL SECURITY;
 
+CREATE POLICY "can update only holder or owner" ON "public"."krews" FOR UPDATE TO "authenticated" USING (("owner" = ( SELECT "users_public"."wallet_address"
+   FROM "public"."users_public"
+  WHERE ("users_public"."user_id" = "auth"."uid"())))) WITH CHECK (("owner" = ( SELECT "users_public"."wallet_address"
+   FROM "public"."users_public"
+  WHERE ("users_public"."user_id" = "auth"."uid"()))));
+
 CREATE POLICY "view everyone" ON "public"."krews" FOR SELECT USING (true);
 
 GRANT ALL ON TABLE "public"."krews" TO "anon";
