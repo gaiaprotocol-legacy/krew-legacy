@@ -1,3 +1,32 @@
 .settings-view {
-    padding: 32px;
+    >h1 {
+        font-size    : 24px;
+        border-bottom: 1px solid var(--line-color);
+        padding      : 20px;
+    }
+
+    >main {
+        padding: 20px;
+
+        >section {
+            background-color: var(--bg2-color);
+            border          : 1px solid var(--line-color);
+            border-radius   : 16px;
+
+            >h2 {
+                font-size    : 20px;
+                border-bottom: 1px solid var(--line-color);
+                padding      : 16px;
+            }
+
+            >main {
+                padding: 16px;
+            }
+
+            >footer {
+                border-top: 1px solid var(--line-color);
+                padding   : 16px;
+            }
+        }
+    }
 }

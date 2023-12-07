@@ -16,6 +16,8 @@ class KrewSignedUserManager extends SignedUserManager<SoFiUserPublic> {
   }
 
   public async linkWallet() {
+    if (!WalletManager.connected) await WalletManager.connect();
+
     const walletAddress = WalletManager.address;
     if (!walletAddress) throw new Error("Wallet is not connected");
 

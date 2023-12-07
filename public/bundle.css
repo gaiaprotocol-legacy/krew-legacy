@@ -1722,8 +1722,30 @@ p {
   max-height: 500px;
   overflow-y: auto;
 }
-.settings-view {
-  padding: 32px;
+.settings-view > h1 {
+  font-size: 24px;
+  border-bottom: 1px solid var(--line-color);
+  padding: 20px;
+}
+.settings-view > main {
+  padding: 20px;
+}
+.settings-view > main > section {
+  background-color: var(--bg2-color);
+  border: 1px solid var(--line-color);
+  border-radius: 16px;
+}
+.settings-view > main > section > h2 {
+  font-size: 20px;
+  border-bottom: 1px solid var(--line-color);
+  padding: 16px;
+}
+.settings-view > main > section > main {
+  padding: 16px;
+}
+.settings-view > main > section > footer {
+  border-top: 1px solid var(--line-color);
+  padding: 16px;
 }
 .profile-view {
   padding: 32px;

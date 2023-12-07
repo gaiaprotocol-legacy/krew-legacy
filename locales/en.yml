@@ -134,3 +134,11 @@ key-held-post-list-empty-message: No posts you hold keys for yet
 search-post-list-empty-message: No posts found
 
 user-profile-joined: Joined {date}
+
+settings-view-title: Settings
+settings-view-x-section-title: Krew's 𝕏
+settings-view-link-wallet-section-title: Link Wallet
+settings-view-link-wallet-section-linked: >
+  Linked:
+settings-view-link-wallet-section-description: You can link your wallet to use Krew.
+settings-view-link-wallet-button: Link Wallet
