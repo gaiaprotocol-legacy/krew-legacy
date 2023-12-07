@@ -1,0 +1,35 @@
+.edit-krew-popup {
+    >header {
+        display    : flex;
+        align-items: center;
+        gap        : 12px;
+
+        >.krew-image {
+            .profile-image();
+            cursor: pointer;
+        }
+    }
+
+    >main {
+        display       : flex;
+        flex-direction: column;
+        gap           : 12px;
+
+        >input,
+        >textarea {
+            padding      : 8px;
+            border       : 1px solid var(--line-color);
+            border-radius: 8px;
+
+            &::placeholder {
+                color     : #474B54;
+                font-size : 12px;
+                font-style: italic;
+            }
+        }
+
+        >textarea {
+            height: 100px;
+        }
+    }
+}

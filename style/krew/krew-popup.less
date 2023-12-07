@@ -1,0 +1,77 @@
+.krew-popup {
+    >header {
+        display    : flex;
+        align-items: center;
+        gap        : 12px;
+
+        >.krew-image {
+            .profile-image();
+        }
+
+        >a.edit {
+            cursor: pointer;
+
+            &.hidden {
+                display: none;
+            }
+        }
+    }
+
+    >.metric-container {
+        margin-top : 16px;
+        display    : flex;
+        gap        : 12px;
+        align-items: center;
+
+        >section {
+            flex-grow    : 1;
+            width        : 50%;
+            display      : flex;
+            padding      : 8px 16px 8px 8px;
+            gap          : 8px;
+            align-items  : center;
+            border       : 1px solid var(--line-color);
+            border-radius: 8px;
+
+            &.price {
+                grid-column: auto / span 2;
+            }
+
+            >.icon-container {
+                padding: 4px;
+                display: flex;
+            }
+
+            >.metric {
+                display       : flex;
+                flex-direction: column;
+
+                >h3 {
+                    font-size     : 12px;
+                    text-transform: capitalize;
+                }
+
+                >.value {
+                    font-size     : 12px;
+                    font-weight   : bold;
+                    text-transform: capitalize;
+                    white-space   : nowrap;
+                }
+            }
+        }
+    }
+
+    >.balance-container {
+        margin-top   : 16px;
+        display      : flex;
+        padding      : 8px 16px 8px 8px;
+        gap          : 8px;
+        align-items  : center;
+        border       : 1px solid var(--line-color);
+        border-radius: 8px;
+
+        >.balance {
+            flex-grow: 1;
+        }
+    }
+}

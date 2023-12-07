@@ -1,0 +1,122 @@
+.user-profile {
+    @media @phone {
+        padding       : 16px;
+        padding-bottom: 0;
+    }
+
+    >.info-container {
+        display    : flex;
+        align-items: center;
+        gap        : 32px;
+
+        @media @phone {
+            gap: 16px;
+        }
+
+        >.profile-image {
+            width        : 180px;
+            height       : 180px;
+            border-radius: 32px;
+
+            @media @phone {
+                width        : 120px;
+                height       : 120px;
+                border-radius: 16px;
+            }
+        }
+
+        >.info {
+            >h2 {
+                font-size: 32px;
+                color    : #fff;
+            }
+
+            >h3 {
+                margin-top: 8px;
+            }
+
+            >p {
+                margin-top: 16px;
+            }
+
+            >footer {
+                margin-top: 8px;
+                display   : flex;
+                gap       : 8px;
+
+                >a {
+                    width           : 32px;
+                    height          : 32px;
+                    border-radius   : 8px;
+                    background-color: var(--bg2-color);
+                    display         : flex;
+                    align-items     : center;
+                    justify-content : center;
+                    font-size       : 18px;
+                }
+            }
+        }
+    }
+
+    >.krew-list,
+    >.metrics-container,
+    >.connections-container {
+        margin-top: 16px;
+
+        &::after {
+            content: "";
+            clear  : both;
+            display: table;
+        }
+    }
+
+    >.metrics-container {
+        >section {
+            float        : left;
+            margin-right : 16px;
+            margin-bottom: 16px;
+            display      : flex;
+            padding      : 8px 16px 8px 8px;
+            gap          : 12px;
+            align-items  : center;
+            min-width    : 150px;
+            border       : 1px solid var(--line-color);
+            border-radius: 8px;
+
+            >.icon-container {
+                padding: 8px;
+                display: flex;
+            }
+
+            >.metric {
+                display       : flex;
+                flex-direction: column;
+
+                >h3 {
+                    font-size     : 12px;
+                    text-transform: capitalize;
+                }
+
+                >.value {
+                    font-weight   : bold;
+                    text-transform: capitalize;
+                }
+            }
+        }
+    }
+
+    >.connections-container {
+        >a {
+            float        : left;
+            margin-right : 16px;
+            margin-bottom: 16px;
+            display      : flex;
+            gap          : 4px;
+
+            >.value {
+                font-weight: bold;
+                color      : #fff;
+            }
+        }
+    }
+}
