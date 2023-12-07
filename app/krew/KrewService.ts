@@ -38,12 +38,16 @@ class KrewService extends SupabaseService<Krew> {
     owner: string,
     lastCreatedAt: string | undefined,
   ) {
-    return await this.safeSelect((b) =>
-      b.eq("owner", owner).gt(
-        "created_at",
-        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
-      )
+    const { data, error } = await Supabase.client.rpc(
+      "get_owned_krews",
+      {
+        p_wallet_address: owner,
+        last_created_at: lastCreatedAt,
+        max_count: this.fetchLimit,
+      },
     );
+    if (error) throw error;
+    return Supabase.safeResult<Krew[]>(data ?? []);
   }
 
   public async fetchKeyHeldKrews(lastCreatedAt: string | undefined) {

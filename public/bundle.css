@@ -1440,10 +1440,15 @@ p {
 .owned-krew-list-item {
   float: left;
   margin-right: 16px;
-  padding: 8px 16px 8px 8px;
+  padding: 8px;
   min-width: 150px;
   border: 1px solid var(--line-color);
   border-radius: 8px;
+}
+.owned-krew-list-item > footer {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
 }
 .switch-to-kroma-popup > main {
   display: flex;
@@ -1490,5 +1495,11 @@ p {
 .notifications-panel > .notification-list {
   max-height: 500px;
   overflow-y: auto;
+}
+.settings-view {
+  padding: 32px;
+}
+.profile-view {
+  padding: 32px;
 }
 
