@@ -1046,6 +1046,20 @@ end;$$;
 
 ALTER FUNCTION "public"."parse_krew_contract_event"() OWNER TO "postgres";
 
+CREATE OR REPLACE FUNCTION "public"."set_krew_last_message"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update krews
+    set
+        last_message = (SELECT display_name FROM public.users_public WHERE user_id = new.author) || ': ' || new.message,
+        last_message_sent_at = now()
+    where
+        id = new.krew;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."set_krew_last_message"() OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."set_notification_read_at"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$BEGIN
@@ -1446,6 +1460,8 @@ CREATE TRIGGER "parse_krew_contract_event" AFTER INSERT ON "public"."krew_contra
 
 CREATE TRIGGER "set_krew_key_holders_updated_at" BEFORE UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
+CREATE TRIGGER "set_krew_last_message" AFTER INSERT ON "public"."krew_chat_messages" FOR EACH ROW EXECUTE FUNCTION "public"."set_krew_last_message"();
+
 CREATE TRIGGER "set_krews_updated_at" BEFORE UPDATE ON "public"."krews" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
 CREATE TRIGGER "set_notification_read_at" BEFORE UPDATE ON "public"."notifications" FOR EACH ROW EXECUTE FUNCTION "public"."set_notification_read_at"();
@@ -1730,6 +1746,10 @@ GRANT ALL ON FUNCTION "public"."notify_repost_event"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."parse_krew_contract_event"() TO "anon";
 GRANT ALL ON FUNCTION "public"."parse_krew_contract_event"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."parse_krew_contract_event"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."set_krew_last_message"() TO "anon";
+GRANT ALL ON FUNCTION "public"."set_krew_last_message"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."set_krew_last_message"() TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "anon";
 GRANT ALL ON FUNCTION "public"."set_notification_read_at"() TO "authenticated";

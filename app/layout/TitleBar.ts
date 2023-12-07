@@ -1,4 +1,11 @@
-import { Button, DomNode, el, msg, Router } from "common-app-module";
+import {
+  BrowserInfo,
+  Button,
+  DomNode,
+  el,
+  msg,
+  Router,
+} from "common-app-module";
 import MaterialIcon from "../MaterialIcon.js";
 import NotificationsPanel from "../notification/NotificationsPanel.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
@@ -18,9 +25,11 @@ export default class TitleBar extends DomNode {
       ...KrewSignedUserManager.signed
         ? [
           el("button.noti", new MaterialIcon("notifications"), {
-            click: (event, button) => {
+            click: (event) => {
               event.stopPropagation();
-              new NotificationsPanel();
+              BrowserInfo.isPhoneSize
+                ? Router.go("/notifications")
+                : new NotificationsPanel();
             },
           }),
           new TitleBarUserDisplay(KrewSignedUserManager.user!),

@@ -1,13 +1,28 @@
 .user-profile {
+    @media @phone {
+        padding       : 16px;
+        padding-bottom: 0;
+    }
+
     >.info-container {
         display    : flex;
         align-items: center;
         gap        : 32px;
 
+        @media @phone {
+            gap: 16px;
+        }
+
         >.profile-image {
             width        : 180px;
             height       : 180px;
             border-radius: 32px;
+
+            @media @phone {
+                width        : 120px;
+                height       : 120px;
+                border-radius: 16px;
+            }
         }
 
         >.info {

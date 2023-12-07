@@ -14,21 +14,24 @@ export default class ActivityView extends View {
     Layout.append(
       this.container = el(
         ".activity-view",
-        this.tabs = new Tabs(
-          "activity-list-tabs",
-          KrewSignedUserManager.walletLinked
-            ? [
-              { id: "global", label: "Global" },
-              { id: "held", label: "Held" },
-            ]
-            : [
-              { id: "global", label: "Global" },
-            ],
+        el(
+          "main",
+          this.tabs = new Tabs(
+            "activity-list-tabs",
+            KrewSignedUserManager.walletLinked
+              ? [
+                { id: "global", label: "Global" },
+                { id: "held", label: "Held" },
+              ]
+              : [
+                { id: "global", label: "Global" },
+              ],
+          ),
+          this.globalActivityList = new GlobalActivityList(),
+          this.keyHeldActivityList = KrewSignedUserManager.walletLinked
+            ? new KeyHeldActivityList()
+            : undefined,
         ),
-        this.globalActivityList = new GlobalActivityList(),
-        this.keyHeldActivityList = KrewSignedUserManager.walletLinked
-          ? new KeyHeldActivityList()
-          : undefined,
       ),
     );
 

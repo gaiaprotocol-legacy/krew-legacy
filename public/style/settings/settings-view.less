@@ -21,6 +21,15 @@
 
             >main {
                 padding: 16px;
+                display: flex;
+
+                >.linked {
+                    white-space  : nowrap;
+                    text-overflow: ellipsis;
+                    overflow     : hidden;
+                    width        : 0;
+                    flex-grow    : 1;
+                }
             }
 
             >footer {

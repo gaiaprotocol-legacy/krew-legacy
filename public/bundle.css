@@ -110,6 +110,11 @@ meter {
   gap: 60px;
   padding: 10px 30px 0;
 }
+@media only screen and (max-width: 859px) {
+  .tabs.component {
+    gap: 40px;
+  }
+}
 .tabs.component > .tab {
   cursor: pointer;
   min-height: 48px;
@@ -1459,9 +1464,12 @@ p {
   margin: 0 auto;
 }
 .activity-view {
+  padding: 20px;
+}
+.activity-view > main {
   max-width: 1000px;
   min-height: 100px;
-  margin: 20px auto;
+  margin: 0 auto;
   border-radius: 20px;
   background-color: var(--bg2-color);
   overflow: hidden;
@@ -1517,15 +1525,23 @@ p {
   font-size: 12px;
 }
 .explore-view {
+  padding: 20px;
+}
+.explore-view > main {
   max-width: 1000px;
   min-height: 100px;
-  margin: 20px auto;
+  margin: 0 auto;
   border-radius: 20px;
   background-color: var(--bg2-color);
   overflow: hidden;
 }
 .user-view {
   padding: 32px;
+}
+@media only screen and (max-width: 859px) {
+  .user-view {
+    padding: 0;
+  }
 }
 .user-display > .posts-container {
   margin-top: 32px;
@@ -1544,15 +1560,33 @@ p {
   flex-direction: column;
   gap: 12px;
 }
+@media only screen and (max-width: 859px) {
+  .user-profile {
+    padding: 16px;
+    padding-bottom: 0;
+  }
+}
 .user-profile > .info-container {
   display: flex;
   align-items: center;
   gap: 32px;
 }
+@media only screen and (max-width: 859px) {
+  .user-profile > .info-container {
+    gap: 16px;
+  }
+}
 .user-profile > .info-container > .profile-image {
   width: 180px;
   height: 180px;
   border-radius: 32px;
+}
+@media only screen and (max-width: 859px) {
+  .user-profile > .info-container > .profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+  }
 }
 .user-profile > .info-container > .info > h2 {
   font-size: 32px;
@@ -1678,6 +1712,12 @@ p {
   border-radius: 8px;
   cursor: pointer;
 }
+@media only screen and (max-width: 859px) {
+  .owned-krew-list-item {
+    float: none;
+    margin-right: 0;
+  }
+}
 .owned-krew-list-item > main {
   display: flex;
   gap: 12px;
@@ -1699,6 +1739,7 @@ p {
   }
 }
 .owned-krew-list-item > main > .info {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1796,6 +1837,14 @@ p {
 }
 .settings-view > main > section > main {
   padding: 16px;
+  display: flex;
+}
+.settings-view > main > section > main > .linked {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 0;
+  flex-grow: 1;
 }
 .settings-view > main > section > footer {
   border-top: 1px solid var(--line-color);
@@ -1803,5 +1852,10 @@ p {
 }
 .profile-view {
   padding: 32px;
+}
+@media only screen and (max-width: 859px) {
+  .profile-view {
+    padding: 0;
+  }
 }
 

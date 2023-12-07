@@ -15,19 +15,22 @@ export default class ExploreView extends View {
     Layout.append(
       this.container = el(
         ".explore-view",
-        this.tabs = new Tabs("explore", [{
-          id: "trending",
-          label: "Trending",
-        }, {
-          id: "top",
-          label: "Top",
-        }, {
-          id: "new",
-          label: "New",
-        }]),
-        this.trendingKrewList = new TrendingKrewList(),
-        this.topKrewList = new TopKrewList(),
-        this.newKrewList = new NewKrewList(),
+        el(
+          "main",
+          this.tabs = new Tabs("explore", [{
+            id: "trending",
+            label: "Trending",
+          }, {
+            id: "top",
+            label: "Top",
+          }, {
+            id: "new",
+            label: "New",
+          }]),
+          this.trendingKrewList = new TrendingKrewList(),
+          this.topKrewList = new TopKrewList(),
+          this.newKrewList = new NewKrewList(),
+        ),
       ),
     );
 
