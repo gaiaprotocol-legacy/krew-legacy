@@ -289,6 +289,9 @@ button.component.contained {
   height: 32px;
   border-radius: 16px;
 }
+.rich-display.component:empty {
+  display: none;
+}
 .rich-display.component > .image-container > a {
   cursor: pointer;
 }
