@@ -32,7 +32,12 @@ export default class TopicChatMessageList extends ChatMessageList {
           filter: "topic=eq." + topic,
         },
         // The response indicating that a message has been sent arrives before the real-time message itself.
-        (payload: any) => this.addNewMessage(payload.new),
+        async (payload: any) => {
+          const message = await TopicChatMessageService.fetchMessage(
+            payload.new.id,
+          );
+          if (message) this.addNewMessage(message);
+        },
       )
       .subscribe();
   }

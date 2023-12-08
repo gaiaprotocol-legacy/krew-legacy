@@ -1,0 +1,8 @@
+activities
+	block_number - int8 - pk
+	log_index - int8 - pk
+	event_type - int2 - not null
+	args - text[] - not null
+	wallet_address - text - not null
+	krew - text - not null
+	created_at - timestampz - now()

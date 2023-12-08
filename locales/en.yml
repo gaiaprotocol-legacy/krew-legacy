@@ -55,6 +55,7 @@ no-wallet-connected-message: You need to connect a wallet to perform this action
 no-wallet-linked-title: No wallet linked
 no-wallet-linked-message: You need to link a wallet to perform this action.
 no-wallet-linked-confirm: Link wallet
+no-wallet-linked-linking: Linking...
 wallet-address-mismatch-title: Wallet address mismatch
 wallet-address-mismatch-message: The wallet address associated with your account and the current crypto wallet address do not match. Please change the crypto wallet address.
 switch-to-kroma-popup-error-title: Error
@@ -93,6 +94,7 @@ create-krew-form-create-button: Create Krew
 create-krew-form-no-krew-type-selected-title: Please Select Your Krew Type
 create-krew-form-no-krew-type-selected-message: Once you've made your selection, press the [Create Krew] button to begin. If you haven't decided on the type of krew yet, please select one to proceed. Let your imagination shape your krew's future!
 
+edit-krew-popup-title: Edit Krew
 edit-krew-popup-save-button: Save
 
 buy-key-popup-title: Buy 1 {krew}'s Key

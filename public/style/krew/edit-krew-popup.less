@@ -1,19 +1,24 @@
 .edit-krew-popup {
     >header {
-        display    : flex;
-        align-items: center;
-        gap        : 12px;
-
-        >.krew-image {
-            .profile-image();
-            cursor: pointer;
-        }
+        display: flex;
+        gap    : 8px;
     }
 
     >main {
         display       : flex;
         flex-direction: column;
         gap           : 12px;
+
+        >.image {
+            display    : flex;
+            align-items: center;
+            gap        : 12px;
+
+            >.krew-image {
+                .profile-image();
+                cursor: pointer;
+            }
+        }
 
         >input,
         >textarea {

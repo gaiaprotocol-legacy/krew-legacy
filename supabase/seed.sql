@@ -945,10 +945,16 @@ begin
             new.wallet_address, 1
         ) on conflict (wallet_address) do update
         set
-            total_key_balance = total_key_balance + 1;
+            total_key_balance = wallets.total_key_balance + 1;
 
         -- notify
         v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
+
+        insert into activities (
+            block_number, log_index, event_type, args, wallet_address, krew, "user"
+        ) values (
+            new.block_number, new.log_index, new.event_type, new.args, new.wallet_address, new.krew, v_receiver
+        );
 
         IF v_receiver IS NOT NULL THEN
             insert into notifications (
@@ -987,7 +993,7 @@ begin
                 new.wallet_address, new.args[4]::int8
             ) on conflict (wallet_address) do update
             set
-                total_key_balance = total_key_balance + new.args[4]::int8;
+                total_key_balance = wallets.total_key_balance + new.args[4]::int8;
         ELSE
             update krew_key_holders set
                 last_fetched_balance = last_fetched_balance - new.args[4]::int8
@@ -996,19 +1002,26 @@ begin
                 wallet_address = new.wallet_address;
 
             update wallets set
-                total_key_balance = total_key_balance - new.args[4]::int8
+                total_key_balance = wallets.total_key_balance - new.args[4]::int8
             where
                 wallet_address = new.wallet_address;
         END IF;
 
         -- notify
 
+        v_triggerer := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
+
+        insert into activities (
+            block_number, log_index, event_type, args, wallet_address, krew, "user"
+        ) values (
+            new.block_number, new.log_index, new.event_type, new.args, new.wallet_address, new.krew, v_triggerer
+        );
+
         IF position('p_' in new.krew) = 1 THEN
 
             v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = (
                 SELECT owner FROM krews WHERE id = new.krew
             ));
-            v_triggerer := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
 
             IF v_receiver IS NOT NULL AND v_receiver != v_triggerer THEN
                 insert into notifications (
@@ -1022,7 +1035,6 @@ begin
 
             FOR v_wallet_address IN SELECT wallet_address FROM krew_key_holders WHERE krew = new.krew LOOP
                 v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = v_wallet_address);
-                v_triggerer := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
 
                 IF v_receiver IS NOT NULL AND v_receiver != v_triggerer THEN
                     insert into notifications (
@@ -1168,6 +1180,19 @@ SET default_tablespace = '';
 
 SET default_table_access_method = "heap";
 
+CREATE TABLE IF NOT EXISTS "public"."activities" (
+    "block_number" bigint NOT NULL,
+    "log_index" bigint NOT NULL,
+    "event_type" smallint NOT NULL,
+    "args" "text"[] DEFAULT '{}'::"text"[] NOT NULL,
+    "wallet_address" "text" NOT NULL,
+    "krew" "text" NOT NULL,
+    "user" "uuid",
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+ALTER TABLE "public"."activities" OWNER TO "postgres";
+
 CREATE TABLE IF NOT EXISTS "public"."topic_chat_messages" (
     "id" bigint NOT NULL,
     "topic" "text" NOT NULL,
@@ -1224,8 +1249,8 @@ CREATE TABLE IF NOT EXISTS "public"."krew_contract_events" (
     "event_type" smallint NOT NULL,
     "args" "text"[] DEFAULT '{}'::"text"[] NOT NULL,
     "wallet_address" "text" NOT NULL,
-    "krew" "text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "krew" "text" NOT NULL
 );
 
 ALTER TABLE "public"."krew_contract_events" OWNER TO "postgres";
@@ -1392,6 +1417,9 @@ CREATE TABLE IF NOT EXISTS "public"."wallets" (
 
 ALTER TABLE "public"."wallets" OWNER TO "postgres";
 
+ALTER TABLE ONLY "public"."activities"
+    ADD CONSTRAINT "activities_pkey" PRIMARY KEY ("block_number", "log_index");
+
 ALTER TABLE ONLY "public"."topic_chat_messages"
     ADD CONSTRAINT "chat_messages_pkey" PRIMARY KEY ("id");
 
@@ -1488,6 +1516,12 @@ CREATE TRIGGER "set_wallets_updated_at" BEFORE UPDATE ON "public"."wallets" FOR 
 
 CREATE TRIGGER "update_key_holder_count" AFTER UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."update_key_holder_count"();
 
+ALTER TABLE ONLY "public"."activities"
+    ADD CONSTRAINT "activities_krew_fkey" FOREIGN KEY ("krew") REFERENCES "public"."krews"("id");
+
+ALTER TABLE ONLY "public"."activities"
+    ADD CONSTRAINT "activities_user_fkey" FOREIGN KEY ("user") REFERENCES "public"."users_public"("user_id");
+
 ALTER TABLE ONLY "public"."follows"
     ADD CONSTRAINT "follows_followee_id_fkey" FOREIGN KEY ("followee_id") REFERENCES "public"."users_public"("user_id");
 
@@ -1496,9 +1530,6 @@ ALTER TABLE ONLY "public"."follows"
 
 ALTER TABLE ONLY "public"."krew_chat_messages"
     ADD CONSTRAINT "krew_chat_messages_author_fkey" FOREIGN KEY ("author") REFERENCES "public"."users_public"("user_id");
-
-ALTER TABLE ONLY "public"."krew_contract_events"
-    ADD CONSTRAINT "krew_contract_events_krew_fkey" FOREIGN KEY ("krew") REFERENCES "public"."krews"("id");
 
 ALTER TABLE ONLY "public"."notifications"
     ADD CONSTRAINT "notifications_krew_fkey" FOREIGN KEY ("krew") REFERENCES "public"."krews"("id");
@@ -1529,6 +1560,8 @@ ALTER TABLE ONLY "public"."users_public"
 
 ALTER TABLE ONLY "public"."wallet_linking_nonces"
     ADD CONSTRAINT "wallet_linking_nonces_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_public"("user_id");
+
+ALTER TABLE "public"."activities" ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "can delete only authed" ON "public"."posts" FOR DELETE TO "authenticated" USING (("author" = "auth"."uid"()));
 
@@ -1609,6 +1642,8 @@ ALTER TABLE "public"."topics" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."tracked_event_blocks" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE "public"."users_public" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "view everyone" ON "public"."activities" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."follows" FOR SELECT USING (true);
 
@@ -1778,6 +1813,10 @@ GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "service_role"
 GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "anon";
 GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "service_role";
+
+GRANT ALL ON TABLE "public"."activities" TO "anon";
+GRANT ALL ON TABLE "public"."activities" TO "authenticated";
+GRANT ALL ON TABLE "public"."activities" TO "service_role";
 
 GRANT ALL ON TABLE "public"."topic_chat_messages" TO "anon";
 GRANT ALL ON TABLE "public"."topic_chat_messages" TO "authenticated";

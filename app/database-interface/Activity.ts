@@ -4,19 +4,17 @@ import PreviewKrew from "./PreviewKrew.js";
 export enum EventType {
   KrewCreated,
   Trade,
-  ClaimFee,
 }
 
-export default interface KrewContractEvent {
+export default interface Activity {
   block_number: number;
-  log_index: number;
   event_type: EventType;
   args: string;
   wallet_address: string;
   krew: PreviewKrew;
-  user?: Author;
+  user: Author;
   created_at: string;
 }
 
-export const KrewContractEventSelectQuery =
-  "*, krew(id, name, image)";
+export const ActivitySelectQuery =
+  "*, krew(id, name, image), user(user_id, display_name, profile_image, profile_image_thumbnail, x_username)";

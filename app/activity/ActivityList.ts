@@ -1,5 +1,5 @@
 import { DomNode, ListLoadingBar, Store } from "common-app-module";
-import KrewContractEvent from "../database-interface/KrewContractEvent.js";
+import Activity from "../database-interface/Activity.js";
 import ActivityListItem from "./ActivityListItem.js";
 
 export interface ActivityListOptions {
@@ -17,7 +17,7 @@ export default abstract class ActivityList extends DomNode {
     this.store = new Store(options.storeName);
     this.domElement.setAttribute("data-empty-message", options.emptyMessage);
 
-    const cachedEvents = this.store.get<KrewContractEvent[]>("cached-events");
+    const cachedEvents = this.store.get<Activity[]>("cached-events");
     if (cachedEvents && cachedEvents.length > 0) {
       for (const e of cachedEvents) {
         this.append(new ActivityListItem(e));
@@ -25,7 +25,7 @@ export default abstract class ActivityList extends DomNode {
     }
   }
 
-  protected abstract fetchActivities(): Promise<KrewContractEvent[]>;
+  protected abstract fetchActivities(): Promise<Activity[]>;
 
   private async refresh() {
     this.append(new ListLoadingBar());

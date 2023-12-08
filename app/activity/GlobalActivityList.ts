@@ -1,7 +1,7 @@
 import { msg } from "common-app-module";
-import KrewContractEvent from "../database-interface/KrewContractEvent.js";
+import Activity from "../database-interface/Activity.js";
 import ActivityList from "./ActivityList.js";
-import KrewContractEventService from "./KrewContractEventService.js";
+import ActivityService from "./ActivityService.js";
 
 export default class GlobalActivityList extends ActivityList {
   constructor() {
@@ -14,7 +14,7 @@ export default class GlobalActivityList extends ActivityList {
     );
   }
 
-  protected async fetchActivities(): Promise<KrewContractEvent[]> {
-    return await KrewContractEventService.fetchGlobalEvents();
+  protected async fetchActivities(): Promise<Activity[]> {
+    return await ActivityService.fetchGlobalEvents();
   }
 }

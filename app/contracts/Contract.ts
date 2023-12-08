@@ -56,6 +56,7 @@ export default abstract class Contract<CT extends BaseContract>
           title: msg("no-wallet-linked-title"),
           message: msg("no-wallet-linked-message"),
           confirmTitle: msg("no-wallet-linked-confirm"),
+          loadingTitle: msg("no-wallet-linked-linking"),
         }, () => KrewSignedUserManager.linkWallet()).wait();
       } catch (e) {
         throw new Error("No wallet linked");

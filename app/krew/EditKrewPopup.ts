@@ -29,31 +29,35 @@ export default class EditKrewPopup extends Popup {
         ".popup.edit-krew-popup",
         el(
           "header",
-          this.krewImageDisplay = el(".krew-image", {
-            style: {
-              backgroundImage: `url(${previewKrew?.image})`,
-            },
-            click: () => this.uploadImageInput.domElement.click(),
-          }),
-          this.uploadImageInput = el("input.upload", {
-            type: "file",
-            change: () => {
-              const files = this.uploadImageInput.domElement.files;
-              this.krewImage = files?.[0];
-              if (this.krewImage) {
-                this.krewImageDisplay.style({
-                  backgroundImage: `url(${
-                    URL.createObjectURL(
-                      this.krewImage,
-                    )
-                  })`,
-                });
-              }
-            },
-          }),
+          el("h1", msg("edit-krew-popup-title")),
         ),
         el(
           "main",
+          el(
+            ".image",
+            this.krewImageDisplay = el(".krew-image", {
+              style: {
+                backgroundImage: `url(${previewKrew?.image})`,
+              },
+              click: () => this.uploadImageInput.domElement.click(),
+            }),
+            this.uploadImageInput = el("input.upload", {
+              type: "file",
+              change: () => {
+                const files = this.uploadImageInput.domElement.files;
+                this.krewImage = files?.[0];
+                if (this.krewImage) {
+                  this.krewImageDisplay.style({
+                    backgroundImage: `url(${
+                      URL.createObjectURL(
+                        this.krewImage,
+                      )
+                    })`,
+                  });
+                }
+              },
+            }),
+          ),
           this.nameInput = el("input", {
             placeholder: "Name",
             value: previewKrew?.name,

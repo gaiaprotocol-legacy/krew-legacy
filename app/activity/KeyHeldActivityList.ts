@@ -1,8 +1,8 @@
 import { msg } from "common-app-module";
-import KrewContractEvent from "../database-interface/KrewContractEvent.js";
+import Activity from "../database-interface/Activity.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import ActivityList from "./ActivityList.js";
-import KrewContractEventService from "./KrewContractEventService.js";
+import ActivityService from "./ActivityService.js";
 
 export default class KeyHeldActivityList extends ActivityList {
   constructor() {
@@ -15,9 +15,9 @@ export default class KeyHeldActivityList extends ActivityList {
     );
   }
 
-  protected async fetchActivities(): Promise<KrewContractEvent[]> {
+  protected async fetchActivities(): Promise<Activity[]> {
     if (KrewSignedUserManager.walletLinked) {
-      return await KrewContractEventService.fetchKeyHeldEvents(
+      return await ActivityService.fetchKeyHeldEvents(
         KrewSignedUserManager.user!.wallet_address!,
         this.lastCreatedAt,
       );

@@ -140,10 +140,16 @@ export default class KrewPopup extends Popup {
   }
 
   private async buyKey() {
-    if (this.krew) new BuyKeyPopup(this.krew);
+    if (this.krew) {
+      new BuyKeyPopup(this.krew);
+      this.delete();
+    }
   }
 
   private async sellKey() {
-    if (this.krew) new SellKeyPopup(this.krew);
+    if (this.krew) {
+      new SellKeyPopup(this.krew);
+      this.delete();
+    }
   }
 }

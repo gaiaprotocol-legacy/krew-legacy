@@ -51,10 +51,16 @@ begin
             new.wallet_address, 1
         ) on conflict (wallet_address) do update
         set
-            total_key_balance = total_key_balance + 1;
+            total_key_balance = wallets.total_key_balance + 1;
 
         -- notify
         v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
+
+        insert into activities (
+            block_number, log_index, event_type, args, wallet_address, krew, "user"
+        ) values (
+            new.block_number, new.log_index, new.event_type, new.args, new.wallet_address, new.krew, v_receiver
+        );
 
         IF v_receiver IS NOT NULL THEN
             insert into notifications (
@@ -93,7 +99,7 @@ begin
                 new.wallet_address, new.args[4]::int8
             ) on conflict (wallet_address) do update
             set
-                total_key_balance = total_key_balance + new.args[4]::int8;
+                total_key_balance = wallets.total_key_balance + new.args[4]::int8;
         ELSE
             update krew_key_holders set
                 last_fetched_balance = last_fetched_balance - new.args[4]::int8
@@ -102,19 +108,26 @@ begin
                 wallet_address = new.wallet_address;
 
             update wallets set
-                total_key_balance = total_key_balance - new.args[4]::int8
+                total_key_balance = wallets.total_key_balance - new.args[4]::int8
             where
                 wallet_address = new.wallet_address;
         END IF;
 
         -- notify
 
+        v_triggerer := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
+
+        insert into activities (
+            block_number, log_index, event_type, args, wallet_address, krew, "user"
+        ) values (
+            new.block_number, new.log_index, new.event_type, new.args, new.wallet_address, new.krew, v_triggerer
+        );
+
         IF position('p_' in new.krew) = 1 THEN
 
             v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = (
                 SELECT owner FROM krews WHERE id = new.krew
             ));
-            v_triggerer := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
 
             IF v_receiver IS NOT NULL AND v_receiver != v_triggerer THEN
                 insert into notifications (
@@ -128,7 +141,6 @@ begin
 
             FOR v_wallet_address IN SELECT wallet_address FROM krew_key_holders WHERE krew = new.krew LOOP
                 v_receiver := (SELECT user_id FROM users_public WHERE wallet_address = v_wallet_address);
-                v_triggerer := (SELECT user_id FROM users_public WHERE wallet_address = new.wallet_address);
 
                 IF v_receiver IS NOT NULL AND v_receiver != v_triggerer THEN
                     insert into notifications (

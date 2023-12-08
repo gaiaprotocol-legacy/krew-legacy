@@ -13,9 +13,6 @@ ALTER TABLE "public"."krew_contract_events" OWNER TO "postgres";
 ALTER TABLE ONLY "public"."krew_contract_events"
     ADD CONSTRAINT "krew_contract_events_pkey" PRIMARY KEY ("block_number", "log_index");
 
-ALTER TABLE ONLY "public"."krew_contract_events"
-    ADD CONSTRAINT "krew_contract_events_krew_fkey" FOREIGN KEY ("krew") REFERENCES "public"."krews"("id");
-
 ALTER TABLE "public"."krew_contract_events" ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "view everyone" ON "public"."krew_contract_events" FOR SELECT USING (true);
