@@ -26,7 +26,7 @@ export default class PostView extends View {
 
     const data = await KrewPostService.fetchPost(
       postId,
-      this.lastCommentId,
+      undefined,
       KrewSignedUserManager.user?.user_id,
     );
 
