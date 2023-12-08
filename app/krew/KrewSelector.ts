@@ -1,5 +1,6 @@
 import { DomNode, el, ListLoadingBar, Store } from "common-app-module";
 import Krew from "../database-interface/Krew.js";
+import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import KrewService from "./KrewService.js";
 import KrewUtil from "./KrewUtil.js";
 
@@ -37,19 +38,24 @@ export default class KrewSelector extends DomNode {
   }
 
   private async refresh() {
-    this.select.append(new ListLoadingBar());
+    if (KrewSignedUserManager.user?.wallet_address) {
+      this.select.append(new ListLoadingBar());
 
-    const krews = await KrewService.fetchKeyHeldKrews(this.lastCreatedAt);
-    this.store.set("cached-krews", krews, true);
+      const krews = await KrewService.fetchKeyHeldKrews(
+        KrewSignedUserManager.user.wallet_address,
+        this.lastCreatedAt,
+      );
+      this.store.set("cached-krews", krews, true);
 
-    if (!this.deleted) {
-      this.select.empty();
-      for (const krew of krews) {
-        this.select.append(
-          el("option", KrewUtil.getName(krew), { value: krew.id }),
-        );
+      if (!this.deleted) {
+        this.select.empty();
+        for (const krew of krews) {
+          this.select.append(
+            el("option", KrewUtil.getName(krew), { value: krew.id }),
+          );
+        }
+        this.lastCreatedAt = krews[krews.length - 1]?.created_at;
       }
-      this.lastCreatedAt = krews[krews.length - 1]?.created_at;
     }
   }
 

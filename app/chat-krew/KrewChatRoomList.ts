@@ -3,6 +3,7 @@ import ChatRoomList from "../chat/ChatRoomList.js";
 import Krew from "../database-interface/Krew.js";
 import KrewService from "../krew/KrewService.js";
 import KrewChatRoomListItem from "./KrewChatRoomListItem.js";
+import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
 export default class KrewChatRoomList extends ChatRoomList {
   constructor() {
@@ -22,15 +23,20 @@ export default class KrewChatRoomList extends ChatRoomList {
   }
 
   private async refresh() {
-    this.append(new ListLoadingBar());
+    if (KrewSignedUserManager.user?.wallet_address) {
+      this.append(new ListLoadingBar());
 
-    const krews = await KrewService.fetchKeyHeldKrews(undefined);
-    this.store.set("cached-krews", krews);
+      const krews = await KrewService.fetchKeyHeldKrews(
+        KrewSignedUserManager.user.wallet_address,
+        undefined,
+      );
+      this.store.set("cached-krews", krews);
 
-    if (!this.deleted) {
-      this.empty();
-      for (const k of krews) {
-        this.append(new KrewChatRoomListItem(k));
+      if (!this.deleted) {
+        this.empty();
+        for (const k of krews) {
+          this.append(new KrewChatRoomListItem(k));
+        }
       }
     }
   }

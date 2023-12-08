@@ -14,9 +14,10 @@ import PostPopup from "./PostPopup.js";
 import PostTargetSelector from "./PostTargetSelector.js";
 
 export default class PostsView extends View {
-  private targetSelector: PostTargetSelector;
-  private krewSelector: KrewSelector;
-  private form: KrewPostForm;
+  private targetSelector: PostTargetSelector | undefined;
+  private krewSelector: KrewSelector | undefined;
+  private form: KrewPostForm | undefined;
+
   private tabs: Tabs | undefined;
   private globalPostList: GlobalPostList<KrewPost>;
   private followingPostList: FollowingPostList<KrewPost> | undefined;
@@ -30,15 +31,17 @@ export default class PostsView extends View {
         ".posts-view",
         el(
           "main",
-          el(
-            ".form-container",
-            el(
-              "header",
-              this.targetSelector = new PostTargetSelector(),
-              this.krewSelector = new KrewSelector().hide(),
-            ),
-            this.form = new KrewPostForm(),
-          ),
+          KrewSignedUserManager.signed
+            ? el(
+              ".form-container",
+              el(
+                "header",
+                this.targetSelector = new PostTargetSelector(),
+                this.krewSelector = new KrewSelector().hide(),
+              ),
+              this.form = new KrewPostForm(),
+            )
+            : undefined,
           el(
             ".post-container",
             KrewSignedUserManager.signed
@@ -81,24 +84,30 @@ export default class PostsView extends View {
               : undefined,
           ),
         ),
-        el("button.post", new MaterialIcon("add"), {
-          click: () => new PostPopup(),
-        }),
+        KrewSignedUserManager.signed
+          ? el("button.post", new MaterialIcon("add"), {
+            click: () => new PostPopup(),
+          })
+          : undefined,
       ),
     );
 
-    this.targetSelector.on(
+    this.targetSelector?.on(
       "change",
       (target: number) => {
-        this.form.target = target;
-        if (target === PostTarget.KEY_HOLDERS) this.krewSelector.show();
-        else this.form.krew = undefined;
+        if (this.form) {
+          this.form.target = target;
+          if (target === PostTarget.KEY_HOLDERS) this.krewSelector?.show();
+          else this.form.krew = undefined;
+        }
       },
     );
 
-    this.krewSelector.on(
+    this.krewSelector?.on(
       "change",
-      (krew: string) => this.form.krew = krew,
+      (krew: string) => {
+        if (this.form) this.form.krew = krew;
+      },
     );
 
     if (!this.tabs) {

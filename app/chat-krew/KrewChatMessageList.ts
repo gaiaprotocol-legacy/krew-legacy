@@ -32,9 +32,7 @@ export default class KrewChatMessageList extends ChatMessageList {
           filter: "krew=eq." + krew,
         },
         // The response indicating that a message has been sent arrives before the real-time message itself.
-        (payload: any) => {
-          console.log(payload);
-        },
+        (payload: any) => this.addNewMessage(payload.new),
       )
       .subscribe();
   }

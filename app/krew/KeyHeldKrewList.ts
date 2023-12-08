@@ -1,5 +1,6 @@
 import { msg } from "common-app-module";
 import Krew from "../database-interface/Krew.js";
+import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import KrewList from "./KrewList.js";
 import KrewService from "./KrewService.js";
 
@@ -12,6 +13,13 @@ export default class KeyHeldKrewList extends KrewList {
   }
 
   protected async fetchKrews(): Promise<Krew[]> {
-    return await KrewService.fetchKeyHeldKrews(this.lastCreatedAt);
+    if (KrewSignedUserManager.user?.wallet_address) {
+      return await KrewService.fetchKeyHeldKrews(
+        KrewSignedUserManager.user.wallet_address,
+        this.lastCreatedAt,
+      );
+    } else {
+      return [];
+    }
   }
 }

@@ -77,11 +77,14 @@ class KrewService extends SupabaseService<Krew> {
     return Supabase.safeResult<Krew[]>(data ?? []);
   }
 
-  public async fetchKeyHeldKrews(lastCreatedAt: string | undefined) {
+  public async fetchKeyHeldKrews(
+    walletAddress: string,
+    lastCreatedAt: string | undefined,
+  ) {
     const { data, error } = await Supabase.client.rpc(
       "get_key_held_krews",
       {
-        p_wallet_address: KrewSignedUserManager.user?.wallet_address,
+        p_wallet_address: walletAddress,
         last_created_at: lastCreatedAt,
         max_count: this.fetchLimit,
       },

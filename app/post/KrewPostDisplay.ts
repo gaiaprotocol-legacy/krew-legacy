@@ -4,6 +4,7 @@ import KrewPost from "../database-interface/KrewPost.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import KrewPostForm from "./KrewPostForm.js";
 import KrewPostInteractions from "./KrewPostInteractions.js";
+import KrewPostService from "./KrewPostService.js";
 
 export default class KrewPostDisplay extends DomNode {
   private thread: PostThread<KrewPost> | undefined;
@@ -14,6 +15,7 @@ export default class KrewPostDisplay extends DomNode {
       this.append(
         this.thread = new PostThread(
           [preview],
+          KrewPostService,
           {
             inView: true,
             mainPostId: preview.id,
@@ -41,6 +43,7 @@ export default class KrewPostDisplay extends DomNode {
     this.empty().append(
       this.thread = new PostThread(
         data.posts,
+        KrewPostService,
         {
           inView: true,
           mainPostId: this.postId,
