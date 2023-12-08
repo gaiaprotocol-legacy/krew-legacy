@@ -300,6 +300,44 @@ button.component.contained {
   max-height: 320px;
   object-fit: cover;
 }
+.snackbar.component {
+  position: fixed;
+  left: 0;
+  bottom: 20px;
+  z-index: 999998;
+  width: 100%;
+}
+@media only screen and (max-width: 859px) {
+  .snackbar.component {
+    bottom: calc(110px + env(safe-area-inset-bottom));
+  }
+}
+.snackbar.component > main {
+  max-width: 532px;
+  width: 90%;
+  margin: auto;
+  background-color: var(--bg2-color);
+  border: 1px solid var(--line-color);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  border-radius: 16px;
+  padding: 8px 20px;
+  gap: 8px;
+}
+.snackbar.component > main > p {
+  flex-grow: 1;
+}
+.snackbar.component > main > button.close {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+.snackbar.component > main > button.close:hover {
+  opacity: 0.8;
+}
 .chat-message-display {
   border-radius: 0 16px 16px 16px;
   border: 1px solid var(--line-color);
