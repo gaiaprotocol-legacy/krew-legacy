@@ -28,8 +28,7 @@ BEGIN
     INNER JOIN 
         users_public u ON p.author = u.user_id
     WHERE 
-        p.author = p_user_id
-        AND POSITION(lower(search_string) IN lower(p.message)) > 0
+        POSITION(lower(search_string) IN lower(p.message)) > 0
         AND (last_post_id IS NULL OR p.id < last_post_id)
     ORDER BY 
         p.id DESC
