@@ -70,14 +70,14 @@ export default class OwnedKrewListItem extends DomNode {
             await KrewPersonalContract.getClaimableFee(
               BigInt(this.krew.id.substring(2)),
             ),
-          );
+          ) + " ETH";
         } else if (this.krew.id.startsWith("c_")) {
           this.claimableFee.text = ethers.formatEther(
             await KrewCommunalContract.getClaimableFee(
               BigInt(this.krew.id.substring(2)),
               KrewSignedUserManager.user.wallet_address,
             ),
-          );
+          ) + " ETH";
         }
       } else {
         this.claimableFee.text = "0";
