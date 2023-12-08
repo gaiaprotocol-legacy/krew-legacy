@@ -2,7 +2,7 @@ import { ethers } from "https://esm.sh/ethers@6.7.0";
 import KrewCommunalContract from "../_shared/contracts/KrewCommunalContract.ts";
 import KrewPersonalContract from "../_shared/contracts/KrewPersonalContract.ts";
 import { serveWithOptions } from "../_shared/cors.ts";
-import supabase, { getSignedUser } from "../_shared/supabase.ts";
+import supabase from "../_shared/supabase.ts";
 
 const provider = new ethers.JsonRpcProvider(Deno.env.get("KROMA_RPC")!);
 const signer = new ethers.JsonRpcSigner(provider, ethers.ZeroAddress);
@@ -15,10 +15,6 @@ serveWithOptions(async (req) => {
   if (!walletAddress) throw new Error("Missing wallet address");
 
   const krewId = BigInt(krew.substring(2));
-
-  const user = await getSignedUser(req);
-  if (!user) throw new Error("Unauthorized");
-
   const contract = krew.startsWith("c_") ? communalContract : personalContract;
 
   const [price, balance] = await Promise.all([
