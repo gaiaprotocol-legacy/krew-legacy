@@ -12,7 +12,10 @@ serveWithOptions(async (req) => {
 
   const response = await fetch("https://graphigo.prd.galaxy.eco/query", {
     method: "POST",
-    headers: { "access-token": accessToken },
+    headers: {
+      "access-token": accessToken,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       operationName: "credentialItems",
       query: `
