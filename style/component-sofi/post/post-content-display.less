@@ -1,0 +1,38 @@
+.post-content-display.sofi-component {
+    display: flex;
+    gap    : 10px;
+    cursor : pointer;
+
+    @media @phone {
+        gap: 6px;
+    }
+
+    >main {
+        flex-grow: 1;
+    }
+
+    .author-profile-image {
+        .profile-image();
+        cursor: pointer;
+    }
+
+    .author {
+        padding-top: 4px;
+        display    : flex;
+        gap        : 4px;
+
+        >.name {
+            font-weight: 700;
+            cursor     : pointer;
+        }
+
+        >.x-username {
+            color : #595959;
+            cursor: pointer;
+        }
+    }
+
+    .message {
+        margin-top: 6px;
+    }
+}
