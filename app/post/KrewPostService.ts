@@ -2,6 +2,7 @@ import { Rich, Supabase, UploadManager } from "common-app-module";
 import { PostSelectQuery, PostService } from "sofi-module";
 import KrewPost from "../database-interface/KrewPost.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
+import LoginRequiredPopup from "../user/LoginRequiredPopup.js";
 
 class KrewPostService extends PostService<KrewPost> {
   constructor() {
@@ -58,6 +59,7 @@ class KrewPostService extends PostService<KrewPost> {
 
   public checkSigned() {
     if (!KrewSignedUserManager.signed) {
+      new LoginRequiredPopup();
       throw new Error("User is not signed in.");
     }
   }

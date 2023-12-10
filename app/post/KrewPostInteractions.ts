@@ -1,9 +1,10 @@
 import { Router } from "common-app-module";
 import { Author, PostInteractions } from "sofi-module";
 import KrewPost from "../database-interface/KrewPost.js";
+import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
+import LoginRequiredPopup from "../user/LoginRequiredPopup.js";
 import PostCommentPopup from "./PostCommentPopup.js";
 import PostOwnerMenu from "./PostOwnerMenu.js";
-import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
 class KrewPostInteractions implements PostInteractions<KrewPost> {
   public openPostView(post: KrewPost) {
@@ -22,7 +23,11 @@ class KrewPostInteractions implements PostInteractions<KrewPost> {
   }
 
   public openCommentPopup(post: KrewPost) {
-    if (KrewSignedUserManager.signed) new PostCommentPopup(post);
+    if (!KrewSignedUserManager.signed) {
+      new LoginRequiredPopup();
+    } else {
+      new PostCommentPopup(post);
+    }
   }
 }
 

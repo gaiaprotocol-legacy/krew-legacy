@@ -13,7 +13,9 @@ import { FollowService, PreviewUserPublic, SoFiUserPublic } from "sofi-module";
 import KrewService from "../../krew/KrewService.js";
 import MaterialIcon from "../../MaterialIcon.js";
 import WalletDataService from "../../wallet/WalletDataService.js";
+import KrewSignedUserManager from "../KrewSignedUserManager.js";
 import KrewUserService from "../KrewUserService.js";
+import LoginRequiredPopup from "../LoginRequiredPopup.js";
 import OwnedKrewListItem from "./OwnedKrewListItem.js";
 
 export default class UserProfile extends DomNode {
@@ -163,7 +165,13 @@ export default class UserProfile extends DomNode {
             title: FollowService.isFollowing(user.user_id)
               ? "Unfollow"
               : "Follow",
-            click: () => FollowService.toggleFollow(user.user_id),
+            click: () => {
+              if (!KrewSignedUserManager.signed) { 
+                new LoginRequiredPopup();
+              } else {
+                FollowService.toggleFollow(user.user_id);
+              }
+            },
           }),
           el("a", "𝕏", {
             href: `https://twitter.com/${user.x_username}`,
