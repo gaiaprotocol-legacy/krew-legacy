@@ -169,3 +169,8 @@ user-display-posts-tab: Posts
 user-display-comments-tab: Comments
 user-display-reposts-tab: Reposts
 user-display-liked-posts-tab: Liked Posts
+
+krew-popup-holders-label: Holders
+krew-popup-price-label: Price
+krew-popup-balance-label: Your Balance
+krew-popup-owner-label: Owner

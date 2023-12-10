@@ -163,7 +163,7 @@ begin
         ) on conflict (wallet_address) do nothing;
 
         update wallets set
-            total_earned_trading_fees = total_earned_trading_fees + new.args[2]::numeric
+            total_earned_trading_fees = total_earned_trading_fees + new.args[3]::numeric
         where
             wallet_address = new.wallet_address;
     END IF;

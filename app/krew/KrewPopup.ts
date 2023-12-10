@@ -6,6 +6,7 @@ import {
   el,
   msg,
   Popup,
+  Router,
 } from "common-app-module";
 import { ethers } from "ethers";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
@@ -16,6 +17,7 @@ import BuyKeyPopup from "../key/BuyKeyPopup.js";
 import SellKeyPopup from "../key/SellKeyPopup.js";
 import MaterialIcon from "../MaterialIcon.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
+import KrewUserService from "../user/KrewUserService.js";
 import EditKrewPopup from "./EditKrewPopup.js";
 import KrewService from "./KrewService.js";
 import KrewUtil from "./KrewUtil.js";
@@ -27,6 +29,11 @@ export default class KrewPopup extends Popup {
   private holderCountDisplay: DomNode;
   private priceDisplay: DomNode;
   private balanceDisplay: DomNode;
+
+  private ownerDisplay: DomNode | undefined;
+  private ownerProfileImage: DomNode | undefined;
+  private ownerName: DomNode | undefined;
+  private ownerXUsername: DomNode | undefined;
 
   constructor(private krewId: string, previewKrew?: PreviewKrew) {
     super({ barrierDismissible: true });
@@ -44,7 +51,7 @@ export default class KrewPopup extends Popup {
           el(
             "h1",
             previewKrew ? KrewUtil.getName(previewKrew) : "...",
-            el("span", "#" + krewId.substring(2)),
+            el("span.id", "ID: #" + krewId.substring(2)),
           ),
           this.editButton = el("a.edit.hidden", new MaterialIcon("edit"), {
             click: () => {
@@ -53,6 +60,21 @@ export default class KrewPopup extends Popup {
             },
           }),
         ),
+        this.krewId.startsWith("p_")
+          ? this.ownerDisplay = el(
+            ".owner",
+            el("h3", msg("krew-popup-owner-label")),
+            el(
+              ".info-container",
+              this.ownerProfileImage = el(".profile-image"),
+              el(
+                ".info",
+                this.ownerName = el(".name", "..."),
+                this.ownerXUsername = el(".x-username", "..."),
+              ),
+            ),
+          )
+          : undefined,
         el(
           ".metric-container",
           el(
@@ -60,7 +82,7 @@ export default class KrewPopup extends Popup {
             el(".icon-container", new MaterialIcon("group")),
             el(
               ".metric",
-              el("h3", "Holders"),
+              el("h3", msg("krew-popup-holders-label")),
               this.holderCountDisplay = el(".value", "..."),
             ),
           ),
@@ -69,7 +91,7 @@ export default class KrewPopup extends Popup {
             el(".icon-container", new MaterialIcon("sell")),
             el(
               ".metric",
-              el("h3", "Price"),
+              el("h3", msg("krew-popup-price-label")),
               this.priceDisplay = el(".value", "..."),
             ),
           ),
@@ -78,7 +100,7 @@ export default class KrewPopup extends Popup {
           ".balance-container",
           el(
             ".balance",
-            el("h3", "Your Balance"),
+            el("h3", msg("krew-popup-balance-label")),
             this.balanceDisplay = el(".value", "..."),
           ),
           new Button({
@@ -118,6 +140,7 @@ export default class KrewPopup extends Popup {
         this.editButton.deleteClass("hidden");
       }
     }
+    if (this.krewId.startsWith("p_")) this.fetchOwner();
   }
 
   private async fetchBalance() {
@@ -154,6 +177,30 @@ export default class KrewPopup extends Popup {
     if (this.krew) {
       new SellKeyPopup(this.krew);
       this.delete();
+    }
+  }
+
+  private async fetchOwner() {
+    if (
+      this.krew?.owner && this.ownerDisplay && this.ownerProfileImage &&
+      this.ownerName &&
+      this.ownerXUsername
+    ) {
+      const owner = await KrewUserService.fetchByWalletAddress(this.krew.owner);
+      if (owner) {
+        this.ownerProfileImage.style({
+          backgroundImage: `url(${owner.profile_image_thumbnail})`,
+        });
+        this.ownerName.text = owner.display_name ?? "";
+        this.ownerXUsername.text = "@" + owner.x_username ?? "";
+        this.ownerDisplay.onDom(
+          "click",
+          () => {
+            Router.go(`/${owner.x_username}`);
+            this.delete();
+          },
+        );
+      }
     }
   }
 }
