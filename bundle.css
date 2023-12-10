@@ -1817,8 +1817,6 @@ p {
 }
 @media only screen and (max-width: 859px) {
   .user-profile > .info-container > .profile-image {
-    width: 120px;
-    height: 120px;
     border-radius: 16px;
   }
 }
@@ -1829,8 +1827,24 @@ p {
 .user-profile > .info-container > .info > h3 {
   margin-top: 8px;
 }
+.user-profile > .info-container > .info > .link {
+  margin-top: 8px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  border: 1px solid var(--line-color);
+  border-radius: 8px;
+  padding: 4px 4px 4px 8px;
+  background-color: var(--bg2-color);
+}
+.user-profile > .info-container > .info > .link > button.copy {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .user-profile > .info-container > .info > p {
-  margin-top: 16px;
+  margin-top: 8px;
 }
 .user-profile > .info-container > .info > footer {
   margin-top: 8px;
