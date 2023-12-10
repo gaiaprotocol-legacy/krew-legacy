@@ -186,6 +186,51 @@ $$;
 
 ALTER FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
+SET default_tablespace = '';
+
+SET default_table_access_method = "heap";
+
+CREATE TABLE IF NOT EXISTS "public"."users_public" (
+    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "wallet_address" "text",
+    "display_name" "text",
+    "profile_image" "text",
+    "profile_image_thumbnail" "text",
+    "profile_image_stored" boolean DEFAULT false NOT NULL,
+    "x_username" "text",
+    "metadata" "jsonb",
+    "follower_count" integer DEFAULT 0 NOT NULL,
+    "following_count" integer DEFAULT 0 NOT NULL,
+    "blocked" boolean DEFAULT false NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone
+);
+
+ALTER TABLE "public"."users_public" OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS SETOF "public"."users_public"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        u.*
+    FROM 
+        users_public u
+    INNER JOIN 
+        follows f ON u.user_id = f.followee_id
+    WHERE 
+        f.follower_id = p_user_id
+        AND (last_fetched_followed_at IS NULL OR f.followed_at < last_fetched_followed_at)
+    ORDER BY 
+        f.followed_at DESC
+    LIMIT 
+        max_count;
+END;
+$$;
+
+ALTER FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text", "created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
@@ -469,7 +514,7 @@ BEGIN
         public.krew_key_holders kh ON k.id = kh.krew
     WHERE 
         (
-            (k.id LIKE 'p_%' AND k.owner = p_wallet_address)
+            (k.id LIKE 'p_%' AND k.owner = p_wallet_address AND k.supply > 0)
             OR
             (k.id LIKE 'c_%' AND kh.wallet_address = p_wallet_address AND kh.last_fetched_balance > 0)
         )
@@ -788,6 +833,19 @@ CREATE OR REPLACE FUNCTION "public"."increase_follow_count"() RETURNS "trigger"
 end;$$;
 
 ALTER FUNCTION "public"."increase_follow_count"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."increase_key_holder_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$begin
+  update krews
+  set
+    key_holder_count = key_holder_count + 1
+  where
+    id = new.krew;
+  return null;
+end;$$;
+
+ALTER FUNCTION "public"."increase_key_holder_count"() OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."increase_post_comment_count"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
@@ -1191,10 +1249,6 @@ end;$$;
 
 ALTER FUNCTION "public"."update_key_holder_count"() OWNER TO "postgres";
 
-SET default_tablespace = '';
-
-SET default_table_access_method = "heap";
-
 CREATE TABLE IF NOT EXISTS "public"."activities" (
     "block_number" bigint NOT NULL,
     "log_index" bigint NOT NULL,
@@ -1395,24 +1449,6 @@ ALTER TABLE "public"."tracked_event_blocks" ALTER COLUMN "contract_type" ADD GEN
     CACHE 1
 );
 
-CREATE TABLE IF NOT EXISTS "public"."users_public" (
-    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
-    "wallet_address" "text",
-    "display_name" "text",
-    "profile_image" "text",
-    "profile_image_thumbnail" "text",
-    "profile_image_stored" boolean DEFAULT false NOT NULL,
-    "x_username" "text",
-    "metadata" "jsonb",
-    "follower_count" integer DEFAULT 0 NOT NULL,
-    "following_count" integer DEFAULT 0 NOT NULL,
-    "blocked" boolean DEFAULT false NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone
-);
-
-ALTER TABLE "public"."users_public" OWNER TO "postgres";
-
 CREATE TABLE IF NOT EXISTS "public"."wallet_linking_nonces" (
     "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
     "wallet_address" "text" NOT NULL,
@@ -1494,6 +1530,8 @@ CREATE TRIGGER "decrease_post_like_count" AFTER DELETE ON "public"."post_likes" 
 CREATE TRIGGER "decrease_repost_count" AFTER DELETE ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_repost_count"();
 
 CREATE TRIGGER "increase_follow_count" AFTER INSERT ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."increase_follow_count"();
+
+CREATE TRIGGER "increase_key_holder_count" AFTER INSERT ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."increase_key_holder_count"();
 
 CREATE TRIGGER "increase_post_comment_count" AFTER INSERT ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."increase_post_comment_count"();
 
@@ -1727,6 +1765,14 @@ GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_p
 GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "service_role";
 
+GRANT ALL ON TABLE "public"."users_public" TO "anon";
+GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
+GRANT ALL ON TABLE "public"."users_public" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "service_role";
+
 GRANT ALL ON FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone, "max_count" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone, "max_count" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone, "max_count" integer) TO "service_role";
@@ -1778,6 +1824,10 @@ GRANT ALL ON FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_i
 GRANT ALL ON FUNCTION "public"."increase_follow_count"() TO "anon";
 GRANT ALL ON FUNCTION "public"."increase_follow_count"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."increase_follow_count"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."increase_key_holder_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."increase_key_holder_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."increase_key_holder_count"() TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."increase_post_comment_count"() TO "anon";
 GRANT ALL ON FUNCTION "public"."increase_post_comment_count"() TO "authenticated";
@@ -1906,10 +1956,6 @@ GRANT ALL ON TABLE "public"."tracked_event_blocks" TO "service_role";
 GRANT ALL ON SEQUENCE "public"."tracked_event_blocks_contract_type_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."tracked_event_blocks_contract_type_seq" TO "authenticated";
 GRANT ALL ON SEQUENCE "public"."tracked_event_blocks_contract_type_seq" TO "service_role";
-
-GRANT ALL ON TABLE "public"."users_public" TO "anon";
-GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
-GRANT ALL ON TABLE "public"."users_public" TO "service_role";
 
 GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "anon";
 GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "authenticated";
