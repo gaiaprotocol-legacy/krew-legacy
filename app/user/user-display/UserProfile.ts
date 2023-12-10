@@ -138,6 +138,18 @@ export default class UserProfile extends DomNode {
           }),
         ),
         el(
+          ".link",
+          `https://krew.social/${user.x_username}`,
+          el("button.copy", new MaterialIcon("content_copy"), {
+            click: (event, button) => {
+              navigator.clipboard.writeText(
+                `https://krew.social/${user.x_username}`,
+              );
+              button.empty().append(new MaterialIcon("check"));
+            },
+          }),
+        ),
+        el(
           "p",
           msg("user-profile-joined", {
             date: DateUtil.format(
