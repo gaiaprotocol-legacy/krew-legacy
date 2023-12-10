@@ -1625,7 +1625,7 @@ p {
 }
 @media only screen and (max-width: 859px) {
   .activity-view {
-    padding: 12px;
+    padding: 0;
   }
 }
 .activity-view > main {
@@ -1635,6 +1635,12 @@ p {
   border-radius: 20px;
   background-color: var(--bg2-color);
   overflow: hidden;
+}
+@media only screen and (max-width: 859px) {
+  .activity-view > main {
+    background-color: transparent;
+    border-radius: 0;
+  }
 }
 .activity-list {
   position: relative;
@@ -1691,7 +1697,7 @@ p {
 }
 @media only screen and (max-width: 859px) {
   .explore-view {
-    padding: 12px;
+    padding: 0;
   }
 }
 .explore-view > main {
@@ -1701,6 +1707,12 @@ p {
   border-radius: 20px;
   background-color: var(--bg2-color);
   overflow: hidden;
+}
+@media only screen and (max-width: 859px) {
+  .explore-view > main {
+    background-color: transparent;
+    border-radius: 0;
+  }
 }
 .user-view {
   padding: 32px;

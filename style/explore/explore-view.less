@@ -2,7 +2,7 @@
     padding: 20px;
 
     @media @phone {
-        padding: 12px;
+        padding: 0;
     }
 
     >main {
@@ -12,5 +12,10 @@
         border-radius   : 20px;
         background-color: var(--bg2-color);
         overflow        : hidden;
+
+        @media @phone {
+            background-color: transparent;
+            border-radius   : 0;
+        }
     }
 }
