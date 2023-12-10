@@ -1,6 +1,3 @@
-/*!**********************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./public/style/lib/reset.css ***!
-  \**********************************************************************************************************/
 /***
     The new CSS reset - version 1.8.4 (last updated 14.2.2023)
     GitHub page: https://github.com/elad2412/the-new-css-reset
@@ -101,9 +98,6 @@ meter {
 :where(dialog:modal) {
     all: revert;
 }
-/*!*********************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
-  \*********************************************************************************************************************************************/
 .tabs.component {
   border-bottom: 1px solid var(--line-color);
   display: flex;
@@ -509,6 +503,12 @@ button.component.contained {
   gap: 16px;
   cursor: pointer;
   align-items: center;
+}
+.post-display.sofi-component .actions > button.repost.reposted {
+  color: #25D366;
+}
+.post-display.sofi-component .actions > button.like.liked {
+  color: #D8093B;
 }
 .post-display.sofi-component.in-view {
   display: block;
@@ -1033,6 +1033,11 @@ p {
   margin-top: 16px;
   display: flex;
   gap: 20px;
+}
+@media only screen and (max-width: 859px) {
+  .create-krew-form > .select-krew-type {
+    flex-direction: column;
+  }
 }
 .create-krew-form > .select-krew-type > section {
   flex: 1;

@@ -55,6 +55,12 @@ class KrewPostService extends PostService<KrewPost> {
     if (error) throw error;
     return this.enhancePostData(data ?? []);
   }
+
+  public checkSigned() {
+    if (!KrewSignedUserManager.signed) {
+      throw new Error("User is not signed in.");
+    }
+  }
 }
 
 export default new KrewPostService();
