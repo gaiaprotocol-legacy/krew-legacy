@@ -1787,6 +1787,10 @@ p {
 .user-connections-view > header > .info > h1 {
   font-size: 20px;
   color: #fff;
+  cursor: pointer;
+}
+.user-connections-view > header > .info > h2 {
+  cursor: pointer;
 }
 .user-display > .posts-container {
   margin-top: 32px;
