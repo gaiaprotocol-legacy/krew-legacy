@@ -4,16 +4,20 @@ import KrewList from "../../krew/KrewList.js";
 import KrewService from "../../krew/KrewService.js";
 
 export default class HoldingList extends KrewList {
-  constructor(private walletAddress: string) {
+  constructor(private walletAddress: string | undefined) {
     super(".holding-list", {
       emptyMessage: msg("holding-list-empty-message"),
     });
   }
 
   protected async fetchKrews(): Promise<Krew[]> {
-    return await KrewService.fetchKeyHeldKrews(
-      this.walletAddress,
-      this.lastCreatedAt,
-    );
+    if (this.walletAddress) {
+      return await KrewService.fetchKeyHeldKrews(
+        this.walletAddress,
+        this.lastCreatedAt,
+      );
+    } else {
+      return [];
+    }
   }
 }

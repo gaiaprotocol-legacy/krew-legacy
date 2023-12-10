@@ -54,46 +54,36 @@ export default class UserConnectionsView extends View {
           el("button.back", new MaterialIcon("arrow_back"), {
             click: () => history.back(),
           }),
-          el(".info", el("h1", displayName), el("h2", `@${xUsername}`)),
+          el(
+            ".info",
+            el("h1", displayName, {
+              click: () => Router.go(`/${xUsername}`),
+            }),
+            el("h2", `@${xUsername}`, {
+              click: () => Router.go(`/${xUsername}`),
+            }),
+          ),
         ),
         this.tabs = new Tabs(
           "user-connections",
-          walletAddress
-            ? [
-              {
-                id: "holding",
-                label: msg("user-connections-holding-keys-tab"),
-              },
-              {
-                id: "following",
-                label: msg("user-connections-following-tab"),
-              },
-              {
-                id: "followers",
-                label: msg("user-connections-followers-tab"),
-              },
-            ]
-            : [
-              {
-                id: "following",
-                label: msg("user-connections-following-tab"),
-              },
-              {
-                id: "followers",
-                label: msg("user-connections-followers-tab"),
-              },
-            ],
+          [
+            {
+              id: "holding",
+              label: msg("user-connections-holding-keys-tab"),
+            },
+            {
+              id: "following",
+              label: msg("user-connections-following-tab"),
+            },
+            {
+              id: "followers",
+              label: msg("user-connections-followers-tab"),
+            },
+          ],
         ),
-        ...(walletAddress
-          ? [
-            this.holdingList = new HoldingList(walletAddress),
-            this.followingList = new FollowingList(userId),
-            this.followerList = new FollowerList(userId),
-          ]
-          : [
-            this.followingList = new FollowingList(userId),
-            this.followerList = new FollowerList(userId),
-          ]),
+        this.holdingList = new HoldingList(walletAddress),
+        this.followingList = new FollowingList(userId),
+        this.followerList = new FollowerList(userId),
       );
 
       this.tabs.on("select", (id: string) => {

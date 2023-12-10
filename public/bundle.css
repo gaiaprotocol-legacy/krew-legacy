@@ -1,3 +1,6 @@
+/*!**********************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./public/style/lib/reset.css ***!
+  \**********************************************************************************************************/
 /***
     The new CSS reset - version 1.8.4 (last updated 14.2.2023)
     GitHub page: https://github.com/elad2412/the-new-css-reset
@@ -98,6 +101,9 @@ meter {
 :where(dialog:modal) {
     all: revert;
 }
+/*!*********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
+  \*********************************************************************************************************************************************/
 .tabs.component {
   border-bottom: 1px solid var(--line-color);
   display: flex;
@@ -1787,6 +1793,10 @@ p {
 .user-connections-view > header > .info > h1 {
   font-size: 20px;
   color: #fff;
+  cursor: pointer;
+}
+.user-connections-view > header > .info > h2 {
+  cursor: pointer;
 }
 .user-display > .posts-container {
   margin-top: 32px;
@@ -1831,15 +1841,17 @@ p {
     border-radius: 16px;
   }
 }
+.user-profile > .info-container > .info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
 .user-profile > .info-container > .info > h2 {
   font-size: 32px;
   color: #fff;
 }
-.user-profile > .info-container > .info > h3 {
-  margin-top: 8px;
-}
 .user-profile > .info-container > .info > .link {
-  margin-top: 8px;
   display: flex;
   gap: 4px;
   align-items: center;
@@ -1854,11 +1866,7 @@ p {
   align-items: center;
   justify-content: center;
 }
-.user-profile > .info-container > .info > p {
-  margin-top: 8px;
-}
 .user-profile > .info-container > .info > footer {
-  margin-top: 8px;
   display: flex;
   gap: 8px;
 }
