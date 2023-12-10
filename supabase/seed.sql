@@ -143,35 +143,26 @@ $$;
 
 ALTER FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
-SET default_tablespace = '';
-
-SET default_table_access_method = "heap";
-
-CREATE TABLE IF NOT EXISTS "public"."users_public" (
-    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
-    "wallet_address" "text",
-    "display_name" "text",
-    "profile_image" "text",
-    "profile_image_thumbnail" "text",
-    "profile_image_stored" boolean DEFAULT false NOT NULL,
-    "x_username" "text",
-    "metadata" "jsonb",
-    "follower_count" integer DEFAULT 0 NOT NULL,
-    "following_count" integer DEFAULT 0 NOT NULL,
-    "blocked" boolean DEFAULT false NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone
-);
-
-ALTER TABLE "public"."users_public" OWNER TO "postgres";
-
-CREATE OR REPLACE FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS SETOF "public"."users_public"
+CREATE OR REPLACE FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("user_id" "uuid", "wallet_address" "text", "display_name" "text", "profile_image" "text", "profile_image_thumbnail" "text", "profile_image_stored" boolean, "x_username" "text", "metadata" "jsonb", "follower_count" integer, "following_count" integer, "blocked" boolean, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "followed_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
     RETURN QUERY
     SELECT 
-        u.*
+        u.user_id,
+        u.wallet_address,
+        u.display_name,
+        u.profile_image,
+        u.profile_image_thumbnail,
+        u.profile_image_stored,
+        u.x_username,
+        u.metadata,
+        u.follower_count,
+        u.following_count,
+        u.blocked,
+        u.created_at,
+        u.updated_at,
+        f.followed_at
     FROM 
         users_public u
     INNER JOIN 
@@ -231,13 +222,26 @@ $$;
 
 ALTER FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS SETOF "public"."users_public"
+CREATE OR REPLACE FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("user_id" "uuid", "wallet_address" "text", "display_name" "text", "profile_image" "text", "profile_image_thumbnail" "text", "profile_image_stored" boolean, "x_username" "text", "metadata" "jsonb", "follower_count" integer, "following_count" integer, "blocked" boolean, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "followed_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
     RETURN QUERY
     SELECT 
-        u.*
+        u.user_id,
+        u.wallet_address,
+        u.display_name,
+        u.profile_image,
+        u.profile_image_thumbnail,
+        u.profile_image_stored,
+        u.x_username,
+        u.metadata,
+        u.follower_count,
+        u.following_count,
+        u.blocked,
+        u.created_at,
+        u.updated_at,
+        f.followed_at
     FROM 
         users_public u
     INNER JOIN 
@@ -1272,6 +1276,10 @@ end;$$;
 
 ALTER FUNCTION "public"."update_key_holder_count"() OWNER TO "postgres";
 
+SET default_tablespace = '';
+
+SET default_table_access_method = "heap";
+
 CREATE TABLE IF NOT EXISTS "public"."activities" (
     "block_number" bigint NOT NULL,
     "log_index" bigint NOT NULL,
@@ -1471,6 +1479,24 @@ ALTER TABLE "public"."tracked_event_blocks" ALTER COLUMN "contract_type" ADD GEN
     NO MAXVALUE
     CACHE 1
 );
+
+CREATE TABLE IF NOT EXISTS "public"."users_public" (
+    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "wallet_address" "text",
+    "display_name" "text",
+    "profile_image" "text",
+    "profile_image_thumbnail" "text",
+    "profile_image_stored" boolean DEFAULT false NOT NULL,
+    "x_username" "text",
+    "metadata" "jsonb",
+    "follower_count" integer DEFAULT 0 NOT NULL,
+    "following_count" integer DEFAULT 0 NOT NULL,
+    "blocked" boolean DEFAULT false NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone
+);
+
+ALTER TABLE "public"."users_public" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."wallet_linking_nonces" (
     "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
@@ -1741,6 +1767,8 @@ CREATE POLICY "view everyone" ON "public"."topics" FOR SELECT USING (true);
 
 CREATE POLICY "view everyone" ON "public"."users_public" FOR SELECT USING (true);
 
+CREATE POLICY "view everyone" ON "public"."wallets" FOR SELECT USING (true);
+
 CREATE POLICY "view everyone or only keyholders" ON "public"."posts" FOR SELECT USING ((("target" = 0) OR ("author" = "auth"."uid"()) OR ("krew" IS NULL) OR (EXISTS ( SELECT 1
    FROM "public"."krews"
   WHERE (("krews"."id" = "posts"."krew") AND (((POSITION(('p_'::"text") IN ("krews"."id")) = 1) AND ("krews"."owner" = ( SELECT "users_public"."wallet_address"
@@ -1783,10 +1811,6 @@ GRANT ALL ON FUNCTION "public"."decrease_repost_count"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint, "max_count" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint, "max_count" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint, "max_count" integer) TO "service_role";
-
-GRANT ALL ON TABLE "public"."users_public" TO "anon";
-GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
-GRANT ALL ON TABLE "public"."users_public" TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "authenticated";
@@ -1983,6 +2007,10 @@ GRANT ALL ON TABLE "public"."tracked_event_blocks" TO "service_role";
 GRANT ALL ON SEQUENCE "public"."tracked_event_blocks_contract_type_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."tracked_event_blocks_contract_type_seq" TO "authenticated";
 GRANT ALL ON SEQUENCE "public"."tracked_event_blocks_contract_type_seq" TO "service_role";
+
+GRANT ALL ON TABLE "public"."users_public" TO "anon";
+GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
+GRANT ALL ON TABLE "public"."users_public" TO "service_role";
 
 GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "anon";
 GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "authenticated";

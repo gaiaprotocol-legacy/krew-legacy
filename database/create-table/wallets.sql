@@ -16,3 +16,5 @@ ALTER TABLE "public"."wallets" ENABLE ROW LEVEL SECURITY;
 GRANT ALL ON TABLE "public"."wallets" TO "anon";
 GRANT ALL ON TABLE "public"."wallets" TO "authenticated";
 GRANT ALL ON TABLE "public"."wallets" TO "service_role";
+
+CREATE POLICY "view everyone" ON "public"."wallets" FOR SELECT USING (true);
