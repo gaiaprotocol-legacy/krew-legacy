@@ -1,10 +1,43 @@
-CREATE OR REPLACE FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS SETOF "public"."users_public"
-    LANGUAGE "plpgsql"
-    AS $$
+CREATE OR REPLACE FUNCTION "public"."get_following_users"(
+    "p_user_id" "uuid", 
+    "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, 
+    "max_count" integer DEFAULT 50
+) 
+RETURNS TABLE (
+    user_id uuid,
+    wallet_address text,
+    display_name text,
+    profile_image text,
+    profile_image_thumbnail text,
+    profile_image_stored boolean,
+    x_username text,
+    metadata jsonb,
+    follower_count int,
+    following_count int,
+    blocked boolean,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone,
+    followed_at timestamp with time zone
+) 
+LANGUAGE "plpgsql"
+AS $$
 BEGIN
     RETURN QUERY
     SELECT 
-        u.*
+        u.user_id,
+        u.wallet_address,
+        u.display_name,
+        u.profile_image,
+        u.profile_image_thumbnail,
+        u.profile_image_stored,
+        u.x_username,
+        u.metadata,
+        u.follower_count,
+        u.following_count,
+        u.blocked,
+        u.created_at,
+        u.updated_at,
+        f.followed_at
     FROM 
         users_public u
     INNER JOIN 

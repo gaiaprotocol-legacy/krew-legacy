@@ -123,7 +123,7 @@ search-user-list-empty-message: No users found
 global-activity-list-empty-message: No global activities yet
 key-held-activity-list-empty-message: No activities you hold keys for yet
 
-user-connections-holding-tab: Holding
+user-connections-holding-keys-tab: Holding Keys
 user-connections-following-tab: Following
 user-connections-followers-tab: Followers
 

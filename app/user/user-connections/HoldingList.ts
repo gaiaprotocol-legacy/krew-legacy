@@ -1,6 +1,7 @@
 import { msg } from "common-app-module";
 import Krew from "../../database-interface/Krew.js";
 import KrewList from "../../krew/KrewList.js";
+import KrewService from "../../krew/KrewService.js";
 
 export default class HoldingList extends KrewList {
   constructor(private walletAddress: string) {
@@ -10,6 +11,9 @@ export default class HoldingList extends KrewList {
   }
 
   protected async fetchKrews(): Promise<Krew[]> {
-    throw new Error("Method not implemented.");
+    return await KrewService.fetchKeyHeldKrews(
+      this.walletAddress,
+      this.lastCreatedAt,
+    );
   }
 }

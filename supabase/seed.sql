@@ -143,6 +143,51 @@ $$;
 
 ALTER FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
+SET default_tablespace = '';
+
+SET default_table_access_method = "heap";
+
+CREATE TABLE IF NOT EXISTS "public"."users_public" (
+    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "wallet_address" "text",
+    "display_name" "text",
+    "profile_image" "text",
+    "profile_image_thumbnail" "text",
+    "profile_image_stored" boolean DEFAULT false NOT NULL,
+    "x_username" "text",
+    "metadata" "jsonb",
+    "follower_count" integer DEFAULT 0 NOT NULL,
+    "following_count" integer DEFAULT 0 NOT NULL,
+    "blocked" boolean DEFAULT false NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone
+);
+
+ALTER TABLE "public"."users_public" OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS SETOF "public"."users_public"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        u.*
+    FROM 
+        users_public u
+    INNER JOIN 
+        follows f ON u.user_id = f.follower_id
+    WHERE 
+        f.followee_id = p_user_id
+        AND (last_fetched_followed_at IS NULL OR f.followed_at < last_fetched_followed_at)
+    ORDER BY 
+        f.followed_at DESC
+    LIMIT 
+        max_count;
+END;
+$$;
+
+ALTER FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
     LANGUAGE "plpgsql"
     AS $$
@@ -185,28 +230,6 @@ END;
 $$;
 
 ALTER FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
-
-SET default_tablespace = '';
-
-SET default_table_access_method = "heap";
-
-CREATE TABLE IF NOT EXISTS "public"."users_public" (
-    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
-    "wallet_address" "text",
-    "display_name" "text",
-    "profile_image" "text",
-    "profile_image_thumbnail" "text",
-    "profile_image_stored" boolean DEFAULT false NOT NULL,
-    "x_username" "text",
-    "metadata" "jsonb",
-    "follower_count" integer DEFAULT 0 NOT NULL,
-    "following_count" integer DEFAULT 0 NOT NULL,
-    "blocked" boolean DEFAULT false NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone
-);
-
-ALTER TABLE "public"."users_public" OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS SETOF "public"."users_public"
     LANGUAGE "plpgsql"
@@ -1761,13 +1784,17 @@ GRANT ALL ON FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" 
 GRANT ALL ON FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint, "max_count" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint, "max_count" integer) TO "service_role";
 
-GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "anon";
-GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "authenticated";
-GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "service_role";
-
 GRANT ALL ON TABLE "public"."users_public" TO "anon";
 GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
 GRANT ALL ON TABLE "public"."users_public" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) TO "authenticated";

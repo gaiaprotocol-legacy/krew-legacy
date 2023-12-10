@@ -1,15 +1,23 @@
 import { msg } from "common-app-module";
 import { SoFiUserPublic } from "sofi-module";
+import KrewUserService from "../KrewUserService.js";
 import UserList from "../user-list/UserList.js";
 
 export default class FollowerList extends UserList {
-  constructor(userId: string) {
+  private lastFetchedFollowedAt: string | undefined;
+
+  constructor(private userId: string) {
     super(".follower-list", {
       emptyMessage: msg("follower-list-empty-message"),
     });
   }
 
-  protected fetchUsers(): Promise<SoFiUserPublic[]> {
-    throw new Error("Method not implemented.");
+  protected async fetchUsers(): Promise<SoFiUserPublic[]> {
+    const result = await KrewUserService.fetchFollowers(
+      this.userId,
+      this.lastFetchedFollowedAt,
+    );
+    this.lastFetchedFollowedAt = result.lastFetchedFollowedAt;
+    return result.users;
   }
 }

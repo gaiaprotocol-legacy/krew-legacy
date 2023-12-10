@@ -1,3 +1,6 @@
+/*!**********************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./public/style/lib/reset.css ***!
+  \**********************************************************************************************************/
 /***
     The new CSS reset - version 1.8.4 (last updated 14.2.2023)
     GitHub page: https://github.com/elad2412/the-new-css-reset
@@ -98,6 +101,9 @@ meter {
 :where(dialog:modal) {
     all: revert;
 }
+/*!*********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
+  \*********************************************************************************************************************************************/
 .tabs.component {
   border-bottom: 1px solid var(--line-color);
   display: flex;
@@ -1722,6 +1728,25 @@ p {
     padding: 0;
   }
 }
+.user-connections-view > header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+}
+.user-connections-view > header > button.back {
+  padding: 4px;
+  cursor: pointer;
+}
+.user-connections-view > header > .info {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.user-connections-view > header > .info > h1 {
+  font-size: 20px;
+  color: #fff;
+}
 .user-display > .posts-container {
   margin-top: 32px;
 }
@@ -1838,6 +1863,7 @@ p {
   margin-bottom: 16px;
   display: flex;
   gap: 4px;
+  cursor: pointer;
 }
 .user-profile > .connections-container > a > .value {
   font-weight: bold;
