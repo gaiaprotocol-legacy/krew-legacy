@@ -9,11 +9,11 @@ await initialize({
   walletConnectProjectId: "9ef2b6a581d3644cd09342a5f0ff5318",
   messageForWalletLinking: "Link Wallet to Krew",
 
-  kromaRpc: "https://api.sepolia.kroma.network",
-  kromaChainId: 2358,
+  //kromaRpc: "https://api.sepolia.kroma.network",
+  //kromaChainId: 2358,
 
-  //kromaRpc: "https://api.kroma.network",
-  //kromaChainId: 255,
+  kromaRpc: "https://api.kroma.network",
+  kromaChainId: 255,
 
   krewPersonalAddress: "0xECFFc91149b8B702dEa6905Ae304A9D36527060F",
   krewCommunalAddress: "0x0",

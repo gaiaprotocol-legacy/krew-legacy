@@ -24,7 +24,7 @@ BEGIN
         public.krew_key_holders kh ON k.id = kh.krew
     WHERE 
         (
-            (k.id LIKE 'p_%' AND k.owner = p_wallet_address)
+            (k.id LIKE 'p_%' AND k.owner = p_wallet_address AND k.supply > 0)
             OR
             (k.id LIKE 'c_%' AND kh.wallet_address = p_wallet_address AND kh.last_fetched_balance > 0)
         )

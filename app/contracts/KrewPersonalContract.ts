@@ -12,6 +12,18 @@ class KrewPersonalContract extends Contract<KrewPersonal>
     super(KrewPersonalArtifact.abi);
   }
 
+  public async getPrice(supply: bigint, amount: bigint) {
+    return await this.viewContract.getPrice(supply, amount);
+  }
+
+  public async getSupply(krewId: bigint) {
+    return (await this.viewContract.krews(krewId)).supply;
+  }
+
+  public async existsKrew(krewId: bigint) {
+    return await this.viewContract.existsKrew(krewId);
+  }
+
   public async getBuyPrice(krewId: bigint, amount: bigint) {
     return await this.viewContract.getBuyPrice(krewId, amount);
   }

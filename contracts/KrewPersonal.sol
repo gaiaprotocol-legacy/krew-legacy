@@ -171,6 +171,8 @@ contract KrewPersonal is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         bool isBuy,
         bytes memory oracleSignature
     ) private nonReentrant {
+        require(existsKrew(krewId), "KrewPersonal: Krew does not exist");
+
         uint256 additionalFee = calculateAdditionalTokenOwnerFee(price, oracleSignature);
         uint256 krewOwnerFee = (price * krewOwnerFeePercent) / 1 ether + additionalFee;
         uint256 protocolFee = (price * protocolFeePercent) / 1 ether - additionalFee;

@@ -41,7 +41,11 @@ export default class KrewPopup extends Popup {
               backgroundImage: `url(${previewKrew?.image})`,
             },
           }),
-          el("h1", previewKrew ? KrewUtil.getName(previewKrew) : "..."),
+          el(
+            "h1",
+            previewKrew ? KrewUtil.getName(previewKrew) : "...",
+            el("span", "#" + krewId.substring(2)),
+          ),
           this.editButton = el("a.edit.hidden", new MaterialIcon("edit"), {
             click: () => {
               new EditKrewPopup(krewId, previewKrew);

@@ -15,8 +15,8 @@ export default class ActivityListItem extends DomNode {
       click: () => new KrewPopup(activity.krew.id, activity.krew),
     });
 
-    const user = el("a", activity.user.display_name, {
-      click: () => Router.go(`/${activity.user.x_username}`),
+    const user = el("a", activity.user?.display_name, {
+      click: () => Router.go(`/${activity.user?.x_username}`),
     });
 
     const krew = el("a", KrewUtil.getName(activity.krew), {

@@ -12,7 +12,7 @@ export default interface Activity {
   args: string;
   wallet_address: string;
   krew: PreviewKrew;
-  user: Author;
+  user?: Author;
   created_at: string;
 }
 

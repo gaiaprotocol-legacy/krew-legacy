@@ -31,12 +31,14 @@ class KrewService extends SupabaseService<Krew> {
   }
 
   public async fetchKrew(krewId: string) {
-    return await this.safeSelectSingle((b) => b.eq("id", krewId));
+    return await this.safeSelectSingle((b) =>
+      b.eq("id", krewId).gt("supply", 0)
+    );
   }
 
   public async fetchNewKrews(lastCreatedAt: string | undefined) {
     return await this.safeSelect((b) =>
-      b.order("created_at", { ascending: false }).gt(
+      b.gt("supply", 0).order("created_at", { ascending: false }).gt(
         "created_at",
         lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
       )
@@ -45,7 +47,7 @@ class KrewService extends SupabaseService<Krew> {
 
   public async fetchTopKrews(lastCreatedAt: string | undefined) {
     return await this.safeSelect((b) =>
-      b.order("last_fetched_key_price", { ascending: false }).gt(
+      b.gt("supply", 0).order("last_fetched_key_price", { ascending: false }).gt(
         "created_at",
         lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
       )
@@ -54,7 +56,7 @@ class KrewService extends SupabaseService<Krew> {
 
   public async fetchTrendingKrews(lastCreatedAt: string | undefined) {
     return await this.safeSelect((b) =>
-      b.order("last_key_purchased_at", { ascending: false }).gt(
+      b.gt("supply", 0).order("last_key_purchased_at", { ascending: false }).gt(
         "created_at",
         lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
       )
@@ -95,7 +97,7 @@ class KrewService extends SupabaseService<Krew> {
 
   public async findKrews(query: string, lastCreatedAt: string | undefined) {
     return await this.safeSelect((b) =>
-      b.or(`name.ilike.%${query}%`).gt(
+      b.gt("supply", 0).or(`name.ilike.%${query}%`).gt(
         "created_at",
         lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
       )
