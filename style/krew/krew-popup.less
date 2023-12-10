@@ -8,11 +8,54 @@
             .profile-image();
         }
 
+        >h1 {
+            display    : flex;
+            align-items: center;
+            gap        : 12px !important;
+
+            >.id {
+                font-size    : 12px;
+                color        : #474B54;
+                border       : 1px solid #474B54;
+                padding      : 4px 8px;
+                border-radius: 8px;
+            }
+        }
+
         >a.edit {
             cursor: pointer;
 
             &.hidden {
                 display: none;
+            }
+        }
+    }
+
+    >.owner {
+        margin-top   : 16px;
+        padding      : 8px 16px 8px 8px;
+        border       : 1px solid var(--line-color);
+        border-radius: 8px;
+        cursor       : pointer;
+
+        >.info-container {
+            margin-top : 8px;
+            display    : flex;
+            align-items: center;
+            gap        : 12px;
+
+            >.info {
+                flex-grow: 1;
+
+                >.name {
+                    font-size  : 16px;
+                    font-weight: bold;
+                }
+
+                >.x-username {
+                    margin-top: 4px;
+                    font-size : 12px;
+                }
             }
         }
     }
