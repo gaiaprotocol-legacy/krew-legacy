@@ -504,6 +504,12 @@ button.component.contained {
   cursor: pointer;
   align-items: center;
 }
+.post-display.sofi-component .actions > button.repost.reposted {
+  color: #25D366;
+}
+.post-display.sofi-component .actions > button.like.liked {
+  color: #D8093B;
+}
 .post-display.sofi-component.in-view {
   display: block;
   cursor: default;
