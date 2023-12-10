@@ -1,4 +1,4 @@
-import { DateUtil, DomNode, el } from "common-app-module";
+import { Constants, DateUtil, DomNode, el } from "common-app-module";
 
 export default abstract class ChatRoomListItem extends DomNode {
   private _lastMessageDisplay?: DomNode;
@@ -28,7 +28,8 @@ export default abstract class ChatRoomListItem extends DomNode {
       el(".message", this.lastMessageData.last_message ?? ""),
       el(
         ".sent-at",
-        this.lastMessageData.last_message_sent_at === "-infinity"
+        this.lastMessageData.last_message_sent_at ===
+            Constants.NEGATIVE_INFINITY
           ? ""
           : DateUtil.fromNow(this.lastMessageData.last_message_sent_at),
       ),

@@ -59,11 +59,11 @@ export default class EditKrewPopup extends Popup {
             }),
           ),
           this.nameInput = el("input", {
-            placeholder: "Name",
+            placeholder: msg("edit-krew-popup-name-input-placeholder"),
             value: previewKrew?.name,
           }),
           this.descriptionTextArea = el("textarea", {
-            placeholder: "Description",
+            placeholder: msg("edit-krew-popup-description-input-placeholder"),
           }),
         ),
         el(

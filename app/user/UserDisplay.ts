@@ -1,4 +1,4 @@
-import { DomNode, el, Tabs } from "common-app-module";
+import { DomNode, el, msg, Tabs } from "common-app-module";
 import { PreviewUserPublic, SoFiUserPublic } from "sofi-module";
 import UserCommentPostList from "./user-display/user-posts/UserCommentPostList.js";
 import UserLikedPostList from "./user-display/user-posts/UserLikedPostList.js";
@@ -46,10 +46,10 @@ export default class UserDisplay extends DomNode {
 
     this.postsContainer.empty().append(
       this.postTabs = new Tabs("user-posts", [
-        { id: "user-posts", label: "Posts" },
-        { id: "user-replies", label: "Replies" },
-        { id: "user-reposts", label: "Reposts" },
-        { id: "user-likes", label: "Likes" },
+        { id: "user-posts", label: msg("user-display-posts-tab") },
+        { id: "user-comments", label: msg("user-display-comments-tab") },
+        { id: "user-reposts", label: msg("user-display-reposts-tab") },
+        { id: "user-liked-posts", label: msg("user-display-liked-posts-tab") },
       ]),
       this.userPostList = new UserPostList(userId),
       this.userCommentPostList = new UserCommentPostList(userId),
@@ -66,9 +66,9 @@ export default class UserDisplay extends DomNode {
       ]
         .forEach((list) => list?.hide());
       if (id === "user-posts") this.userPostList?.show();
-      else if (id === "user-replies") this.userCommentPostList?.show();
+      else if (id === "user-comments") this.userCommentPostList?.show();
       else if (id === "user-reposts") this.userRepostList?.show();
-      else if (id === "user-likes") this.userLikedPostList?.show();
+      else if (id === "user-liked-posts") this.userLikedPostList?.show();
     }).init();
   }
 }

@@ -8,5 +8,7 @@ export default class TradePersonalKeyPopup extends Popup {
         ".popup.trade-personal-key-popup",
       ),
     );
+
+    //TODO:
   }
 }

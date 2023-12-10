@@ -1,4 +1,4 @@
-import { el, Tabs, View } from "common-app-module";
+import { el, msg, Tabs, View } from "common-app-module";
 import NewKrewList from "../krew/NewKrewList.js";
 import TopKrewList from "../krew/TopKrewList.js";
 import TrendingKrewList from "../krew/TrendingKrewList.js";
@@ -19,13 +19,13 @@ export default class ExploreView extends View {
           "main",
           this.tabs = new Tabs("explore", [{
             id: "trending",
-            label: "Trending",
+            label: msg("explore-view-trending-tab"),
           }, {
             id: "top",
-            label: "Top",
+            label: msg("explore-view-top-tab"),
           }, {
             id: "new",
-            label: "New",
+            label: msg("explore-view-new-tab"),
           }]),
           this.trendingKrewList = new TrendingKrewList(),
           this.topKrewList = new TopKrewList(),

@@ -1,4 +1,4 @@
-import { el, Tabs, View, ViewParams } from "common-app-module";
+import { el, msg, Tabs, View, ViewParams } from "common-app-module";
 import { FollowingPostList, GlobalPostList } from "sofi-module";
 import KrewPost, { PostTarget } from "../database-interface/KrewPost.js";
 import KrewSelector from "../krew/KrewSelector.js";
@@ -49,13 +49,13 @@ export default class PostsView extends View {
                 "posts-view-tabs",
                 KrewSignedUserManager.walletLinked
                   ? [
-                    { id: "global", label: "Global" },
-                    { id: "following", label: "Following" },
-                    { id: "held", label: "Held" },
+                    { id: "global", label: msg("posts-view-global-tab") },
+                    { id: "following", label: msg("posts-view-following-tab") },
+                    { id: "key-held", label: msg("posts-view-key-held-tab") },
                   ]
                   : [
-                    { id: "global", label: "Global" },
-                    { id: "following", label: "Following" },
+                    { id: "global", label: msg("posts-view-global-tab") },
+                    { id: "following", label: msg("posts-view-following-tab") },
                   ],
               )
               : undefined,
@@ -118,7 +118,7 @@ export default class PostsView extends View {
           .forEach((list) => list?.hide());
         if (id === "global") this.globalPostList.show();
         else if (id === "following") this.followingPostList?.show();
-        else if (id === "held") this.keyHeldPostList?.show();
+        else if (id === "key-held") this.keyHeldPostList?.show();
       }).init();
     }
   }

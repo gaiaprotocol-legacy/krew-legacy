@@ -45,7 +45,7 @@ export default class CreateKrewForm extends DomNode {
             el("li", msg("create-krew-form-communal-krew-feature-2")),
             el("li", msg("create-krew-form-communal-krew-feature-3")),
           ),
-          //{ click: () => this.selectKrewType(KrewType.Communal) },
+          //TODO: { click: () => this.selectKrewType(KrewType.Communal) },
         ),
       ),
       this.createButton = new Button({

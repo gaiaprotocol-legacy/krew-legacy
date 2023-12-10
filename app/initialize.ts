@@ -4,10 +4,10 @@ import {
   MaterialIconSystem,
   msg,
   Router,
-  Snackbar,
-  SplashLoader,
+  SplashLoader
 } from "common-app-module";
 import {
+  AuthUtil,
   inject_sofi_msg,
   TestChatView,
   TestPostListView,
@@ -122,4 +122,6 @@ export default async function initialize(config: Config) {
   Router.route("test/chat", TestChatView);
   Router.route("test/posts", TestPostListView);
   Router.route("test/post", TestPostView);
+
+  AuthUtil.checkEmailAccess();
 }

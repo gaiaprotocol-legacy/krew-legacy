@@ -1,5 +1,6 @@
 import {
   Button,
+  Constants,
   DateUtil,
   DomNode,
   el,
@@ -139,7 +140,9 @@ export default class UserProfile extends DomNode {
         el(
           "p",
           msg("user-profile-joined", {
-            date: DateUtil.format(user.created_at ?? "-infinity"),
+            date: DateUtil.format(
+              user.created_at ?? Constants.NEGATIVE_INFINITY,
+            ),
           }),
         ),
         el(

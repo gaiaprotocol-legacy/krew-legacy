@@ -14,7 +14,6 @@ import Krew from "../database-interface/Krew.js";
 import KrewType from "../database-interface/KrewType.js";
 import KrewService from "../krew/KrewService.js";
 import KrewUtil from "../krew/KrewUtil.js";
-import KeyBoughtPopup from "./KeyBoughtPopup.js";
 
 export default class SellKeyPopup extends Popup {
   private priceDisplay: DomNode;

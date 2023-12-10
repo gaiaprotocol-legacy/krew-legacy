@@ -1,4 +1,4 @@
-import { Supabase, SupabaseService, UploadManager } from "common-app-module";
+import { Constants, Supabase, SupabaseService, UploadManager } from "common-app-module";
 import Krew, { KrewSelectQuery } from "../database-interface/Krew.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
@@ -40,17 +40,18 @@ class KrewService extends SupabaseService<Krew> {
     return await this.safeSelect((b) =>
       b.gt("supply", 0).order("created_at", { ascending: false }).gt(
         "created_at",
-        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
+        lastCreatedAt ?? Constants.UNIX_EPOCH_START_DATE,
       )
     );
   }
 
   public async fetchTopKrews(lastCreatedAt: string | undefined) {
     return await this.safeSelect((b) =>
-      b.gt("supply", 0).order("last_fetched_key_price", { ascending: false }).gt(
-        "created_at",
-        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
-      )
+      b.gt("supply", 0).order("last_fetched_key_price", { ascending: false })
+        .gt(
+          "created_at",
+          lastCreatedAt ?? Constants.UNIX_EPOCH_START_DATE,
+        )
     );
   }
 
@@ -58,7 +59,7 @@ class KrewService extends SupabaseService<Krew> {
     return await this.safeSelect((b) =>
       b.gt("supply", 0).order("last_key_purchased_at", { ascending: false }).gt(
         "created_at",
-        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
+        lastCreatedAt ?? Constants.UNIX_EPOCH_START_DATE,
       )
     );
   }
@@ -99,7 +100,7 @@ class KrewService extends SupabaseService<Krew> {
     return await this.safeSelect((b) =>
       b.gt("supply", 0).or(`name.ilike.%${query}%`).gt(
         "created_at",
-        lastCreatedAt ?? "1970-01-01T00:00:00.000Z",
+        lastCreatedAt ?? Constants.UNIX_EPOCH_START_DATE,
       )
     );
   }

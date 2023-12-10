@@ -1,4 +1,4 @@
-import { el, Tabs, View } from "common-app-module";
+import { el, msg, Tabs, View } from "common-app-module";
 import Layout from "../layout/Layout.js";
 import SearchKrewList from "./SearchKrewList.js";
 import SearchPostList from "./SearchPostList.js";
@@ -18,14 +18,14 @@ export default class SearchView extends View {
       this.container = el(
         ".search-view",
         this.tabs = new Tabs("search", [{
-          id: "post",
-          label: "Post",
+          id: "posts",
+          label: msg("search-view-posts-tab"),
         }, {
-          id: "krew",
-          label: "Krew",
+          id: "krews",
+          label: msg("search-view-krews-tab"),
         }, {
-          id: "user",
-          label: "User",
+          id: "users",
+          label: msg("search-view-users-tab"),
         }]),
         this.postList = new SearchPostList(query!),
         this.krewList = new SearchKrewList(query!),
@@ -39,9 +39,9 @@ export default class SearchView extends View {
         this.krewList,
         this.userList,
       ].forEach((list) => list.hide());
-      if (id === "post") this.postList.show();
-      else if (id === "krew") this.krewList.show();
-      else if (id === "user") this.userList.show();
+      if (id === "posts") this.postList.show();
+      else if (id === "krews") this.krewList.show();
+      else if (id === "users") this.userList.show();
     }).init();
   }
 

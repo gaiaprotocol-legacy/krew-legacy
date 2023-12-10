@@ -128,6 +128,10 @@ user-connections-holding-tab: Holding
 user-connections-following-tab: Following
 user-connections-followers-tab: Followers
 
+explore-view-trending-tab: Trending
+explore-view-top-tab: Top
+explore-view-new-tab: New
+
 user-post-list-empty-message: No posts from this user yet
 user-comment-post-list-empty-message: No comments from this user yet
 user-repost-list-empty-message: No reposts from this user yet
@@ -144,3 +148,25 @@ settings-view-link-wallet-section-linked: >
   Linked:
 settings-view-link-wallet-section-description: You can link your wallet to use Krew.
 settings-view-link-wallet-button: Link Wallet
+
+default-personal-krew-name: "Personal Krew #{id}"
+default-communal-krew-name: "Communal Krew #{id}"
+
+edit-krew-popup-name-input-placeholder: Krew Name
+edit-krew-popup-description-input-placeholder: Krew Description
+
+search-view-posts-tab: Posts
+search-view-krews-tab: Krews
+search-view-users-tab: Users
+
+sidebar-trending-krews-title: Trending Krews
+sidebar-top-krews-title: Top Krews
+
+posts-view-global-tab: Global
+posts-view-following-tab: Following
+posts-view-key-held-tab: Key Held
+
+user-display-posts-tab: Posts
+user-display-comments-tab: Comments
+user-display-reposts-tab: Reposts
+user-display-liked-posts-tab: Liked Posts
