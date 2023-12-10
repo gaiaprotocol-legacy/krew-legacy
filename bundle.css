@@ -1835,15 +1835,17 @@ p {
     border-radius: 16px;
   }
 }
+.user-profile > .info-container > .info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
 .user-profile > .info-container > .info > h2 {
   font-size: 32px;
   color: #fff;
 }
-.user-profile > .info-container > .info > h3 {
-  margin-top: 8px;
-}
 .user-profile > .info-container > .info > .link {
-  margin-top: 8px;
   display: flex;
   gap: 4px;
   align-items: center;
@@ -1858,11 +1860,7 @@ p {
   align-items: center;
   justify-content: center;
 }
-.user-profile > .info-container > .info > p {
-  margin-top: 8px;
-}
 .user-profile > .info-container > .info > footer {
-  margin-top: 8px;
   display: flex;
   gap: 8px;
 }
