@@ -12,6 +12,10 @@
         display   : flex;
         gap       : 20px;
 
+        @media @phone {
+            flex-direction: column;
+        }
+
         >section {
             flex         : 1;
             border       : 1px solid var(--line-color);

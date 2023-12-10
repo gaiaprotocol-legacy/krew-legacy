@@ -1028,6 +1028,11 @@ p {
   display: flex;
   gap: 20px;
 }
+@media only screen and (max-width: 859px) {
+  .create-krew-form > .select-krew-type {
+    flex-direction: column;
+  }
+}
 .create-krew-form > .select-krew-type > section {
   flex: 1;
   border: 1px solid var(--line-color);
