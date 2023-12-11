@@ -11,7 +11,7 @@ import {
 import Krew from "../database-interface/Krew.js";
 import KrewUtil from "../krew/KrewUtil.js";
 import animationData from "./firecracker-animation.json" assert {
-  type: "json"
+  type: "json",
 };
 
 export default class KeyBoughtPopup extends Popup {
@@ -48,12 +48,14 @@ export default class KeyBoughtPopup extends Popup {
           new Button({
             type: ButtonType.Contained,
             tag: ".go-to-krew",
-            click: () => this.goToKrew(),
+            click: () => Router.go(this.krewUri),
             title: msg("key-bought-popup-go-to-krew-button"),
           }),
         ),
       ),
     );
+
+    this.onDelegate(Router, "go", () => this.delete());
   }
 
   private get krewUri(): string {
@@ -63,10 +65,5 @@ export default class KeyBoughtPopup extends Popup {
       return `/c/${this.krew.id.substring(2)}`;
     }
     throw new Error("Invalid krew id");
-  }
-
-  private goToKrew() {
-    Router.go(this.krewUri);
-    this.delete();
   }
 }

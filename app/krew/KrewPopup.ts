@@ -7,6 +7,7 @@ import {
   msg,
   Popup,
   Router,
+  Tabs,
 } from "common-app-module";
 import { ethers } from "ethers";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
@@ -19,6 +20,8 @@ import MaterialIcon from "../MaterialIcon.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import KrewUserService from "../user/KrewUserService.js";
 import EditKrewPopup from "./EditKrewPopup.js";
+import KrewActivityList from "./KrewActivityList.js";
+import KrewHolderList from "./KrewHolderList.js";
 import KrewService from "./KrewService.js";
 import KrewUtil from "./KrewUtil.js";
 
@@ -34,6 +37,10 @@ export default class KrewPopup extends Popup {
   private ownerProfileImage: DomNode | undefined;
   private ownerName: DomNode | undefined;
   private ownerXUsername: DomNode | undefined;
+
+  private tabs: Tabs;
+  private holderList: KrewHolderList;
+  private activityList: KrewActivityList;
 
   constructor(private krewId: string, previewKrew?: PreviewKrew) {
     super({ barrierDismissible: true });
@@ -112,6 +119,15 @@ export default class KrewPopup extends Popup {
             click: () => this.sellKey(),
           }),
         ),
+        this.tabs = new Tabs("krew-popup", [{
+          id: "holders",
+          label: msg("krew-popup-holders-tab"),
+        }, {
+          id: "activities",
+          label: msg("krew-popup-activities-tab"),
+        }]),
+        this.holderList = new KrewHolderList(krewId),
+        this.activityList = new KrewActivityList(krewId),
         el(
           "footer",
           new Button({
@@ -124,8 +140,19 @@ export default class KrewPopup extends Popup {
       ),
     );
 
+    this.tabs.on("select", (id: string) => {
+      [
+        this.holderList,
+        this.activityList,
+      ].forEach((list) => list.hide());
+      if (id === "holders") this.holderList.show();
+      else if (id === "activities") this.activityList.show();
+    }).init();
+
     this.fetchKrew();
     this.fetchBalance();
+
+    this.onDelegate(Router, "go", () => this.delete());
   }
 
   private async fetchKrew() {
@@ -195,10 +222,7 @@ export default class KrewPopup extends Popup {
         this.ownerXUsername.text = "@" + owner.x_username ?? "";
         this.ownerDisplay.onDom(
           "click",
-          () => {
-            Router.go(`/${owner.x_username}`);
-            this.delete();
-          },
+          () => Router.go(`/${owner.x_username}`),
         );
       }
     }

@@ -121,9 +121,11 @@ new-user-list-empty-message: No new users yet
 top-user-list-empty-message: No top users yet
 trending-user-list-empty-message: No trending users yet
 search-user-list-empty-message: No users found
+krew-holder-list-empty-message: No holders yet
 
 global-activity-list-empty-message: No global activities yet
 key-held-activity-list-empty-message: No activities you hold keys for yet
+krew-activity-list-empty-message: No activities for this krew yet
 
 user-connections-holding-keys-tab: Holding Keys
 user-connections-following-tab: Following
@@ -176,6 +178,8 @@ krew-popup-holders-label: Holders
 krew-popup-price-label: Price
 krew-popup-balance-label: Your Balance
 krew-popup-owner-label: Owner
+krew-popup-holders-tab: Holders
+krew-popup-activities-tab: Activities
 
 add-popup-krew-tab: New Krew
 add-popup-post-tab: New Post

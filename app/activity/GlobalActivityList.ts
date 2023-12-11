@@ -15,6 +15,6 @@ export default class GlobalActivityList extends ActivityList {
   }
 
   protected async fetchActivities(): Promise<Activity[]> {
-    return await ActivityService.fetchGlobalEvents();
+    return await ActivityService.fetchGlobalActivities();
   }
 }

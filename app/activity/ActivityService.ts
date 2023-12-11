@@ -1,9 +1,11 @@
-import { Supabase, SupabaseService } from "common-app-module";
-import Activity from "../database-interface/Activity.js";
+import { Constants, Supabase, SupabaseService } from "common-app-module";
+import Activity, {
+  ActivitySelectQuery,
+} from "../database-interface/Activity.js";
 
 class ActivityService extends SupabaseService<Activity> {
   constructor() {
-    super("activities", "*", 100);
+    super("activities", ActivitySelectQuery, 100);
   }
 
   protected enhanceEventData(events: Activity[]): Activity[] {
@@ -25,7 +27,7 @@ class ActivityService extends SupabaseService<Activity> {
     return _activities;
   }
 
-  public async fetchGlobalEvents(lastCreatedAt?: string) {
+  /*public async fetchGlobalEvents(lastCreatedAt?: string) {
     let { data, error } = await Supabase.client.rpc(
       "get_global_krew_contract_events",
       {
@@ -36,6 +38,15 @@ class ActivityService extends SupabaseService<Activity> {
     if (error) throw error;
     if (!data) data = [];
     return this.enhanceEventData(data);
+  }*/
+
+  public async fetchGlobalActivities(lastCreatedAt?: string) {
+    return await this.safeSelect((b) =>
+      b.order("created_at", { ascending: false }).gt(
+        "created_at",
+        lastCreatedAt ?? Constants.UNIX_EPOCH_START_DATE,
+      )
+    );
   }
 
   public async fetchKeyHeldEvents(
@@ -46,6 +57,23 @@ class ActivityService extends SupabaseService<Activity> {
       "get_key_held_krew_contract_events",
       {
         p_wallet_address: walletAddress,
+        last_created_at: lastCreatedAt,
+        max_count: this.fetchLimit,
+      },
+    );
+    if (error) throw error;
+    if (!data) data = [];
+    return this.enhanceEventData(data);
+  }
+
+  public async fetchKrewActivities(
+    krew: string,
+    lastCreatedAt?: string,
+  ) {
+    let { data, error } = await Supabase.client.rpc(
+      "get_krew_activities",
+      {
+        p_krew_id: krew,
         last_created_at: lastCreatedAt,
         max_count: this.fetchLimit,
       },

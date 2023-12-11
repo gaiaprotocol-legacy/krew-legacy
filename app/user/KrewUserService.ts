@@ -13,6 +13,19 @@ class KrewUserService extends SoFiUserService<SoFiUserPublic> {
     if (error) throw error;
     return BigInt(data ?? "0");
   }
+
+  public async fetchKrewHolders(
+    krew: string,
+    lastCreatedAt?: string,
+  ): Promise<SoFiUserPublic[]> {
+    const { data, error } = await Supabase.client.rpc("get_krew_holders", {
+      p_krew_id: krew,
+      last_created_at: lastCreatedAt,
+      max_count: this.fetchLimit,
+    });
+    if (error) throw error;
+    return data;
+  }
 }
 
 export default new KrewUserService();

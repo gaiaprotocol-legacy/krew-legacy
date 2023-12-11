@@ -3,21 +3,21 @@ import Activity from "../database-interface/Activity.js";
 import ActivityListItem from "./ActivityListItem.js";
 
 export interface ActivityListOptions {
-  storeName: string;
+  storeName?: string;
   emptyMessage: string;
 }
 
 export default abstract class ActivityList extends DomNode {
-  private store: Store;
+  private store: Store | undefined;
   private refreshed = false;
   protected lastCreatedAt: string | undefined;
 
   constructor(tag: string, options: ActivityListOptions) {
     super(tag + ".activity-list");
-    this.store = new Store(options.storeName);
+    this.store = options.storeName ? new Store(options.storeName) : undefined;
     this.domElement.setAttribute("data-empty-message", options.emptyMessage);
 
-    const cachedEvents = this.store.get<Activity[]>("cached-events");
+    const cachedEvents = this.store?.get<Activity[]>("cached-events");
     if (cachedEvents && cachedEvents.length > 0) {
       for (const e of cachedEvents) {
         this.append(new ActivityListItem(e));
@@ -31,7 +31,7 @@ export default abstract class ActivityList extends DomNode {
     this.append(new ListLoadingBar());
 
     const events = await this.fetchActivities();
-    this.store.set("cached-events", events, true);
+    this.store?.set("cached-events", events, true);
 
     if (!this.deleted) {
       this.empty();

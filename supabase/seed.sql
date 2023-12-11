@@ -322,12 +322,12 @@ BEGIN
         p.updated_at,
         CASE 
             WHEN signed_user_id IS NOT NULL THEN 
-                EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = signed_user_id)
+                EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = signed_user_id LIMIT 1)
             ELSE FALSE 
         END AS liked,
         CASE 
             WHEN signed_user_id IS NOT NULL THEN 
-                EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = signed_user_id)
+                EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = signed_user_id LIMIT 1)
             ELSE FALSE 
         END AS reposted
     FROM 
@@ -336,7 +336,7 @@ BEGIN
         users_public u ON p.author = u.user_id
     WHERE 
         p.parent IS NULL AND
-        last_post_id IS NULL OR p.id < last_post_id
+        (last_post_id IS NULL OR p.id < last_post_id)
     ORDER BY 
         p.id DESC
     LIMIT 
@@ -470,6 +470,91 @@ END;
 $$;
 
 ALTER FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."get_krew_activities"("p_krew_id" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "krew" "text", "user" "uuid", "created_at" timestamp with time zone, "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_x_username" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text")
+    LANGUAGE "plpgsql" STABLE
+    AS $$
+BEGIN
+    RETURN QUERY 
+    SELECT 
+        a.block_number,
+        a.log_index,
+        a.event_type,
+        a.args,
+        a.wallet_address,
+        a.krew,
+        a.user,
+        a.created_at,
+        u.user_id,
+        u.display_name as user_display_name,
+        u.profile_image as user_profile_image,
+        u.profile_image_thumbnail as user_profile_image_thumbnail,
+        u.x_username as user_x_username,
+        k.id AS krew_id,
+        k.name AS krew_name,
+        k.image AS krew_image
+    FROM 
+        "public"."activities" a
+    LEFT JOIN 
+        "public"."users_public" u ON a.user = u.user_id
+    LEFT JOIN
+        "public"."krews" k ON a.krew = k.id
+    WHERE 
+        a.krew = p_krew_id
+        AND (last_created_at IS NULL OR a.created_at < last_created_at)
+    ORDER BY 
+        a.created_at DESC
+    LIMIT 
+        max_count;
+END;
+$$;
+
+ALTER FUNCTION "public"."get_krew_activities"("p_krew_id" "text", "last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
+
+SET default_tablespace = '';
+
+SET default_table_access_method = "heap";
+
+CREATE TABLE IF NOT EXISTS "public"."users_public" (
+    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "wallet_address" "text",
+    "display_name" "text",
+    "profile_image" "text",
+    "profile_image_thumbnail" "text",
+    "profile_image_stored" boolean DEFAULT false NOT NULL,
+    "x_username" "text",
+    "metadata" "jsonb",
+    "follower_count" integer DEFAULT 0 NOT NULL,
+    "following_count" integer DEFAULT 0 NOT NULL,
+    "blocked" boolean DEFAULT false NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone
+);
+
+ALTER TABLE "public"."users_public" OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."get_krew_holders"("p_krew_id" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS SETOF "public"."users_public"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        u.*
+    FROM 
+        public.users_public u
+    INNER JOIN 
+        public.krew_key_holders kh ON u.wallet_address = kh.wallet_address
+    WHERE 
+        kh.krew = p_krew_id
+        AND (last_created_at IS NULL OR u.created_at < last_created_at)
+    ORDER BY 
+        u.created_at DESC
+    LIMIT 
+        max_count;
+END;
+$$;
+
+ALTER FUNCTION "public"."get_krew_holders"("p_krew_id" "text", "last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "like_created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
@@ -1255,6 +1340,55 @@ $$;
 
 ALTER FUNCTION "public"."set_user_metadata_to_public"() OWNER TO "postgres";
 
+CREATE OR REPLACE FUNCTION "public"."test_get_global_posts"("last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50, "signed_user_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        p.id,
+        p.target,
+        p.krew,
+        p.author,
+        u.display_name,
+        u.profile_image,
+        u.profile_image_thumbnail,
+        u.x_username,
+        p.message,
+        p.translated,
+        p.rich,
+        p.parent,
+        p.comment_count,
+        p.repost_count,
+        p.like_count,
+        p.created_at,
+        p.updated_at,
+        CASE 
+            WHEN signed_user_id IS NOT NULL THEN 
+                EXISTS (SELECT 1 FROM post_likes pl WHERE pl.post_id = p.id AND pl.user_id = signed_user_id)
+            ELSE FALSE 
+        END AS liked,
+        CASE 
+            WHEN signed_user_id IS NOT NULL THEN 
+                EXISTS (SELECT 1 FROM reposts r WHERE r.post_id = p.id AND r.user_id = signed_user_id)
+            ELSE FALSE 
+        END AS reposted
+    FROM 
+        posts p
+    INNER JOIN 
+        users_public u ON p.author = u.user_id
+    WHERE 
+        p.parent IS NULL AND
+        last_post_id IS NULL OR p.id < last_post_id
+    ORDER BY 
+        p.id DESC
+    LIMIT 
+        max_count;
+END;
+$$;
+
+ALTER FUNCTION "public"."test_get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."update_key_holder_count"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$begin
@@ -1275,10 +1409,6 @@ CREATE OR REPLACE FUNCTION "public"."update_key_holder_count"() RETURNS "trigger
 end;$$;
 
 ALTER FUNCTION "public"."update_key_holder_count"() OWNER TO "postgres";
-
-SET default_tablespace = '';
-
-SET default_table_access_method = "heap";
 
 CREATE TABLE IF NOT EXISTS "public"."activities" (
     "block_number" bigint NOT NULL,
@@ -1479,24 +1609,6 @@ ALTER TABLE "public"."tracked_event_blocks" ALTER COLUMN "contract_type" ADD GEN
     NO MAXVALUE
     CACHE 1
 );
-
-CREATE TABLE IF NOT EXISTS "public"."users_public" (
-    "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
-    "wallet_address" "text",
-    "display_name" "text",
-    "profile_image" "text",
-    "profile_image_thumbnail" "text",
-    "profile_image_stored" boolean DEFAULT false NOT NULL,
-    "x_username" "text",
-    "metadata" "jsonb",
-    "follower_count" integer DEFAULT 0 NOT NULL,
-    "following_count" integer DEFAULT 0 NOT NULL,
-    "blocked" boolean DEFAULT false NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone
-);
-
-ALTER TABLE "public"."users_public" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."wallet_linking_nonces" (
     "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
@@ -1705,7 +1817,7 @@ CREATE POLICY "can write only authed" ON "public"."posts" FOR INSERT TO "authent
            FROM "public"."users_public"
           WHERE ("users_public"."user_id" = "auth"."uid"())))) OR ((POSITION(('c_'::"text") IN ("krews"."id")) = 1) AND (1 <= ( SELECT "krew_key_holders"."last_fetched_balance"
            FROM "public"."krew_key_holders"
-          WHERE (("krew_key_holders"."krew" = "krew_key_holders"."krew") AND ("krew_key_holders"."wallet_address" = ( SELECT "users_public"."wallet_address"
+          WHERE (("krew_key_holders"."krew" = "posts"."krew") AND ("krew_key_holders"."wallet_address" = ( SELECT "users_public"."wallet_address"
                    FROM "public"."users_public"
                   WHERE ("users_public"."user_id" = "auth"."uid"()))))))))))))));
 
@@ -1775,7 +1887,7 @@ CREATE POLICY "view everyone or only keyholders" ON "public"."posts" FOR SELECT 
            FROM "public"."users_public"
           WHERE ("users_public"."user_id" = "auth"."uid"())))) OR (1 <= ( SELECT "krew_key_holders"."last_fetched_balance"
            FROM "public"."krew_key_holders"
-          WHERE (("krew_key_holders"."krew" = "krew_key_holders"."krew") AND ("krew_key_holders"."wallet_address" = ( SELECT "users_public"."wallet_address"
+          WHERE (("krew_key_holders"."krew" = "posts"."krew") AND ("krew_key_holders"."wallet_address" = ( SELECT "users_public"."wallet_address"
                    FROM "public"."users_public"
                   WHERE ("users_public"."user_id" = "auth"."uid"()))))))))))));
 
@@ -1843,6 +1955,18 @@ GRANT ALL ON FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text", "
 GRANT ALL ON FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."get_krew_activities"("p_krew_id" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_krew_activities"("p_krew_id" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_krew_activities"("p_krew_id" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "service_role";
+
+GRANT ALL ON TABLE "public"."users_public" TO "anon";
+GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
+GRANT ALL ON TABLE "public"."users_public" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."get_krew_holders"("p_krew_id" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_krew_holders"("p_krew_id" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_krew_holders"("p_krew_id" "text", "last_created_at" timestamp with time zone, "max_count" integer) TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone, "max_count" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone, "max_count" integer) TO "authenticated";
@@ -1932,6 +2056,10 @@ GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "anon";
 GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."set_user_metadata_to_public"() TO "service_role";
 
+GRANT ALL ON FUNCTION "public"."test_get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."test_get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."test_get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") TO "service_role";
+
 GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "anon";
 GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."update_key_holder_count"() TO "service_role";
@@ -2007,10 +2135,6 @@ GRANT ALL ON TABLE "public"."tracked_event_blocks" TO "service_role";
 GRANT ALL ON SEQUENCE "public"."tracked_event_blocks_contract_type_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."tracked_event_blocks_contract_type_seq" TO "authenticated";
 GRANT ALL ON SEQUENCE "public"."tracked_event_blocks_contract_type_seq" TO "service_role";
-
-GRANT ALL ON TABLE "public"."users_public" TO "anon";
-GRANT ALL ON TABLE "public"."users_public" TO "authenticated";
-GRANT ALL ON TABLE "public"."users_public" TO "service_role";
 
 GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "anon";
 GRANT ALL ON TABLE "public"."wallet_linking_nonces" TO "authenticated";

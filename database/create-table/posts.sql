@@ -38,7 +38,7 @@ CREATE POLICY "can write only authed" ON "public"."posts" FOR INSERT TO "authent
            FROM "public"."users_public"
           WHERE ("users_public"."user_id" = "auth"."uid"())))) OR ((position('c_' in "krews"."id") = 1) AND (1 <= ( SELECT "krew_key_holders"."last_fetched_balance"
            FROM "public"."krew_key_holders"
-          WHERE (("krew_key_holders"."krew" = "krew_key_holders"."krew") AND ("krew_key_holders"."wallet_address" = ( SELECT "users_public"."wallet_address"
+          WHERE (("krew_key_holders"."krew" = "posts"."krew") AND ("krew_key_holders"."wallet_address" = ( SELECT "users_public"."wallet_address"
                    FROM "public"."users_public"
                   WHERE ("users_public"."user_id" = "auth"."uid"()))))))))))))));
 
@@ -50,7 +50,7 @@ CREATE POLICY "view everyone or only keyholders" ON "public"."posts" FOR SELECT 
            FROM "public"."users_public"
           WHERE ("users_public"."user_id" = "auth"."uid"())))) OR (1 <= ( SELECT "krew_key_holders"."last_fetched_balance"
            FROM "public"."krew_key_holders"
-          WHERE (("krew_key_holders"."krew" = "krew_key_holders"."krew") AND ("krew_key_holders"."wallet_address" = ( SELECT "users_public"."wallet_address"
+          WHERE (("krew_key_holders"."krew" = "posts"."krew") AND ("krew_key_holders"."wallet_address" = ( SELECT "users_public"."wallet_address"
                    FROM "public"."users_public"
                   WHERE ("users_public"."user_id" = "auth"."uid"()))))))))))));
 

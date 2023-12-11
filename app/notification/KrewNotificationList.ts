@@ -22,7 +22,6 @@ export default class KrewNotificationList
     isNew: boolean,
   ): void {
     const item = new KrewNotificationListItem(notification);
-    item.on("changeUri", () => this.fireEvent("changeUri"));
     isNew ? this.prepend(item) : this.append(item);
   }
 

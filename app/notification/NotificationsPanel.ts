@@ -13,10 +13,7 @@ export default class NotificationsPanel extends DomNode {
         "header",
         el("h1", msg("notification-title")),
         el("a", msg("notification-more-button"), {
-          click: () => {
-            Router.go("/notifications");
-            this.delete();
-          },
+          click: () => Router.go("/notifications"),
         }),
       ),
       KrewSignedUserManager.signed
@@ -25,9 +22,11 @@ export default class NotificationsPanel extends DomNode {
         )
         : new LoginRequiredDisplay(),
     );
-    this.list?.on("changeUri", () => this.delete());
+
     BodyNode.append(this);
     window.addEventListener("click", this.windowClickHandler);
+
+    this.onDelegate(Router, "go", () => this.delete());
   }
 
   private windowClickHandler = (event: MouseEvent) => {
