@@ -107,7 +107,7 @@
     >.balance-container {
         margin-top   : 16px;
         display      : flex;
-        padding      : 8px 16px 8px 8px;
+        padding      : 8px 16px;
         gap          : 8px;
         align-items  : center;
         border       : 1px solid var(--line-color);
@@ -115,6 +115,23 @@
 
         >.balance {
             flex-grow: 1;
+
+            >h3 {
+                font-size     : 12px;
+                text-transform: capitalize;
+            }
+
+            >.value {
+                margin-top : 4px;
+                font-size  : 16px;
+                font-weight: bold;
+            }
         }
+    }
+
+    >.krew-holder-list,
+    >.krew-activity-list {
+        max-height: 300px;
+        overflow-y: scroll;
     }
 }
