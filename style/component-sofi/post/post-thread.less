@@ -15,7 +15,11 @@
             left            : 40px;
             width           : 2px;
             height          : calc(100% - 64px);
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: var(--line-color);
+
+            @media @phone {
+                left: 32px;
+            }
         }
     }
 }
