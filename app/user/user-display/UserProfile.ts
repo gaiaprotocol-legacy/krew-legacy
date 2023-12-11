@@ -48,12 +48,13 @@ export default class UserProfile extends DomNode {
       this.krewList = el(".krew-list", new ListLoadingBar()),
       el(
         ".metrics-container",
+        el("h2", msg("user-profile-metrics-title")),
         el(
           "section.earned",
           el(".icon-container", new MaterialIcon("savings")),
           el(
             ".metric",
-            el("h3", "Fees Earned"),
+            el("h3", msg("user-profile-metrics-fees-earned-title")),
             this.feesEarnedDisplay = el(".value", "..."),
           ),
         ),
@@ -62,7 +63,7 @@ export default class UserProfile extends DomNode {
           el(".icon-container", new MaterialIcon("account_balance")),
           el(
             ".metric",
-            el("h3", "Portfolio Value"),
+            el("h3", msg("user-profile-metrics-portfolio-value-title")),
             this.portfolioValueDisplay = el(".value", "..."),
           ),
         ),
@@ -72,19 +73,19 @@ export default class UserProfile extends DomNode {
         el(
           "a.holding",
           this.holdingDisplay = el(".value", "..."),
-          el("h3", "Holding"),
+          el("h3", msg("user-profile-connections-holding-keys-title")),
           { click: () => Router.go(`/${xUsername}/holding`) },
         ),
         el(
           "a.following",
           this.followingDisplay = el(".value", "..."),
-          el("h3", "Following"),
+          el("h3", msg("user-profile-connections-following-title")),
           { click: () => Router.go(`/${xUsername}/following`) },
         ),
         el(
           "a.followers",
           this.followersDisplay = el(".value", "..."),
-          el("h3", "Followers"),
+          el("h3", msg("user-profile-connections-followers-title")),
           { click: () => Router.go(`/${xUsername}/followers`) },
         ),
       ),
@@ -166,7 +167,7 @@ export default class UserProfile extends DomNode {
               ? "Unfollow"
               : "Follow",
             click: () => {
-              if (!KrewSignedUserManager.signed) { 
+              if (!KrewSignedUserManager.signed) {
                 new LoginRequiredPopup();
               } else {
                 FollowService.toggleFollow(user.user_id);
@@ -210,7 +211,7 @@ export default class UserProfile extends DomNode {
     this.krewsFetched = true;
 
     const krews = await KrewService.fetchOwnedKrews(walletAddress, undefined);
-    this.krewList.empty();
+    this.krewList.empty().append(el("h2", msg("user-profile-owned-krews")));
     for (const krew of krews) {
       this.krewList.append(
         new OwnedKrewListItem(krew, this.feeClaimable),

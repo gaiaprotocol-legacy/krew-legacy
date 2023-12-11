@@ -1,4 +1,9 @@
-import { Constants, Supabase, SupabaseService, UploadManager } from "common-app-module";
+import {
+  Constants,
+  Supabase,
+  SupabaseService,
+  UploadManager,
+} from "common-app-module";
 import Krew, { KrewSelectQuery } from "../database-interface/Krew.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
@@ -78,6 +83,17 @@ class KrewService extends SupabaseService<Krew> {
     );
     if (error) throw error;
     return Supabase.safeResult<Krew[]>(data ?? []);
+  }
+
+  public async checkOwnedKrewsExist(): Promise<boolean> {
+    const { data, error } = await Supabase.client.rpc(
+      "check_owned_krews_exist",
+      {
+        p_wallet_address: KrewSignedUserManager.user?.wallet_address,
+      },
+    );
+    if (error) throw error;
+    return data ?? false;
   }
 
   public async fetchKeyHeldKrews(

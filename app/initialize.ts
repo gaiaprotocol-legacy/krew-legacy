@@ -5,6 +5,7 @@ import {
   msg,
   Router,
   SplashLoader,
+  Store,
 } from "common-app-module";
 import {
   AuthUtil,
@@ -28,6 +29,7 @@ import KrewCommunalContract from "./contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "./contracts/KrewPersonalContract.js";
 import EnvironmentManager from "./EnvironmentManager.js";
 import ExploreView from "./explore/ExploreView.js";
+import KrewService from "./krew/KrewService.js";
 import MyKrewsView from "./krew/MyKrewsView.js";
 import Layout from "./layout/Layout.js";
 import NotificationsView from "./notification/NotificationsView.js";
@@ -40,6 +42,7 @@ import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
 import UserConnectionsView from "./user/user-connections/UserConnectionsView.js";
 import UserView from "./user/UserView.js";
 import WalletManager from "./wallet/WalletManager.js";
+import WelcomeToKrewPopup from "./WelcomeToKrewPopup.js";
 
 inject_sofi_msg();
 msg.setMessages({
@@ -125,4 +128,12 @@ export default async function initialize(config: Config) {
   Router.route("test/post", TestPostView);
 
   AuthUtil.checkEmailAccess();
+
+  const welcomeStore = new Store("welcome");
+  if (
+    !welcomeStore.get("skip") &&
+    await KrewService.checkOwnedKrewsExist() !== true
+  ) {
+    new WelcomeToKrewPopup();
+  }
 }

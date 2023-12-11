@@ -143,6 +143,13 @@ key-held-post-list-empty-message: No posts you hold keys for yet
 search-post-list-empty-message: No posts found
 
 user-profile-joined: Joined {date}
+user-profile-owned-krews: Owned Krews
+user-profile-metrics-title: Metrics
+user-profile-metrics-fees-earned-title: Fees Earned
+user-profile-metrics-portfolio-value-title: Portfolio Value
+user-profile-connections-holding-keys-title: Holding Keys
+user-profile-connections-following-title: Following
+user-profile-connections-followers-title: Followers
 
 settings-view-title: Settings
 settings-view-x-section-title: Krew's 𝕏
@@ -172,7 +179,7 @@ posts-view-key-held-tab: Key Held
 user-display-posts-tab: Posts
 user-display-comments-tab: Comments
 user-display-reposts-tab: Reposts
-user-display-liked-posts-tab: Liked Posts
+user-display-liked-posts-tab: Liked
 
 krew-popup-holders-label: Holders
 krew-popup-price-label: Price
@@ -186,3 +193,9 @@ add-popup-post-tab: New Post
 
 my-krews-view-owned-tab: Owned Krews
 my-krews-view-key-held-tab: Key Held Krews
+
+welcome-to-krew-popup-title: Welcome to Krew!
+welcome-to-krew-popup-message: We're thrilled to have you here! You haven't created a Krew yet. Krews are where people come together to share, collaborate, and connect. Would you like to create your first Krew now?
+welcome-to-krew-popup-create-button: Create My Krew
+welcome-to-krew-popup-later-button: Maybe Later
+welcome-to-krew-popup-skip-checkbox: Don't show this again
