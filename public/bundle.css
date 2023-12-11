@@ -626,7 +626,13 @@ button.component.contained {
   left: 40px;
   width: 2px;
   height: calc(100% - 64px);
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--line-color);
+}
+@media only screen and (max-width: 859px) {
+  .post-thread.sofi-component > .post-display.parent::before,
+  .post-thread.sofi-component > .post-form.parent::before {
+    left: 32px;
+  }
 }
 .post-list.sofi-component {
   position: relative;
