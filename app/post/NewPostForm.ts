@@ -9,7 +9,7 @@ export default class NewPostForm extends DomNode {
   private krewSelector: KrewSelector;
   private form: KrewPostForm;
 
-  constructor(callback?: (post: KrewPost) => void) {
+  constructor(focus?: boolean, callback?: (post: KrewPost) => void) {
     super(".new-post-form");
 
     this.append(
@@ -20,7 +20,7 @@ export default class NewPostForm extends DomNode {
       ),
       this.form = new KrewPostForm(
         undefined,
-        true,
+        focus,
         callback ? (post) => callback(post) : undefined,
       ),
     );

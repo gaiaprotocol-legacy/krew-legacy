@@ -30,7 +30,7 @@ export default class AddPopup extends Popup {
           label: msg("add-popup-post-tab"),
         }]),
         this.krewForm = new CreateKrewForm(),
-        this.postForm = new NewPostForm(() => this.delete()),
+        this.postForm = new NewPostForm(true, () => this.delete()),
       ),
     );
 

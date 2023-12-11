@@ -15,7 +15,7 @@ export default class PostPopup extends Popup {
             click: () => this.delete(),
           }),
         ),
-        new NewPostForm(() => this.delete()),
+        new NewPostForm(true, () => this.delete()),
       ),
     );
   }

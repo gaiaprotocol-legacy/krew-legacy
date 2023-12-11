@@ -36,7 +36,7 @@ export default class WelcomeToKrewPopup extends Popup {
             tag: ".later",
             click: () => {
               if (this.checkbox.domElement.checked) {
-                this.store.set("skip", true);
+                this.store.set("skip", true, true);
               }
               this.delete();
             },
