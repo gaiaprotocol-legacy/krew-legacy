@@ -29,8 +29,10 @@ export default class NewPostForm extends DomNode {
       "change",
       (target: number) => {
         this.form.target = target;
-        if (target === PostTarget.KEY_HOLDERS) this.krewSelector.show();
-        else this.form.krew = undefined;
+        if (target === PostTarget.KEY_HOLDERS) {
+          this.krewSelector.show();
+          this.form.krew = this.krewSelector.krew;
+        } else this.form.krew = undefined;
       },
     );
 

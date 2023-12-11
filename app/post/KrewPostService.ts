@@ -30,9 +30,19 @@ class KrewPostService extends PostService<KrewPost> {
     return rich;
   }
 
-  public async post(target: number, message: string, files: File[]) {
+  public async post(
+    target: number,
+    krew: string | undefined,
+    message: string,
+    files: File[],
+  ) {
     const rich = files.length ? await this.upload(files) : undefined;
-    const data = await this.safeInsertAndSelect({ target, message, rich });
+    const data = await this.safeInsertAndSelect({
+      target,
+      krew,
+      message,
+      rich,
+    });
     this.notifyNewGlobalPost(data);
     return data;
   }

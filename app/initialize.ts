@@ -4,7 +4,7 @@ import {
   MaterialIconSystem,
   msg,
   Router,
-  SplashLoader
+  SplashLoader,
 } from "common-app-module";
 import {
   AuthUtil,
@@ -28,6 +28,7 @@ import KrewCommunalContract from "./contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "./contracts/KrewPersonalContract.js";
 import EnvironmentManager from "./EnvironmentManager.js";
 import ExploreView from "./explore/ExploreView.js";
+import MyKrewsView from "./krew/MyKrewsView.js";
 import Layout from "./layout/Layout.js";
 import NotificationsView from "./notification/NotificationsView.js";
 import PostsView from "./post/PostsView.js";
@@ -97,6 +98,7 @@ export default async function initialize(config: Config) {
   Router.route("notifications", NotificationsView);
   Router.route("profile", ProfileView);
   Router.route("settings", SettingsView);
+  Router.route("my-krews", MyKrewsView);
 
   Router.route("{xUsername}", UserView, [
     "chats",
@@ -106,6 +108,7 @@ export default async function initialize(config: Config) {
     "notifications",
     "profile",
     "settings",
+    "my-krews",
   ]);
   Router.route(
     [

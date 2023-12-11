@@ -18,7 +18,7 @@ export default class KrewPostForm extends PostForm {
 
   protected async post(message: string, files: File[]): Promise<void> {
     const post = !this.parentPostId
-      ? await KrewPostService.post(this.target, message, files)
+      ? await KrewPostService.post(this.target, this.krew, message, files)
       : await KrewPostService.comment(this.parentPostId, message, files);
 
     new Snackbar({

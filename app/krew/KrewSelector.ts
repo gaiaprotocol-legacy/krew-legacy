@@ -6,7 +6,7 @@ import KrewUtil from "./KrewUtil.js";
 
 export default class KrewSelector extends DomNode {
   private store: Store;
-  private select: DomNode;
+  private select: DomNode<HTMLSelectElement>;
   private refreshed = false;
   private lastCreatedAt: string | undefined;
 
@@ -16,13 +16,7 @@ export default class KrewSelector extends DomNode {
     this.append(
       this.select = el(
         "select",
-        {
-          change: (event, select) =>
-            this.fireEvent(
-              "change",
-              Number((select.domElement as HTMLSelectElement).value),
-            ),
-        },
+        { change: (event, select) => this.fireEvent("change", this.krew) },
       ),
     );
 
@@ -57,6 +51,10 @@ export default class KrewSelector extends DomNode {
         this.lastCreatedAt = krews[krews.length - 1]?.created_at;
       }
     }
+  }
+
+  public get krew() {
+    return this.select.domElement.value;
   }
 
   public show() {

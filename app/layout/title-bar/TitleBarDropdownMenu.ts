@@ -15,6 +15,9 @@ export default class TitleBarDropdownMenu extends DropdownMenu {
           title: msg("title-bar-dropdown-menu-profile-button"),
           click: () => Router.go("/profile"),
         }, {
+          title: msg("title-bar-dropdown-menu-my-krews-button"),
+          click: () => Router.go("/my-krews"),
+        }, {
           title: msg("title-bar-dropdown-menu-settings-button"),
           click: () => Router.go("/settings"),
         }, {

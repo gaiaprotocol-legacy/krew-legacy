@@ -1412,6 +1412,28 @@ p {
   background-size: 5px 5px, 5px 5px, 1px 1.5em;
   background-repeat: no-repeat;
 }
+.my-krews-view {
+  padding: 20px;
+}
+@media only screen and (max-width: 859px) {
+  .my-krews-view {
+    padding: 0;
+  }
+}
+.my-krews-view > main {
+  max-width: 1000px;
+  min-height: 100px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background-color: var(--bg2-color);
+  overflow: hidden;
+}
+@media only screen and (max-width: 859px) {
+  .my-krews-view > main {
+    background-color: transparent;
+    border-radius: 0;
+  }
+}
 .posts-view {
   position: relative;
   height: 100%;

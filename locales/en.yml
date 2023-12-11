@@ -6,6 +6,7 @@ login-required-login-button: Login with 𝕏
 title-bar-sign-in-button: Sign In
 title-bar-search-form-placeholder: Search for krews
 title-bar-dropdown-menu-profile-button: Profile
+title-bar-dropdown-menu-my-krews-button: My Krews
 title-bar-dropdown-menu-settings-button: Settings
 title-bar-dropdown-menu-logout-button: Logout
 
@@ -31,6 +32,7 @@ top-krew-list-empty-message: No top krews yet
 trending-krew-list-empty-message: No trending krews yet
 key-held-krew-list-empty-message: No krews you hold keys for yet
 search-krew-list-empty-message: No krews found
+owned-krew-list-empty-message: No owned krews yet
 
 activity-list-item-created-krew-text: "{user} created {krew} krew."
 activity-list-item-bought-key-text: "{user} bought {amount} {krew} key for {price} ETH."
@@ -177,3 +179,6 @@ krew-popup-owner-label: Owner
 
 add-popup-krew-tab: New Krew
 add-popup-post-tab: New Post
+
+my-krews-view-owned-tab: Owned Krews
+my-krews-view-key-held-tab: Key Held Krews
