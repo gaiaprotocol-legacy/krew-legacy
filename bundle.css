@@ -107,6 +107,7 @@ meter {
 @media only screen and (max-width: 859px) {
   .tabs.component {
     gap: 40px;
+    padding: 10px 20px 0;
   }
 }
 .tabs.component > .tab {
@@ -538,7 +539,7 @@ button.component.contained {
 }
 .post-display.sofi-component.in-view {
   display: block;
-  cursor: default;
+  cursor: inherit;
 }
 .post-display.sofi-component.in-view > header {
   display: flex;
@@ -825,6 +826,33 @@ p {
   max-width: 400px;
   height: auto;
 }
+.welcome-to-krew-popup > main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.welcome-to-krew-popup > main > p {
+  margin-bottom: 16px;
+}
+.welcome-to-krew-popup > main > label {
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+.welcome-to-krew-popup > main > label > input[type="checkbox"] {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  background-color: #eee;
+  border-radius: 5px;
+  border: 1px solid #dcdcdc;
+}
+.welcome-to-krew-popup > main > label > input[type="checkbox"]:hover {
+  background-color: #ddd;
+}
+.welcome-to-krew-popup > main > label > input[type="checkbox"]:checked {
+  background-color: #009688;
+}
 .layout {
   position: relative;
   height: 100%;
@@ -1105,8 +1133,22 @@ p {
   padding: 16px;
   cursor: pointer;
 }
+@media only screen and (max-width: 859px) {
+  .create-krew-form > .select-krew-type > section > p {
+    display: none;
+  }
+  .create-krew-form > .select-krew-type > section > ul {
+    display: none;
+  }
+}
 .create-krew-form > .select-krew-type > section.selected {
   border: 1px solid var(--accent-color);
+}
+.create-krew-form > .select-krew-type > section.selected > p {
+  display: block;
+}
+.create-krew-form > .select-krew-type > section.selected > ul {
+  display: block;
 }
 .create-krew-form > .select-krew-type > section > h2 {
   font-size: 20px;
@@ -1114,6 +1156,11 @@ p {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+@media only screen and (max-width: 859px) {
+  .create-krew-form > .select-krew-type > section > h2 {
+    font-size: 16px;
+  }
 }
 .create-krew-form > .select-krew-type > section > p {
   min-height: 100px;
@@ -1975,6 +2022,7 @@ p {
 }
 @media only screen and (max-width: 859px) {
   .user-profile > .info-container {
+    flex-direction: column;
     gap: 16px;
   }
 }
@@ -1985,6 +2033,8 @@ p {
 }
 @media only screen and (max-width: 859px) {
   .user-profile > .info-container > .profile-image {
+    width: 100px;
+    height: 100px;
     border-radius: 16px;
   }
 }
@@ -1993,6 +2043,11 @@ p {
   flex-direction: column;
   gap: 8px;
   align-items: flex-start;
+}
+@media only screen and (max-width: 859px) {
+  .user-profile > .info-container > .info {
+    align-items: center;
+  }
 }
 .user-profile > .info-container > .info > h2 {
   font-size: 32px;
@@ -2032,12 +2087,22 @@ p {
 .user-profile > .connections-container {
   margin-top: 16px;
 }
+.user-profile > .krew-list > h2,
+.user-profile > .metrics-container > h2,
+.user-profile > .connections-container > h2 {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 16px;
+}
 .user-profile > .krew-list::after,
 .user-profile > .metrics-container::after,
 .user-profile > .connections-container::after {
   content: "";
   clear: both;
   display: table;
+}
+.user-profile > .krew-list {
+  margin-top: 32px;
 }
 .user-profile > .metrics-container > section {
   float: left;

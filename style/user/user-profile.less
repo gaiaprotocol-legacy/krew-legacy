@@ -10,7 +10,8 @@
         gap        : 32px;
 
         @media @phone {
-            gap: 16px;
+            flex-direction: column;
+            gap           : 16px;
         }
 
         >.profile-image {
@@ -19,6 +20,8 @@
             border-radius: 32px;
 
             @media @phone {
+                width        : 100px;
+                height       : 100px;
                 border-radius: 16px;
             }
         }
@@ -28,6 +31,10 @@
             flex-direction: column;
             gap           : 8px;
             align-items   : flex-start;
+
+            @media @phone {
+                align-items: center;
+            }
 
             >h2 {
                 font-size: 32px;
@@ -74,11 +81,21 @@
     >.connections-container {
         margin-top: 16px;
 
+        >h2 {
+            font-size    : 16px;
+            color        : #fff;
+            margin-bottom: 16px;
+        }
+
         &::after {
             content: "";
             clear  : both;
             display: table;
         }
+    }
+
+    >.krew-list {
+        margin-top: 32px;
     }
 
     >.metrics-container {

@@ -27,8 +27,26 @@
             padding      : 16px;
             cursor       : pointer;
 
+            @media @phone {
+                >p {
+                    display: none;
+                }
+
+                >ul {
+                    display: none;
+                }
+            }
+
             &.selected {
                 border: 1px solid var(--accent-color);
+
+                >p {
+                    display: block;
+                }
+
+                >ul {
+                    display: block;
+                }
             }
 
             >h2 {
@@ -38,6 +56,10 @@
                 display    : flex;
                 align-items: center;
                 gap        : 8px;
+
+                @media @phone {
+                    font-size: 16px;
+                }
             }
 
             >p {
