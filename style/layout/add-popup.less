@@ -1,0 +1,28 @@
+.add-popup {
+    padding: 0 !important;
+
+    &.krew {
+        max-width: 800px !important;
+    }
+
+    >header {
+        position: relative;
+
+        >button.close {
+            position: absolute;
+            top     : 14px;
+            right   : 14px;
+            padding : 4px;
+            cursor  : pointer;
+        }
+    }
+
+    >.create-krew-form,
+    >.new-post-form {
+        padding: 30px;
+
+        @media @phone {
+            padding: 20px;
+        }
+    }
+}
