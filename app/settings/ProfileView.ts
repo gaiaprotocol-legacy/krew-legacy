@@ -19,5 +19,9 @@ export default class ProfileView extends View {
       ),
     );
     this.userDisplay.user = KrewSignedUserManager.user;
+
+    if (!KrewSignedUserManager.signed) {
+      setTimeout(() => Router.goNoHistory("/"));
+    }
   }
 }
