@@ -6,7 +6,7 @@ serveWithOptions(async (req) => {
   if (!walletAddress) throw new Error("Missing wallet address");
 
   const accessToken = "3zvgYgciBkH1ucCx7PIx8cJyogq3Zwq2";
-  const credId = "355600703024701440";
+  const credId = "355171752783552512";
   const operation = "APPEND";
   const items = [walletAddress];
 
