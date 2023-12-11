@@ -145,6 +145,11 @@ meter {
   background-color: var(--bg2-color);
   border-radius: 16px;
 }
+@media only screen and (max-width: 859px) {
+  .popup.component {
+    padding: 20px;
+  }
+}
 .popup.component > header > h1 {
   display: flex;
   align-items: center;
@@ -1307,8 +1312,14 @@ p {
   font-size: 16px;
   font-weight: bold;
 }
+.krew-popup > .tabs {
+  margin-left: -20px;
+  margin-right: -20px;
+}
 .krew-popup > .krew-holder-list,
 .krew-popup > .krew-activity-list {
+  margin-left: -20px;
+  margin-right: -20px;
   max-height: 300px;
   overflow-y: scroll;
 }
