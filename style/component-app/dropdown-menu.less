@@ -8,16 +8,41 @@
     overflow     : hidden;
     box-shadow   : 0 0 10px rgba(0, 0, 0, 0.5);
 
-    >li>button {
-        cursor         : pointer;
-        width          : 100%;
-        padding        : 10px 0;
+    >ul {
+        padding: 10px 0;
+
+        >li>button {
+            cursor         : pointer;
+            width          : 100%;
+            padding        : 10px 0;
+            display        : flex;
+            justify-content: center;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.05);
+                color     : #fff;
+            }
+        }
+    }
+
+    >footer.social {
+        border-top     : 1px solid rgba(181, 191, 214, 0.20);
         display        : flex;
         justify-content: center;
+        align-items    : center;
+        padding        : 5px 0;
 
-        &:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color     : #fff;
+        >a {
+            display        : flex;
+            justify-content: center;
+            align-items    : center;
+            padding        : 5px;
+            border-radius  : 5px;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.05);
+                color     : #fff;
+            }
         }
     }
 }
