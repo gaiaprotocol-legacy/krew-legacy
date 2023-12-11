@@ -9,6 +9,7 @@ import {
 import MaterialIcon from "../MaterialIcon.js";
 import NotificationsPanel from "../notification/NotificationsPanel.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
+import TitleBarDropdownMenu from "./title-bar/TitleBarDropdownMenu.js";
 import TitleBarSearchForm from "./title-bar/TitleBarSearchForm.js";
 import TitleBarUserDisplay from "./title-bar/TitleBarUserDisplay.js";
 
@@ -39,6 +40,16 @@ export default class TitleBar extends DomNode {
             tag: ".sign-in",
             title: msg("title-bar-sign-in-button"),
             click: () => KrewSignedUserManager.signIn(),
+          }),
+          el("button.menu", new MaterialIcon("menu"), {
+            click: (event) => {
+              event.stopPropagation();
+              const rect = this.rect;
+              new TitleBarDropdownMenu({
+                left: rect.right - (BrowserInfo.isPhoneSize ? 172 : 215),
+                top: rect.bottom - 8,
+              });
+            },
           }),
         ],
     );
