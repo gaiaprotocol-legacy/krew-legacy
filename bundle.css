@@ -1978,6 +1978,9 @@ p {
 .user-connections-view > header > button.back {
   padding: 4px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .user-connections-view > header > .info {
   display: flex;
