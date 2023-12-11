@@ -1,23 +1,25 @@
-import { el, msg, Tabs, View, ViewParams } from "common-app-module";
+import {
+  BrowserInfo,
+  el,
+  msg,
+  Tabs,
+  View,
+  ViewParams,
+} from "common-app-module";
 import { FollowingPostList, GlobalPostList } from "sofi-module";
-import KrewPost, { PostTarget } from "../database-interface/KrewPost.js";
-import KrewSelector from "../krew/KrewSelector.js";
+import KrewPost from "../database-interface/KrewPost.js";
 import KrewLoadingAnimation from "../KrewLoadingAnimation.js";
+import AddPopup from "../layout/AddPopup.js";
 import Layout from "../layout/Layout.js";
 import MaterialIcon from "../MaterialIcon.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import KeyHeldPostList from "./KeyHeldPostList.js";
-import KrewPostForm from "./KrewPostForm.js";
 import KrewPostInteractions from "./KrewPostInteractions.js";
 import KrewPostService from "./KrewPostService.js";
+import NewPostForm from "./NewPostForm.js";
 import PostPopup from "./PostPopup.js";
-import PostTargetSelector from "./PostTargetSelector.js";
 
 export default class PostsView extends View {
-  private targetSelector: PostTargetSelector | undefined;
-  private krewSelector: KrewSelector | undefined;
-  private form: KrewPostForm | undefined;
-
   private tabs: Tabs | undefined;
   private globalPostList: GlobalPostList<KrewPost>;
   private followingPostList: FollowingPostList<KrewPost> | undefined;
@@ -31,17 +33,7 @@ export default class PostsView extends View {
         ".posts-view",
         el(
           "main",
-          KrewSignedUserManager.signed
-            ? el(
-              ".form-container",
-              el(
-                "header",
-                this.targetSelector = new PostTargetSelector(),
-                this.krewSelector = new KrewSelector().hide(),
-              ),
-              this.form = new KrewPostForm(),
-            )
-            : undefined,
+          KrewSignedUserManager.signed ? new NewPostForm() : undefined,
           el(
             ".post-container",
             KrewSignedUserManager.signed
@@ -86,28 +78,11 @@ export default class PostsView extends View {
         ),
         KrewSignedUserManager.signed
           ? el("button.post", new MaterialIcon("add"), {
-            click: () => new PostPopup(),
+            click: () =>
+              BrowserInfo.isPhoneSize ? new AddPopup() : new PostPopup(),
           })
           : undefined,
       ),
-    );
-
-    this.targetSelector?.on(
-      "change",
-      (target: number) => {
-        if (this.form) {
-          this.form.target = target;
-          if (target === PostTarget.KEY_HOLDERS) this.krewSelector?.show();
-          else this.form.krew = undefined;
-        }
-      },
-    );
-
-    this.krewSelector?.on(
-      "change",
-      (krew: string) => {
-        if (this.form) this.form.krew = krew;
-      },
     );
 
     if (!this.tabs) {

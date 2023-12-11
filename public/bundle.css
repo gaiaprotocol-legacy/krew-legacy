@@ -1,3 +1,6 @@
+/*!**********************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./public/style/lib/reset.css ***!
+  \**********************************************************************************************************/
 /***
     The new CSS reset - version 1.8.4 (last updated 14.2.2023)
     GitHub page: https://github.com/elad2412/the-new-css-reset
@@ -98,6 +101,9 @@ meter {
 :where(dialog:modal) {
     all: revert;
 }
+/*!*********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/less-loader/dist/cjs.js!./public/style/main.less ***!
+  \*********************************************************************************************************************************************/
 .tabs.component {
   border-bottom: 1px solid var(--line-color);
   display: flex;
@@ -1023,6 +1029,35 @@ p {
   margin: 0;
   border-bottom: 1px solid var(--line-color);
 }
+.add-popup {
+  padding: 0 !important;
+}
+.add-popup.krew {
+  max-width: 800px !important;
+}
+.add-popup > header {
+  position: relative;
+}
+.add-popup > header > button.close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 4px;
+  cursor: pointer;
+}
+.add-popup > .create-krew-form,
+.add-popup > .new-post-form {
+  padding: 30px;
+}
+@media only screen and (max-width: 859px) {
+  .add-popup > .create-krew-form,
+  .add-popup > .new-post-form {
+    padding: 20px;
+  }
+}
+.create-krew-form.hidden {
+  display: none;
+}
 .create-krew-form > h2 {
   font-size: 24px;
 }
@@ -1057,7 +1092,7 @@ p {
   gap: 8px;
 }
 .create-krew-form > .select-krew-type > section > p {
-  height: 100px;
+  min-height: 100px;
   margin-top: 8px;
 }
 .create-krew-form > .select-krew-type > section > ul {
@@ -1077,6 +1112,18 @@ p {
 }
 .create-krew-popup {
   max-width: 800px !important;
+}
+.create-krew-popup > header {
+  display: flex;
+  gap: 8px;
+}
+.create-krew-popup > header > button.close {
+  margin-left: auto;
+  padding: 4px;
+  cursor: pointer;
+}
+.create-krew-popup > .create-krew-form {
+  margin-top: -26px;
 }
 .edit-krew-popup > header {
   display: flex;
@@ -1361,20 +1408,13 @@ p {
     overflow-y: visible;
   }
 }
-.posts-view > main > .form-container {
+.posts-view > main > .new-post-form {
   max-width: 1000px;
   margin: auto;
   margin-bottom: 20px;
   padding: 20px;
   border-radius: 20px;
   background-color: var(--bg2-color);
-}
-.posts-view > main > .form-container > header {
-  display: flex;
-  gap: 8px;
-}
-.posts-view > main > .form-container > .post-form {
-  margin-top: 20px;
 }
 .posts-view > main > .post-container {
   max-width: 1000px;
@@ -1416,6 +1456,16 @@ p {
 .posts-view > button.post:active {
   opacity: 1;
 }
+.new-post-form.hidden {
+  display: none;
+}
+.new-post-form > header {
+  display: flex;
+  gap: 8px;
+}
+.new-post-form > .post-form {
+  margin-top: 20px;
+}
 .post-view {
   padding-bottom: 330px;
 }
@@ -1428,8 +1478,8 @@ p {
   padding: 4px;
   cursor: pointer;
 }
-.post-popup > .post-form {
-  margin-top: 20px;
+.post-popup > .new-post-form {
+  margin-top: -26px;
 }
 .post-comment-popup > header {
   display: flex;
@@ -1518,13 +1568,16 @@ p {
 }
 .chat-room-list-item {
   height: 90px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   padding: 0 27px;
   cursor: pointer;
   border-bottom: 1px solid var(--line-color);
   background-color: var(--bg2-color);
+}
+@media only screen and (max-width: 859px) {
+  .chat-room-list-item {
+    height: 80px;
+    padding: 0 20px;
+  }
 }
 .chat-room-list-item .last-message-info {
   margin-top: 4px;
@@ -1563,11 +1616,21 @@ p {
   font-weight: 500;
   text-transform: capitalize;
 }
+.topic-chat-room-list-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .topic-chat-room-list-item > h3 {
   color: #FFF;
   font-size: 18px;
   font-weight: 500;
   text-transform: capitalize;
+}
+@media only screen and (max-width: 859px) {
+  .topic-chat-room-list-item > h3 {
+    font-size: 16px;
+  }
 }
 .krew-chat-room-header {
   height: 90px;
@@ -1592,11 +1655,35 @@ p {
   font-weight: 500;
   text-transform: capitalize;
 }
+.krew-chat-room-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.krew-chat-room-list-item > .image {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #252525;
+  background-size: cover;
+}
+@media only screen and (max-width: 859px) {
+  .krew-chat-room-list-item > .image {
+    width: 34px;
+    height: 34px;
+  }
+}
 .krew-chat-room-list-item > .info > h3 {
   color: #FFF;
   font-size: 18px;
   font-weight: 500;
   text-transform: capitalize;
+}
+@media only screen and (max-width: 859px) {
+  .krew-chat-room-list-item > .info > h3 {
+    font-size: 16px;
+  }
 }
 .buy-key-popup > main > .krew-image {
   flex-shrink: 0;

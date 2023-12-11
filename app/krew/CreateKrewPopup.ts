@@ -1,5 +1,5 @@
-import { Component, Popup, Router } from "common-app-module";
-import KrewType from "../database-interface/KrewType.js";
+import { Component, el, Popup } from "common-app-module";
+import MaterialIcon from "../MaterialIcon.js";
 import CreateKrewForm from "./CreateKrewForm.js";
 import EditKrewPopup from "./EditKrewPopup.js";
 
@@ -12,6 +12,12 @@ export default class CreateKrewPopup extends Popup {
     this.append(
       new Component(
         ".popup.create-krew-popup",
+        el(
+          "header",
+          el("button.close", new MaterialIcon("close"), {
+            click: () => this.delete(),
+          }),
+        ),
         this.form = new CreateKrewForm(),
       ),
     );

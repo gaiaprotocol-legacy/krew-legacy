@@ -88,4 +88,14 @@ export default class CreateKrewForm extends DomNode {
       this.createButton.title = msg("create-krew-form-create-button");
     }
   }
+
+  public show() {
+    this.deleteClass("hidden");
+    return this;
+  }
+
+  public hide() {
+    this.addClass("hidden");
+    return this;
+  }
 }
