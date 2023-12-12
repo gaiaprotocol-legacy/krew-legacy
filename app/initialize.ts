@@ -131,7 +131,7 @@ export default async function initialize(config: Config) {
 
   const welcomeStore = new Store("welcome");
   if (
-    !welcomeStore.get("skip") &&
+    !welcomeStore.get("skip") && KrewSignedUserManager.signed &&
     await KrewService.checkOwnedKrewsExist() !== true
   ) {
     new WelcomeToKrewPopup();
