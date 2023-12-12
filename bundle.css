@@ -631,7 +631,7 @@ button.component.contained {
 @media only screen and (max-width: 859px) {
   .post-thread.sofi-component > .post-display.parent::before,
   .post-thread.sofi-component > .post-form.parent::before {
-    left: 32px;
+    left: 36px;
   }
 }
 .post-list.sofi-component {
@@ -1375,6 +1375,12 @@ p {
   margin-right: -20px;
   max-height: 300px;
   overflow-y: scroll;
+}
+@media only screen and (max-width: 859px) {
+  .krew-popup > .krew-holder-list,
+  .krew-popup > .krew-activity-list {
+    max-height: 200px;
+  }
 }
 .krew-list {
   container-type: inline-size;
