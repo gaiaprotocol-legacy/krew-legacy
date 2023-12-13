@@ -45,7 +45,11 @@ export default class UserProfile extends DomNode {
 
     this.append(
       this.infoContainer = el(".info-container"),
-      this.krewList = el(".krew-list", new ListLoadingBar()),
+      el(
+        ".krew-list-container",
+        el("h2", msg("user-profile-owned-krews")),
+        this.krewList = el(".krew-list", new ListLoadingBar()),
+      ),
       el(
         ".metrics-container",
         el("h2", msg("user-profile-metrics-title")),
@@ -211,7 +215,7 @@ export default class UserProfile extends DomNode {
     this.krewsFetched = true;
 
     const krews = await KrewService.fetchOwnedKrews(walletAddress, undefined);
-    this.krewList.empty().append(el("h2", msg("user-profile-owned-krews")));
+    this.krewList.empty();
     for (const krew of krews) {
       this.krewList.append(
         new OwnedKrewListItem(krew, this.feeClaimable),

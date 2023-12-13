@@ -2008,7 +2008,7 @@ p {
   cursor: pointer;
 }
 .user-display > .posts-container {
-  margin-top: 32px;
+  margin-top: 16px;
 }
 .login-required {
   background-color: var(--bg2-color);
@@ -2039,6 +2039,7 @@ p {
   .user-profile > .info-container {
     flex-direction: column;
     gap: 16px;
+    padding-top: 16px;
   }
 }
 .user-profile > .info-container > .profile-image {
@@ -2097,27 +2098,32 @@ p {
   justify-content: center;
   font-size: 18px;
 }
-.user-profile > .krew-list,
+.user-profile > .krew-list-container,
 .user-profile > .metrics-container,
 .user-profile > .connections-container {
   margin-top: 16px;
 }
-.user-profile > .krew-list > h2,
+.user-profile > .krew-list-container > h2,
 .user-profile > .metrics-container > h2,
 .user-profile > .connections-container > h2 {
   font-size: 16px;
   color: #fff;
   margin-bottom: 16px;
 }
-.user-profile > .krew-list::after,
+.user-profile > .krew-list-container::after,
 .user-profile > .metrics-container::after,
 .user-profile > .connections-container::after {
   content: "";
   clear: both;
   display: table;
 }
-.user-profile > .krew-list {
+.user-profile > .krew-list-container {
   margin-top: 32px;
+}
+.user-profile > .krew-list-container > .krew-list::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 .user-profile > .metrics-container > section {
   float: left;

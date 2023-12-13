@@ -12,6 +12,7 @@
         @media @phone {
             flex-direction: column;
             gap           : 16px;
+            padding-top   : 16px;
         }
 
         >.profile-image {
@@ -76,7 +77,7 @@
         }
     }
 
-    >.krew-list,
+    >.krew-list-container,
     >.metrics-container,
     >.connections-container {
         margin-top: 16px;
@@ -94,8 +95,16 @@
         }
     }
 
-    >.krew-list {
+    >.krew-list-container {
         margin-top: 32px;
+
+        >.krew-list {
+            &::after {
+                content: "";
+                clear  : both;
+                display: table;
+            }
+        }
     }
 
     >.metrics-container {

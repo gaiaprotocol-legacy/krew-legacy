@@ -49,9 +49,17 @@ export default class SettingsView extends View {
         "footer",
         new Button({
           title: msg("settings-view-link-wallet-button"),
-          click: async () => {
-            await KrewSignedUserManager.linkWallet();
-            this.renderLinkWalletSection();
+          click: async (event, button) => {
+            button.domElement.setAttribute("disabled", "disabled");
+            button.text = msg("no-wallet-linked-linking");
+            try {
+              await KrewSignedUserManager.linkWallet();
+              this.renderLinkWalletSection();
+            } catch (e) {
+              console.error(e);
+              button.domElement.removeAttribute("disabled");
+              button.text = msg("settings-view-link-wallet-button");
+            }
           },
         }),
       ),
