@@ -214,7 +214,18 @@ export default class KrewPopup extends Popup {
       this.ownerXUsername
     ) {
       const owner = await KrewUserService.fetchByWalletAddress(this.krew.owner);
-      if (owner) {
+      if (!owner) {
+        this.ownerProfileImage.style({
+          display: "none",
+        });
+        this.ownerName.text = this.krew.owner;
+        this.ownerXUsername.text = "";
+        this.ownerDisplay.onDom(
+          "click",
+          () =>
+            window.open(`https://kromascan.com/address/${this.krew?.owner}`),
+        );
+      } else {
         this.ownerProfileImage.style({
           backgroundImage: `url(${owner.profile_image_thumbnail})`,
         });

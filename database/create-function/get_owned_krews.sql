@@ -21,7 +21,7 @@ BEGIN
     FROM 
         public.krews k
     LEFT JOIN 
-        public.krew_key_holders kh ON k.id = kh.krew
+        public.krew_key_holders kh ON k.id = kh.krew AND kh.wallet_address = p_wallet_address
     WHERE 
         (
             (k.id LIKE 'p_%' AND k.owner = p_wallet_address AND k.supply > 0)

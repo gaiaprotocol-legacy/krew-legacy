@@ -47,12 +47,18 @@ export default class OwnedKrewListItem extends DomNode {
         feeClaimable
           ? new Button({
             title: "Claim Fee",
-            click: () => this.claimFee(),
+            click: (event) => {
+              event.stopPropagation();
+              this.claimFee();
+            },
           })
           : undefined,
         new Button({
           title: "Buy",
-          click: () => new BuyKeyPopup(krew),
+          click: (event) => {
+            event.stopPropagation();
+            new BuyKeyPopup(krew);
+          },
         }),
       ),
     );

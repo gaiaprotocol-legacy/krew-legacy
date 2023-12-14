@@ -86,9 +86,11 @@ class KrewService extends SupabaseService<Krew> {
   }
 
   public async checkOwnedKrewsExist(): Promise<boolean> {
+    const walletAddress = KrewSignedUserManager.user?.wallet_address;
+    if (!walletAddress) return false;
     const { data, error } = await Supabase.client.rpc(
       "check_owned_krews_exist",
-      { p_wallet_address: KrewSignedUserManager.user?.wallet_address },
+      { p_wallet_address: walletAddress },
     );
     if (error) throw error;
     return data ?? false;
