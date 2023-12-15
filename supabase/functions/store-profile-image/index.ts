@@ -64,20 +64,20 @@ serveWithOptions(async (req) => {
     }
 
     const { error: updateError } = await supabase.from("users_public").update({
-      profile_image: url?.startsWith("http://supabase_kong_sofia:8000/")
+      profile_image_stored: true,
+      stored_profile_image: url?.startsWith("http://supabase_kong_sofia:8000/")
         ? url.replace(
           "http://supabase_kong_sofia:8000/",
           "http://localhost:54321/",
         )
         : url,
-      profile_image_thumbnail:
+      stored_profile_image_thumbnail:
         thumbnailUrl?.startsWith("http://supabase_kong_sofia:8000/")
           ? thumbnailUrl.replace(
             "http://supabase_kong_sofia:8000/",
             "http://localhost:54321/",
           )
           : thumbnailUrl,
-      profile_image_stored: true,
     })
       .eq("user_id", user.id);
     if (updateError) throw updateError;

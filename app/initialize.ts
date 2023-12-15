@@ -1,3 +1,4 @@
+//import { Face, Network } from "@haechi-labs/face-sdk";
 import {
   AppInitializer,
   el,
@@ -136,4 +137,9 @@ export default async function initialize(config: Config) {
   ) {
     new WelcomeToKrewPopup();
   }
+
+  /*const face = new Face({
+    network: config.dev ? Network.KROMA_SEPOLIA : Network.KROMA,
+    apiKey: config.faceWalletApiKey,
+  });*/
 }

@@ -1,12 +1,15 @@
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { msg, Supabase } from "common-app-module";
-import { ChatMessageList, Message } from "sofi-module";
+import { ChatMessageList } from "sofi-module";
 import KrewChatMessageInteractions from "../chat/KrewChatMessageInteractions.js";
+import ChatMessageSource from "../database-interface/ChatMessageSource.js";
+import KrewChatMessage from "../database-interface/KrewChatMessage.js";
 import KrewLoadingAnimation from "../KrewLoadingAnimation.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import KrewChatMessageService from "./KrewChatMessageService.js";
 
-export default class KrewChatMessageList extends ChatMessageList {
+export default class KrewChatMessageList
+  extends ChatMessageList<ChatMessageSource> {
   private channel: RealtimeChannel;
 
   constructor(private krew: string) {
@@ -42,7 +45,7 @@ export default class KrewChatMessageList extends ChatMessageList {
       .subscribe();
   }
 
-  protected async fetchMessages(): Promise<Message[]> {
+  protected async fetchMessages(): Promise<KrewChatMessage[]> {
     return await KrewChatMessageService.fetchMessages(this.krew);
   }
 

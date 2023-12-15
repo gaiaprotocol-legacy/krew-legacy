@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS "public"."users_public" (
     "profile_image" "text",
     "profile_image_thumbnail" "text",
     "profile_image_stored" boolean DEFAULT false NOT NULL,
+    "stored_profile_image" "text",
+    "stored_profile_image_thumbnail" "text",
     "x_username" "text",
     "metadata" "jsonb",
     "follower_count" integer DEFAULT 0 NOT NULL,

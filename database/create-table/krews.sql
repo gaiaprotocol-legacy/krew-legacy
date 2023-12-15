@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "is_key_price_up" boolean,
     "last_message" "text",
     "last_message_sent_at" timestamp with time zone DEFAULT '-infinity'::timestamp with time zone NOT NULL,
-    "key_holder_count" integer DEFAULT 1 NOT NULL,
+    "key_holder_count" integer DEFAULT 0 NOT NULL,
     "last_key_purchased_at" timestamp with time zone DEFAULT '-infinity'::timestamp with time zone NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "updated_at" timestamp with time zone

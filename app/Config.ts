@@ -12,4 +12,6 @@ export default interface Config {
 
   krewPersonalAddress: string;
   krewCommunalAddress: string;
+
+  faceWalletApiKey: string;
 }

@@ -13,6 +13,7 @@ BEGIN
         public.krew_key_holders kh ON u.wallet_address = kh.wallet_address
     WHERE 
         kh.krew = p_krew_id
+        AND kh.last_fetched_balance > 0
         AND (last_created_at IS NULL OR u.created_at < last_created_at)
     ORDER BY 
         u.created_at DESC

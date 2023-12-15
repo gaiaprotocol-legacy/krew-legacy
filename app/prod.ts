@@ -14,4 +14,7 @@ await initialize({
 
   krewPersonalAddress: "0xECFFc91149b8B702dEa6905Ae304A9D36527060F",
   krewCommunalAddress: "0x0",
+
+  faceWalletApiKey:
+    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD-mCDG60gguwgoqPDhzxWfNFOsY0DDSytnxp2QH0cNrwUHFeL6dq2cOAFHiUR_92ja0MUs1t-7Jvu02Yfx7lCEBfaxniCusVOPWhCH8VSvVvIQSX18f6TaaldlMIy4H_CjEXn2aPhdRHoZLWfno7uZ67E3rSkv-S0oBzCGT6VYPwIDAQAB",
 });

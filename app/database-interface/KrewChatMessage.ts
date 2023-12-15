@@ -1,5 +1,6 @@
-import { Message } from "sofi-module";
+import ChatMessage from "sofi-module/lib/database-interface/ChatMessage.js";
+import ChatMessageSource from "./ChatMessageSource.js";
 
-export default interface KrewChatMessage extends Message {
+export default interface KrewChatMessage extends ChatMessage<ChatMessageSource> {
   krew: string;
 }

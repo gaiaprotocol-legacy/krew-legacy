@@ -17,6 +17,8 @@
   },
   "type": "module",
   "dependencies": {
+    "@haechi-labs/face-sdk": "^1.12.5",
+    "@haechi-labs/face-types": "^1.12.5",
     "@wagmi/core": "^1.3.8",
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/html": "^2.7.1",

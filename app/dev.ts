@@ -15,6 +15,8 @@ await initialize({
   krewPersonalAddress: "0xECFFc91149b8B702dEa6905Ae304A9D36527060F",
   krewCommunalAddress: "0x0",
 
+  faceWalletApiKey:
+    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCabnLsk0vauF2YhaKrovsi6VvfjNLlb0IY5WdySMiNoAf_gtxHFiBCS4XXI3bctLEM4GZ81GcUwlIaXOrE3V-1hV9dqI-vC_UBMQf-aeEMWQp4lgtP7j2egUf-tZxswNeYRxSfVzZeN4no5UhV8EQcQpxAc3Urdi1Oj-8j22QNIQIDAQAB",
   /*supabaseUrl: "https://sfwnwiuxgehxbyystchq.supabase.co",
   supabaseAnonKey:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmd253aXV4Z2VoeGJ5eXN0Y2hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDAyMTA5OTYsImV4cCI6MjAxNTc4Njk5Nn0.iQ9aIdYmqKOdeAXonb6LFy9DLSVMlWycxleueEIOZes",

@@ -411,6 +411,11 @@ button.component.contained {
   gap: 8px;
   align-items: center;
 }
+.chat-message-list-item > main > header > .author {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
 .chat-message-list-item > main > header > .author > .name {
   color: #fff;
   font-weight: 500;

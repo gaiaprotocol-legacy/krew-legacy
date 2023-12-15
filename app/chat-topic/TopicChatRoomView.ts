@@ -1,5 +1,6 @@
 import { ViewParams } from "common-app-module";
 import ChatRoomView from "../chat/ChatRoomView.js";
+import ChatMessageSource from "../database-interface/ChatMessageSource.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import TopicChatMessageForm from "./TopicChatMessageForm.js";
 import TopicChatMessageList from "./TopicChatMessageList.js";
@@ -30,6 +31,7 @@ export default class TopicChatRoomView extends ChatRoomView {
         if (KrewSignedUserManager.user) {
           list.messageSending(
             tempId,
+            ChatMessageSource.Internal,
             KrewSignedUserManager.user,
             message,
             files,

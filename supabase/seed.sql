@@ -43,6 +43,26 @@ END;$$;
 
 ALTER FUNCTION "public"."append_galxe_credential_personal_buy_keys"() OWNER TO "postgres";
 
+CREATE OR REPLACE FUNCTION "public"."check_owned_krews_exist"("p_wallet_address" "text") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    owner_exists boolean;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM public.krews k
+        LEFT JOIN public.krew_key_holders kh ON k.id = kh.krew
+        WHERE (k.id LIKE 'p_%' AND k.owner = p_wallet_address AND k.supply > 0)
+            OR (k.id LIKE 'c_%' AND kh.wallet_address = p_wallet_address AND kh.last_fetched_balance > 0)
+    ) INTO owner_exists;
+
+    RETURN owner_exists;
+END;
+$$;
+
+ALTER FUNCTION "public"."check_owned_krews_exist"("p_wallet_address" "text") OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."decrease_follow_count"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$begin
@@ -528,7 +548,9 @@ CREATE TABLE IF NOT EXISTS "public"."users_public" (
     "following_count" integer DEFAULT 0 NOT NULL,
     "blocked" boolean DEFAULT false NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone
+    "updated_at" timestamp with time zone,
+    "stored_profile_image" "text",
+    "stored_profile_image_thumbnail" "text"
 );
 
 ALTER TABLE "public"."users_public" OWNER TO "postgres";
@@ -546,6 +568,7 @@ BEGIN
         public.krew_key_holders kh ON u.wallet_address = kh.wallet_address
     WHERE 
         kh.krew = p_krew_id
+        AND kh.last_fetched_balance > 0
         AND (last_created_at IS NULL OR u.created_at < last_created_at)
     ORDER BY 
         u.created_at DESC
@@ -623,7 +646,7 @@ BEGIN
     FROM 
         public.krews k
     LEFT JOIN 
-        public.krew_key_holders kh ON k.id = kh.krew
+        public.krew_key_holders kh ON k.id = kh.krew AND kh.wallet_address = p_wallet_address
     WHERE 
         (
             (k.id LIKE 'p_%' AND k.owner = p_wallet_address AND k.supply > 0)
@@ -1426,11 +1449,16 @@ ALTER TABLE "public"."activities" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."topic_chat_messages" (
     "id" bigint NOT NULL,
     "topic" "text" NOT NULL,
-    "author" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "author" "uuid" DEFAULT "auth"."uid"(),
     "message" "text",
     "translated" "jsonb",
     "rich" "jsonb",
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "source" smallint DEFAULT '0'::smallint NOT NULL,
+    "external_author_id" "text",
+    "external_author_name" "text",
+    "external_author_avatar" "text",
+    "external_message_id" "text"
 );
 
 ALTER TABLE "public"."topic_chat_messages" OWNER TO "postgres";
@@ -1455,11 +1483,16 @@ ALTER TABLE "public"."follows" OWNER TO "postgres";
 CREATE TABLE IF NOT EXISTS "public"."krew_chat_messages" (
     "id" bigint NOT NULL,
     "krew" "text" NOT NULL,
-    "author" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "author" "uuid" DEFAULT "auth"."uid"(),
     "message" "text",
     "translated" "jsonb",
     "rich" "jsonb",
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "source" smallint DEFAULT '0'::smallint NOT NULL,
+    "external_author_id" "text",
+    "external_author_name" "text",
+    "external_author_avatar" "text",
+    "external_message_id" "text"
 );
 
 ALTER TABLE "public"."krew_chat_messages" OWNER TO "postgres";
@@ -1502,7 +1535,7 @@ CREATE TABLE IF NOT EXISTS "public"."krews" (
     "is_key_price_up" boolean,
     "last_message" "text",
     "last_message_sent_at" timestamp with time zone DEFAULT '-infinity'::timestamp with time zone NOT NULL,
-    "key_holder_count" integer DEFAULT 1 NOT NULL,
+    "key_holder_count" integer DEFAULT 0 NOT NULL,
     "last_key_purchased_at" timestamp with time zone DEFAULT '-infinity'::timestamp with time zone NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "updated_at" timestamp with time zone,
@@ -1903,6 +1936,10 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 GRANT ALL ON FUNCTION "public"."append_galxe_credential_personal_buy_keys"() TO "anon";
 GRANT ALL ON FUNCTION "public"."append_galxe_credential_personal_buy_keys"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."append_galxe_credential_personal_buy_keys"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."check_owned_krews_exist"("p_wallet_address" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."check_owned_krews_exist"("p_wallet_address" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."check_owned_krews_exist"("p_wallet_address" "text") TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."decrease_follow_count"() TO "anon";
 GRANT ALL ON FUNCTION "public"."decrease_follow_count"() TO "authenticated";

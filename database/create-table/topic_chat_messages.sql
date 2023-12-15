@@ -1,8 +1,13 @@
 CREATE TABLE IF NOT EXISTS "public"."topic_chat_messages" (
     "id" bigint NOT NULL,
+    "source" smallint DEFAULT 0 NOT NULL,
     "topic" "text" NOT NULL,
-    "author" "uuid" DEFAULT "auth"."uid"() NOT NULL,
+    "author" "uuid" DEFAULT "auth"."uid"(),
+    "external_author_id" "text",
+    "external_author_name" "text",
+    "external_author_avatar" "text",
     "message" "text",
+    "external_message_id" "text",
     "translated" "jsonb",
     "rich" "jsonb",
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
