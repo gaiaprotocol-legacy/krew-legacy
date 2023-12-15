@@ -9,14 +9,24 @@ begin
     values (
       new.id,
       new.raw_user_meta_data ->> 'full_name',
-      new.raw_user_meta_data ->> 'avatar_url',
+      case 
+        when strpos(new.raw_user_meta_data ->> 'avatar_url', '_normal') > 0 then
+          replace(new.raw_user_meta_data ->> 'avatar_url', '_normal', '')
+        else
+          new.raw_user_meta_data ->> 'avatar_url'
+      end,
       new.raw_user_meta_data ->> 'avatar_url',
       false,
       new.raw_user_meta_data ->> 'user_name'
     ) on conflict (user_id) do update
     set
       display_name = new.raw_user_meta_data ->> 'full_name',
-      profile_image = new.raw_user_meta_data ->> 'avatar_url',
+      profile_image = case 
+                        when strpos(new.raw_user_meta_data ->> 'avatar_url', '_normal') > 0 then
+                          replace(new.raw_user_meta_data ->> 'avatar_url', '_normal', '')
+                        else
+                          new.raw_user_meta_data ->> 'avatar_url'
+                      end,
       profile_image_thumbnail = new.raw_user_meta_data ->> 'avatar_url',
       profile_image_stored = false,
       x_username = new.raw_user_meta_data ->> 'user_name';
