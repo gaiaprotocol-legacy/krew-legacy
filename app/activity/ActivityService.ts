@@ -21,6 +21,8 @@ class ActivityService extends SupabaseService<Activity> {
         display_name: activity.user_display_name,
         profile_image: activity.user_profile_image,
         profile_image_thumbnail: activity.user_profile_image_thumbnail,
+        stored_profile_image: activity.user_stored_profile_image,
+        stored_profile_image_thumbnail: activity.user_stored_profile_image_thumbnail,
         x_username: activity.user_x_username,
       };
     }

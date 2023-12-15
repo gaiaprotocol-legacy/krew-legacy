@@ -13,7 +13,10 @@ export default class KrewPostForm extends PostForm {
     focus?: boolean,
     private callback?: (post: KrewPost) => void,
   ) {
-    super(KrewSignedUserManager.user?.profile_image_thumbnail ?? "", focus);
+    super([
+      KrewSignedUserManager.user?.profile_image_thumbnail,
+      KrewSignedUserManager.user?.stored_profile_image_thumbnail,
+    ], focus);
   }
 
   protected async post(message: string, files: File[]): Promise<void> {

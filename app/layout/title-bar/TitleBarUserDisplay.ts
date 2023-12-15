@@ -1,5 +1,5 @@
 import { DomNode, el } from "common-app-module";
-import { SoFiUserPublic } from "sofi-module";
+import { AuthorUtil, SoFiUserPublic } from "sofi-module";
 import MaterialIcon from "../../MaterialIcon.js";
 import TitleBarDropdownMenu from "./TitleBarDropdownMenu.js";
 
@@ -7,10 +7,15 @@ export default class TitleBarUserDisplay extends DomNode {
   constructor(user: SoFiUserPublic) {
     super(".title-bar-user-display");
 
+    const profileImage = el(".profile-image");
+
+    AuthorUtil.selectLoadableProfileImage(profileImage, [
+      user.profile_image_thumbnail,
+      user.stored_profile_image_thumbnail,
+    ]);
+
     this.append(
-      el(".profile-image", {
-        style: { backgroundImage: `url(${user.profile_image_thumbnail})` },
-      }),
+      profileImage,
       el(".name", user.display_name),
       el("button.dropdown", new MaterialIcon("arrow_drop_down")),
     );

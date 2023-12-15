@@ -10,6 +10,7 @@ import {
   Tabs,
 } from "common-app-module";
 import { ethers } from "ethers";
+import { AuthorUtil } from "sofi-module";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
 import Krew from "../database-interface/Krew.js";
@@ -226,9 +227,11 @@ export default class KrewPopup extends Popup {
             window.open(`https://kromascan.com/address/${this.krew?.owner}`),
         );
       } else {
-        this.ownerProfileImage.style({
-          backgroundImage: `url(${owner.profile_image_thumbnail})`,
-        });
+        AuthorUtil.selectLoadableProfileImage(this.ownerProfileImage, [
+          owner.profile_image_thumbnail,
+          owner.stored_profile_image_thumbnail,
+        ]);
+
         this.ownerName.text = owner.display_name ?? "";
         this.ownerXUsername.text = "@" + owner.x_username ?? "";
         this.ownerDisplay.onDom(

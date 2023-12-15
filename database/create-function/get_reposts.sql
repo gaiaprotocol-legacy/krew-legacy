@@ -1,6 +1,31 @@
-CREATE OR REPLACE FUNCTION "public"."get_reposts"("p_user_id" "uuid", "last_reposted_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "repost_created_at" timestamp with time zone)
-    LANGUAGE "plpgsql"
-    AS $$
+CREATE OR REPLACE FUNCTION "public"."get_reposts"(
+        "p_user_id" "uuid",
+        "last_reposted_at" timestamp with time zone DEFAULT NULL::timestamp with time zone,
+        "max_count" integer DEFAULT 50
+    ) RETURNS TABLE(
+        "id" bigint,
+        "target" smallint,
+        "krew" "text",
+        "author" "uuid",
+        "author_display_name" "text",
+        "author_profile_image" "text",
+        "author_profile_image_thumbnail" "text",
+        "author_stored_profile_image" "text",
+        "author_stored_profile_image_thumbnail" "text",
+        "author_x_username" "text",
+        "message" "text",
+        "translated" "jsonb",
+        "rich" "jsonb",
+        "parent" bigint,
+        "comment_count" integer,
+        "repost_count" integer,
+        "like_count" integer,
+        "created_at" timestamp with time zone,
+        "updated_at" timestamp with time zone,
+        "liked" boolean,
+        "reposted" boolean,
+        "repost_created_at" timestamp with time zone
+    ) LANGUAGE "plpgsql" AS $$
 BEGIN
     RETURN QUERY
     SELECT 
@@ -11,6 +36,8 @@ BEGIN
         u.display_name,
         u.profile_image,
         u.profile_image_thumbnail,
+        u.stored_profile_image,
+        u.stored_profile_image_thumbnail,
         u.x_username,
         p.message,
         p.translated,
