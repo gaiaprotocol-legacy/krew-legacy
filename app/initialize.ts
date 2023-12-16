@@ -4,6 +4,7 @@ import {
   el,
   MaterialIconSystem,
   msg,
+  RichDisplay,
   Router,
   SplashLoader,
   Store,
@@ -55,6 +56,8 @@ msg.setMessages({
 });
 
 MaterialIconSystem.launch();
+
+RichDisplay.NOT_FOUND_IMAGE = "/images/no-longer-available.jpg";
 
 export default async function initialize(config: Config) {
   AppInitializer.initialize(
