@@ -1,5 +1,5 @@
 import { DomNode, el, msg, Tabs } from "@common-module/app";
-import { PreviewUserPublic, SoFiUserPublic } from "sofi-module";
+import { PreviewUserPublic, SoFiUserPublic } from "@common-module/social";
 import UserCommentPostList from "./user-display/user-posts/UserCommentPostList.js";
 import UserLikedPostList from "./user-display/user-posts/UserLikedPostList.js";
 import UserPostList from "./user-display/user-posts/UserPostList.js";

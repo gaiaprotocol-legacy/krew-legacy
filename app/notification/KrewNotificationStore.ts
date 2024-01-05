@@ -1,4 +1,4 @@
-import { NotificationStore } from "sofi-module";
+import { NotificationStore } from "@common-module/social";
 import KrewNotification, {
   KrewNotificationSelectQuery,
 } from "../database-interface/KrewNotification.js";

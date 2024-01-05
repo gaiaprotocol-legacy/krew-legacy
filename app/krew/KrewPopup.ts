@@ -10,7 +10,7 @@ import {
   Tabs,
 } from "@common-module/app";
 import { ethers } from "ethers";
-import { AuthorUtil } from "sofi-module";
+import { AuthorUtil } from "@common-module/social";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
 import Krew from "../database-interface/Krew.js";

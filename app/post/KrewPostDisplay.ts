@@ -1,5 +1,5 @@
 import { DomNode } from "@common-module/app";
-import { PostThread } from "sofi-module";
+import { PostThread } from "@common-module/social";
 import KrewPost from "../database-interface/KrewPost.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import KrewPostForm from "./KrewPostForm.js";

@@ -1,7 +1,7 @@
 import { getNetwork, getWalletClient } from "@wagmi/core";
 import { Supabase } from "@common-module/app";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
-import { SignedUserManager, SoFiUserPublic } from "sofi-module";
+import { SignedUserManager, SoFiUserPublic } from "@common-module/social";
 import EnvironmentManager from "../EnvironmentManager.js";
 import WalletManager from "../wallet/WalletManager.js";
 import KrewUserService from "./KrewUserService.js";

@@ -1,4 +1,4 @@
-import { Author } from "sofi-module";
+import { Author } from "@common-module/social";
 import PreviewKrew from "./PreviewKrew.js";
 
 export enum EventType {

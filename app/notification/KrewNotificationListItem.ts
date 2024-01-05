@@ -1,5 +1,5 @@
 import { DateUtil, el, msg, Router } from "@common-module/app";
-import { NotificationListItem } from "sofi-module";
+import { NotificationListItem } from "@common-module/social";
 import KrewNotification, {
   KrewNotificationType,
 } from "../database-interface/KrewNotification.js";

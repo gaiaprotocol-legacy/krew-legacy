@@ -1,4 +1,4 @@
-import { Post } from "sofi-module";
+import { Post } from "@common-module/social";
 
 export enum PostTarget {
   EVERYONE,

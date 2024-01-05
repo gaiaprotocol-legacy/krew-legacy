@@ -1,5 +1,5 @@
 import { el, Router } from "@common-module/app";
-import { Author, ChatMessageInteractions } from "sofi-module";
+import { Author, ChatMessageInteractions } from "@common-module/social";
 import ChatMessageSource from "../database-interface/ChatMessageSource.js";
 
 class KrewChatMessageInteractions

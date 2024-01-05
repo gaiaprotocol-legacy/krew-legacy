@@ -1,4 +1,4 @@
-import { TopicService } from "sofi-module";
+import { TopicService } from "@common-module/social";
 
 class KrewTopicService extends TopicService {
   constructor() {

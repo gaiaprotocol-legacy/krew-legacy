@@ -1,5 +1,5 @@
 import { el, View, ViewParams } from "@common-module/app";
-import { PreviewUserPublic } from "sofi-module";
+import { PreviewUserPublic } from "@common-module/social";
 import Layout from "../layout/Layout.js";
 import KrewUserService from "./KrewUserService.js";
 import UserDisplay from "./UserDisplay.js";

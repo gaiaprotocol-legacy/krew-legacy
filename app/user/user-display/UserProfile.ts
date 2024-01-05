@@ -9,7 +9,7 @@ import {
   Router,
 } from "@common-module/app";
 import { ethers } from "ethers";
-import { FollowService, PreviewUserPublic, SoFiUserPublic } from "sofi-module";
+import { FollowService, PreviewUserPublic, SoFiUserPublic } from "@common-module/social";
 import KrewService from "../../krew/KrewService.js";
 import MaterialIcon from "../../MaterialIcon.js";
 import WalletDataService from "../../wallet/WalletDataService.js";

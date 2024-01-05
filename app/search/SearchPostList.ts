@@ -1,5 +1,5 @@
 import { msg } from "@common-module/app";
-import { PostList } from "sofi-module";
+import { PostList } from "@common-module/social";
 import KrewLoadingAnimation from "../KrewLoadingAnimation.js";
 import KrewPost from "../database-interface/KrewPost.js";
 import KrewPostInteractions from "../post/KrewPostInteractions.js";

@@ -1,6 +1,6 @@
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { msg, Supabase } from "@common-module/app";
-import { ChatMessageList } from "sofi-module";
+import { ChatMessageList } from "@common-module/social";
 import KrewChatMessageInteractions from "../chat/KrewChatMessageInteractions.js";
 import ChatMessageSource from "../database-interface/ChatMessageSource.js";
 import TopicChatMessage from "../database-interface/TopicChatMessage.js";

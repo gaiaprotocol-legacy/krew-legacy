@@ -1,7 +1,7 @@
 import { DateUtil, DomNode, el, Router } from "@common-module/app";
 import { msgs } from "@common-module/app/lib/i18n/msg.js";
 import { ethers } from "ethers";
-import { AuthorUtil } from "sofi-module";
+import { AuthorUtil } from "@common-module/social";
 import BlockTimeManager from "../BlockTimeManager.js";
 import Activity, { EventType } from "../database-interface/Activity.js";
 import KrewPopup from "../krew/KrewPopup.js";

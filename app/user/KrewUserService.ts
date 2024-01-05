@@ -1,5 +1,5 @@
 import { Supabase } from "@common-module/app";
-import { SoFiUserPublic, SoFiUserService } from "sofi-module";
+import { SoFiUserPublic, SoFiUserService } from "@common-module/social";
 
 class KrewUserService extends SoFiUserService<SoFiUserPublic> {
   constructor() {

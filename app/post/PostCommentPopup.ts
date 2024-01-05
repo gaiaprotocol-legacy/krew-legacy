@@ -1,5 +1,5 @@
 import { Component, el, Popup } from "@common-module/app";
-import { Post, PostContentDisplay } from "sofi-module";
+import { Post, PostContentDisplay } from "@common-module/social";
 import MaterialIcon from "../MaterialIcon.js";
 import KrewPostForm from "./KrewPostForm.js";
 

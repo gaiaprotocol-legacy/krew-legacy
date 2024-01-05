@@ -1,5 +1,5 @@
 import { DomNode, ListLoadingBar, Store } from "@common-module/app";
-import { SoFiUserPublic } from "sofi-module";
+import { SoFiUserPublic } from "@common-module/social";
 import UserListItem from "./UserListItem.js";
 
 export interface UserListOptions {

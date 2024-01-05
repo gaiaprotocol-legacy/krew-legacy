@@ -1,5 +1,5 @@
 import { el, msg, Router, Tabs, View, ViewParams } from "@common-module/app";
-import { SoFiUserPublic } from "sofi-module";
+import { SoFiUserPublic } from "@common-module/social";
 import Layout from "../../layout/Layout.js";
 import MaterialIcon from "../../MaterialIcon.js";
 import KrewUserService from "../KrewUserService.js";

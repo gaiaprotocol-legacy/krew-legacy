@@ -1,5 +1,5 @@
 import { msg } from "@common-module/app";
-import { NotificationList } from "sofi-module";
+import { NotificationList } from "@common-module/social";
 import KrewLoadingAnimation from "../KrewLoadingAnimation.js";
 import KrewNotification from "../database-interface/KrewNotification.js";
 import KrewNotificationListItem from "./KrewNotificationListItem.js";

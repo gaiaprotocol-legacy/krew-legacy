@@ -1,5 +1,5 @@
 import { ButtonType } from "@common-module/app";
-import { ChatMessageForm } from "sofi-module";
+import { ChatMessageForm } from "@common-module/social";
 import MaterialIcon from "../MaterialIcon.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import LoginRequiredPopup from "../user/LoginRequiredPopup.js";

@@ -1,5 +1,5 @@
 import { DomNode, el, Router } from "@common-module/app";
-import { AuthorUtil, SoFiUserPublic } from "sofi-module";
+import { AuthorUtil, SoFiUserPublic } from "@common-module/social";
 
 export default class UserListItem extends DomNode {
   constructor(user: SoFiUserPublic) {

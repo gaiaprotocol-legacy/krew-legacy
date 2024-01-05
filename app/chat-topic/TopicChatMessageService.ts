@@ -1,5 +1,5 @@
 import { Rich, UploadManager } from "@common-module/app";
-import { MessageSelectQuery, MessageService } from "sofi-module";
+import { MessageSelectQuery, MessageService } from "@common-module/social";
 import TopicChatMessage from "../database-interface/TopicChatMessage.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 

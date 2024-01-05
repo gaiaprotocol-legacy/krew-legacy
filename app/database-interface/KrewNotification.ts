@@ -1,4 +1,4 @@
-import { Notification, NotificationSelectQuery } from "sofi-module";
+import { Notification, NotificationSelectQuery } from "@common-module/social";
 
 export enum KrewNotificationType {
   CREATE_KEY,
