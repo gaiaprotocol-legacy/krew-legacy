@@ -1,4 +1,4 @@
-import { el, Router } from "common-app-module";
+import { el, Router } from "@common-module/app";
 import { Author, ChatMessageInteractions } from "sofi-module";
 import ChatMessageSource from "../database-interface/ChatMessageSource.js";
 

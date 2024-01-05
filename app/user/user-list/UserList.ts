@@ -1,4 +1,4 @@
-import { DomNode, ListLoadingBar, Store } from "common-app-module";
+import { DomNode, ListLoadingBar, Store } from "@common-module/app";
 import { SoFiUserPublic } from "sofi-module";
 import UserListItem from "./UserListItem.js";
 

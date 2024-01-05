@@ -1,4 +1,4 @@
-import { DomNode, el, msg } from "common-app-module";
+import { DomNode, el, msg } from "@common-module/app";
 import TopKrewList from "../krew/TopKrewList.js";
 import TrendingKrewList from "../krew/TrendingKrewList.js";
 

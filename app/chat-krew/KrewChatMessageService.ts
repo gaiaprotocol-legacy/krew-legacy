@@ -1,4 +1,4 @@
-import { Rich, UploadManager } from "common-app-module";
+import { Rich, UploadManager } from "@common-module/app";
 import { MessageSelectQuery, MessageService } from "sofi-module";
 import KrewChatMessage from "../database-interface/KrewChatMessage.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";

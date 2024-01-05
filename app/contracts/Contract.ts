@@ -1,5 +1,5 @@
 import { getNetwork, getWalletClient } from "@wagmi/core";
-import { Confirm, ErrorAlert, EventContainer, msg } from "common-app-module";
+import { Confirm, ErrorAlert, EventContainer, msg } from "@common-module/app";
 import { BaseContract, Interface, InterfaceAbi, ethers } from "ethers";
 import EnvironmentManager from "../EnvironmentManager.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";

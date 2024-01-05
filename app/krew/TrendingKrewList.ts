@@ -1,4 +1,4 @@
-import { msg } from "common-app-module";
+import { msg } from "@common-module/app";
 import Krew from "../database-interface/Krew.js";
 import KrewList from "./KrewList.js";
 import KrewService from "./KrewService.js";

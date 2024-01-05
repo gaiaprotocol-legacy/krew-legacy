@@ -1,4 +1,4 @@
-import { el, msg, Tabs, View } from "common-app-module";
+import { el, msg, Tabs, View } from "@common-module/app";
 import Layout from "../layout/Layout.js";
 import SearchKrewList from "./SearchKrewList.js";
 import SearchPostList from "./SearchPostList.js";

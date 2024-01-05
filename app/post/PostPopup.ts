@@ -1,4 +1,4 @@
-import { Component, el, Popup } from "common-app-module";
+import { Component, el, Popup } from "@common-module/app";
 import MaterialIcon from "../MaterialIcon.js";
 import NewPostForm from "./NewPostForm.js";
 

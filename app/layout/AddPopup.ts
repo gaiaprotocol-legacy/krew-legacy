@@ -1,4 +1,4 @@
-import { Component, el, msg, Popup, Tabs } from "common-app-module";
+import { Component, el, msg, Popup, Tabs } from "@common-module/app";
 import CreateKrewForm from "../krew/CreateKrewForm.js";
 import EditKrewPopup from "../krew/EditKrewPopup.js";
 import MaterialIcon from "../MaterialIcon.js";

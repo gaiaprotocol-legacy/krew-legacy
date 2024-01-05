@@ -8,7 +8,7 @@ import {
   Popup,
   Router,
   Tabs,
-} from "common-app-module";
+} from "@common-module/app";
 import { ethers } from "ethers";
 import { AuthorUtil } from "sofi-module";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";

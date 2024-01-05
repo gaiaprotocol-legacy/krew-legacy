@@ -1,4 +1,4 @@
-import { Supabase } from "common-app-module";
+import { Supabase } from "@common-module/app";
 import { SoFiUserPublic, SoFiUserService } from "sofi-module";
 
 class KrewUserService extends SoFiUserService<SoFiUserPublic> {

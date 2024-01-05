@@ -1,4 +1,4 @@
-import { ViewParams } from "common-app-module";
+import { ViewParams } from "@common-module/app";
 import ChatRoomView from "../chat/ChatRoomView.js";
 import ChatMessageSource from "../database-interface/ChatMessageSource.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";

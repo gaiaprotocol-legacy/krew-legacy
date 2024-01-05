@@ -8,7 +8,7 @@ import {
   Popup,
   el,
   msg,
-} from "common-app-module";
+} from "@common-module/app";
 import EnvironmentManager from "../EnvironmentManager.js";
 
 export default class SwitchToKromaPopup extends Popup {

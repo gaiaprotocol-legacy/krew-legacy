@@ -1,5 +1,5 @@
-import { DateUtil, DomNode, el, Router } from "common-app-module";
-import { msgs } from "common-app-module/lib/i18n/msg.js";
+import { DateUtil, DomNode, el, Router } from "@common-module/app";
+import { msgs } from "@common-module/app/lib/i18n/msg.js";
 import { ethers } from "ethers";
 import { AuthorUtil } from "sofi-module";
 import BlockTimeManager from "../BlockTimeManager.js";

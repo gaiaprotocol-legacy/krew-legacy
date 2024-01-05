@@ -7,7 +7,7 @@ import {
   msg,
   Popup,
   Store,
-} from "common-app-module";
+} from "@common-module/app";
 import CreateKrewPopup from "./krew/CreateKrewPopup.js";
 
 export default class WelcomeToKrewPopup extends Popup {

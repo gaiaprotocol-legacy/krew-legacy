@@ -1,4 +1,4 @@
-import { BodyNode, DomNode, el, msg, Router } from "common-app-module";
+import { BodyNode, DomNode, el, msg, Router } from "@common-module/app";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import LoginRequiredDisplay from "../user/LoginRequiredDisplay.js";
 import KrewNotificationList from "./KrewNotificationList.js";

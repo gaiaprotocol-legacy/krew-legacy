@@ -1,4 +1,4 @@
-import { Button, DomNode, el, msg } from "common-app-module";
+import { Button, DomNode, el, msg } from "@common-module/app";
 import KrewSignedUserManager from "./KrewSignedUserManager.js";
 import MaterialIcon from "../MaterialIcon.js";
 

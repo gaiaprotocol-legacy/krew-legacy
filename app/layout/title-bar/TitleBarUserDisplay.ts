@@ -1,4 +1,4 @@
-import { DomNode, el } from "common-app-module";
+import { DomNode, el } from "@common-module/app";
 import { AuthorUtil, SoFiUserPublic } from "sofi-module";
 import MaterialIcon from "../../MaterialIcon.js";
 import TitleBarDropdownMenu from "./TitleBarDropdownMenu.js";

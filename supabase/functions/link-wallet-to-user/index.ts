@@ -40,20 +40,7 @@ serveWithOptions(async (req) => {
   ).eq("wallet_address", walletAddress);
   if (deleteWalletAddressError) throw deleteWalletAddressError;
 
-  // deno-lint-ignore no-explicit-any
-  const metadata: any = {};
-
-  const { error: setWalletAddressError } = await supabase
-    .from("users_public")
-    .upsert({
-      user_id: user.id,
-      wallet_address: walletAddress,
-      display_name: user.user_metadata.full_name,
-      profile_image: user.user_metadata.avatar_url,
-      x_username: user.app_metadata.provider === "twitter"
-        ? user.user_metadata.user_name
-        : undefined,
-      metadata,
-    }).eq("user_id", user.id);
+  const { error: setWalletAddressError } = await supabase.from("users_public")
+    .update({ wallet_address: walletAddress }).eq("user_id", user.id);
   if (setWalletAddressError) throw setWalletAddressError;
 });

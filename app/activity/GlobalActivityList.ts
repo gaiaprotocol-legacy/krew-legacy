@@ -1,4 +1,4 @@
-import { msg } from "common-app-module";
+import { msg } from "@common-module/app";
 import Activity from "../database-interface/Activity.js";
 import ActivityList from "./ActivityList.js";
 import ActivityService from "./ActivityService.js";
@@ -15,6 +15,6 @@ export default class GlobalActivityList extends ActivityList {
   }
 
   protected async fetchActivities(): Promise<Activity[]> {
-    return await ActivityService.fetchGlobalActivities();
+    return await ActivityService.fetchGlobalActivities(this.lastCreatedAt);
   }
 }

@@ -5,7 +5,7 @@ import {
   Tabs,
   View,
   ViewParams,
-} from "common-app-module";
+} from "@common-module/app";
 import { FollowingPostList, GlobalPostList } from "sofi-module";
 import KrewPost from "../database-interface/KrewPost.js";
 import KrewLoadingAnimation from "../KrewLoadingAnimation.js";

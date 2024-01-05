@@ -1,4 +1,4 @@
-import { msg, Router, Snackbar } from "common-app-module";
+import { msg, Router, Snackbar } from "@common-module/app";
 import { PostForm } from "sofi-module";
 import KrewPost, { PostTarget } from "../database-interface/KrewPost.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";

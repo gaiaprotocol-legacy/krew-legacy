@@ -1,4 +1,4 @@
-import { msg } from "common-app-module";
+import { msg } from "@common-module/app";
 import { SoFiUserPublic } from "sofi-module";
 import KrewUserService from "../KrewUserService.js";
 import UserList from "../user-list/UserList.js";

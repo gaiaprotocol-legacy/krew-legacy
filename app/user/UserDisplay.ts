@@ -1,4 +1,4 @@
-import { DomNode, el, msg, Tabs } from "common-app-module";
+import { DomNode, el, msg, Tabs } from "@common-module/app";
 import { PreviewUserPublic, SoFiUserPublic } from "sofi-module";
 import UserCommentPostList from "./user-display/user-posts/UserCommentPostList.js";
 import UserLikedPostList from "./user-display/user-posts/UserLikedPostList.js";

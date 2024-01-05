@@ -1,4 +1,4 @@
-import { msg } from "common-app-module";
+import { msg } from "@common-module/app";
 
 export default class KrewUtil {
   public static getName(krew: { id: string; name?: string }): string {

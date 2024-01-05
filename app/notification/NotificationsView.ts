@@ -1,4 +1,4 @@
-import { el, msg, View } from "common-app-module";
+import { el, msg, View } from "@common-module/app";
 import Layout from "../layout/Layout.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import LoginRequiredDisplay from "../user/LoginRequiredDisplay.js";

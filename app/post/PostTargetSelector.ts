@@ -1,4 +1,4 @@
-import { DomNode, el, msg } from "common-app-module";
+import { DomNode, el, msg } from "@common-module/app";
 import { PostTarget } from "../database-interface/KrewPost.js";
 
 export default class PostTargetSelector extends DomNode {

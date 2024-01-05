@@ -7,7 +7,7 @@ import {
   msg,
   Popup,
   Router,
-} from "common-app-module";
+} from "@common-module/app";
 import Krew from "../database-interface/Krew.js";
 import KrewUtil from "../krew/KrewUtil.js";
 import animationData from "./firecracker-animation.json" assert {

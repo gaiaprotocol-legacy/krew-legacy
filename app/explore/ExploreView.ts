@@ -1,4 +1,4 @@
-import { el, msg, Tabs, View } from "common-app-module";
+import { el, msg, Tabs, View } from "@common-module/app";
 import NewKrewList from "../krew/NewKrewList.js";
 import TopKrewList from "../krew/TopKrewList.js";
 import TrendingKrewList from "../krew/TrendingKrewList.js";

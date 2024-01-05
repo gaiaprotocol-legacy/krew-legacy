@@ -1,4 +1,4 @@
-import { el, View } from "common-app-module";
+import { el, View } from "@common-module/app";
 import KrewChatRoomList from "../chat-krew/KrewChatRoomList.js";
 import TopicChatRoomList from "../chat-topic/TopicChatRoomList.js";
 import Layout from "../layout/Layout.js";

@@ -1,4 +1,4 @@
-import { Router } from "common-app-module";
+import { Router } from "@common-module/app";
 import { Author, PostInteractions } from "sofi-module";
 import KrewPost from "../database-interface/KrewPost.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";

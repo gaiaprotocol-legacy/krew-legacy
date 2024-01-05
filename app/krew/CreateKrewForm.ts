@@ -1,4 +1,4 @@
-import { Button, DomNode, el, msg } from "common-app-module";
+import { Button, DomNode, el, msg } from "@common-module/app";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
 import KrewType from "../database-interface/KrewType.js";

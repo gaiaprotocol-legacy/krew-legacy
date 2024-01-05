@@ -1,4 +1,4 @@
-import { DomNode, el } from "common-app-module";
+import { DomNode, el } from "@common-module/app";
 import KrewPost, { PostTarget } from "../database-interface/KrewPost.js";
 import KrewSelector from "../krew/KrewSelector.js";
 import KrewPostForm from "./KrewPostForm.js";

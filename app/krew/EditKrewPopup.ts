@@ -6,7 +6,7 @@ import {
   el,
   msg,
   Popup,
-} from "common-app-module";
+} from "@common-module/app";
 import Krew from "../database-interface/Krew.js";
 import PreviewKrew from "../database-interface/PreviewKrew.js";
 import KrewService from "./KrewService.js";

@@ -1,4 +1,4 @@
-import { el, Router } from "common-app-module";
+import { el, Router } from "@common-module/app";
 import ChatRoomListItem from "../chat/ChatRoomListItem.js";
 import Krew from "../database-interface/Krew.js";
 import KrewUtil from "../krew/KrewUtil.js";

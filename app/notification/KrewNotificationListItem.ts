@@ -1,4 +1,4 @@
-import { DateUtil, el, msg, Router } from "common-app-module";
+import { DateUtil, el, msg, Router } from "@common-module/app";
 import { NotificationListItem } from "sofi-module";
 import KrewNotification, {
   KrewNotificationType,

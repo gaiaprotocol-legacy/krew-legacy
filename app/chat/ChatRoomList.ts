@@ -1,4 +1,4 @@
-import { DomNode, Store } from "common-app-module";
+import { DomNode, Store } from "@common-module/app";
 
 export interface ChatRoomListOptions {
   storeName: string;

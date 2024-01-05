@@ -1,4 +1,4 @@
-import { msg } from "common-app-module";
+import { msg } from "@common-module/app";
 import Activity from "../database-interface/Activity.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import ActivityList from "./ActivityList.js";

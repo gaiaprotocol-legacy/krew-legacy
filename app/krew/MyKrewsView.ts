@@ -1,4 +1,4 @@
-import { el, msg, Tabs, View } from "common-app-module";
+import { el, msg, Tabs, View } from "@common-module/app";
 import KeyHeldKrewList from "../krew/KeyHeldKrewList.js";
 import Layout from "../layout/Layout.js";
 import OwnedKrewList from "./OwnedKrewList.js";

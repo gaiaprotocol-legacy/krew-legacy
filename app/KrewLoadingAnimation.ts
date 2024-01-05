@@ -1,4 +1,4 @@
-import { DomNode, LottieAnimation } from "common-app-module";
+import { DomNode, LottieAnimation } from "@common-module/app";
 import animationData from "./krew-loading-animation.json" assert {
   type: "json",
 };

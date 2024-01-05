@@ -1,4 +1,4 @@
-import { el, View } from "common-app-module";
+import { el, View } from "@common-module/app";
 import Layout from "../layout/Layout.js";
 
 export default abstract class ChatRoomView extends View {

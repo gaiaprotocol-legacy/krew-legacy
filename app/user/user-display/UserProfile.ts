@@ -7,7 +7,7 @@ import {
   ListLoadingBar,
   msg,
   Router,
-} from "common-app-module";
+} from "@common-module/app";
 import { ethers } from "ethers";
 import { FollowService, PreviewUserPublic, SoFiUserPublic } from "sofi-module";
 import KrewService from "../../krew/KrewService.js";

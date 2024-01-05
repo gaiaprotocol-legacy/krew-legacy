@@ -8,7 +8,7 @@ import {
   Router,
   SplashLoader,
   Store,
-} from "common-app-module";
+} from "@common-module/app";
 import {
   AuthUtil,
   inject_sofi_msg,
@@ -126,10 +126,6 @@ export default async function initialize(config: Config) {
     ],
     UserConnectionsView,
   );
-
-  Router.route("test/chat", TestChatView);
-  Router.route("test/posts", TestPostListView);
-  Router.route("test/post", TestPostView);
 
   AuthUtil.checkEmailAccess();
 

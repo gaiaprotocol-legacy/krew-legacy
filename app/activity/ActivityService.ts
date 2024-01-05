@@ -1,4 +1,4 @@
-import { Constants, Supabase, SupabaseService } from "common-app-module";
+import { Constants, Supabase, SupabaseService } from "@common-module/app";
 import Activity, {
   ActivitySelectQuery,
 } from "../database-interface/Activity.js";

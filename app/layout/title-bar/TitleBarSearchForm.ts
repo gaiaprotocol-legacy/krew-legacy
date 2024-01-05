@@ -1,4 +1,4 @@
-import { DomNode, el, msg, Router } from "common-app-module";
+import { DomNode, el, msg, Router } from "@common-module/app";
 import MaterialIcon from "../../MaterialIcon.js";
 
 export default class TitleBarSearchForm extends DomNode {

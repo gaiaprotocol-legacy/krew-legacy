@@ -1,4 +1,4 @@
-import { el, View, ViewParams } from "common-app-module";
+import { el, View, ViewParams } from "@common-module/app";
 import { PreviewUserPublic } from "sofi-module";
 import Layout from "../layout/Layout.js";
 import KrewUserService from "./KrewUserService.js";

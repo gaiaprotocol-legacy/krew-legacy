@@ -1,4 +1,4 @@
-import { Rich, Supabase, UploadManager } from "common-app-module";
+import { Rich, Supabase, UploadManager } from "@common-module/app";
 import { PostSelectQuery, PostService } from "sofi-module";
 import KrewPost from "../database-interface/KrewPost.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";

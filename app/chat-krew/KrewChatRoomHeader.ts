@@ -1,4 +1,4 @@
-import { DomNode, el } from "common-app-module";
+import { DomNode, el } from "@common-module/app";
 import MaterialIcon from "../MaterialIcon.js";
 import Krew from "../database-interface/Krew.js";
 import KrewService from "../krew/KrewService.js";

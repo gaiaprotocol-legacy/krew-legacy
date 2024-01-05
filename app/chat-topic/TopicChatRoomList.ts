@@ -1,4 +1,4 @@
-import { ListLoadingBar, msg } from "common-app-module";
+import { ListLoadingBar, msg } from "@common-module/app";
 import { Topic } from "sofi-module";
 import ChatRoomList from "../chat/ChatRoomList.js";
 import KrewTopicService from "../topic/KrewTopicService.js";

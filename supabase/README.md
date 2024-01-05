@@ -6,6 +6,10 @@ supabase functions deploy
 supabase db dump -f supabase/seed.sql
 ```
 
+```
+https://api.telegram.org/bot5602811563:AAHOrClDXGxizjg7NY-lPC0rYmgjCl5hZA4/setWebhook?url=https://sfwnwiuxgehxbyystchq.supabase.co/functions/v1/telegram-bot?secret=test
+```
+
 ```sql
 select * from cron.job;
 ```

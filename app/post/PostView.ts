@@ -1,4 +1,4 @@
-import { el, View, ViewParams } from "common-app-module";
+import { el, View, ViewParams } from "@common-module/app";
 import KrewPost from "../database-interface/KrewPost.js";
 import Layout from "../layout/Layout.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";

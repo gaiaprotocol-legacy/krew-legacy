@@ -1,4 +1,4 @@
-import { DomNode, ListLoadingBar, Store } from "common-app-module";
+import { DomNode, ListLoadingBar, Store } from "@common-module/app";
 import Krew from "../database-interface/Krew.js";
 import KrewListItem from "./KrewListItem.js";
 

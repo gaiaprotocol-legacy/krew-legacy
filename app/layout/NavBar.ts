@@ -1,4 +1,4 @@
-import { DomNode, el, Router } from "common-app-module";
+import { DomNode, el, Router } from "@common-module/app";
 import MaterialIcon from "../MaterialIcon.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import LoginRequiredPopup from "../user/LoginRequiredPopup.js";

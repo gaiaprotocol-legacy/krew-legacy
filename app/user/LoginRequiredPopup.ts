@@ -6,7 +6,7 @@ import {
   el,
   msg,
   Popup,
-} from "common-app-module";
+} from "@common-module/app";
 import KrewSignedUserManager from "./KrewSignedUserManager.js";
 
 export default class LoginRequiredPopup extends Popup {

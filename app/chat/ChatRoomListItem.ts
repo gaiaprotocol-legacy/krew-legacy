@@ -1,4 +1,4 @@
-import { Constants, DateUtil, DomNode, el } from "common-app-module";
+import { Constants, DateUtil, DomNode, el } from "@common-module/app";
 
 export default abstract class ChatRoomListItem extends DomNode {
   private _lastMessageDisplay?: DomNode;

@@ -1,4 +1,4 @@
-import { Component, Popup } from "common-app-module";
+import { Component, Popup } from "@common-module/app";
 
 export default class TradePersonalKeyPopup extends Popup {
   constructor() {

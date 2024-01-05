@@ -5,7 +5,7 @@ import {
   el,
   msg,
   Router,
-} from "common-app-module";
+} from "@common-module/app";
 import MaterialIcon from "../MaterialIcon.js";
 import NotificationsPanel from "../notification/NotificationsPanel.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";

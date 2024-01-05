@@ -3,7 +3,7 @@ import {
   Supabase,
   SupabaseService,
   UploadManager,
-} from "common-app-module";
+} from "@common-module/app";
 import Krew, { KrewSelectQuery } from "../database-interface/Krew.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 

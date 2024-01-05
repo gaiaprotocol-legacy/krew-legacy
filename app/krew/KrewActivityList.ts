@@ -1,4 +1,4 @@
-import { msg } from "common-app-module";
+import { msg } from "@common-module/app";
 import ActivityList from "../activity/ActivityList.js";
 import ActivityService from "../activity/ActivityService.js";
 import Activity from "../database-interface/Activity.js";

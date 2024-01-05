@@ -1,5 +1,5 @@
 import { getNetwork, getWalletClient } from "@wagmi/core";
-import { Supabase } from "common-app-module";
+import { Supabase } from "@common-module/app";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
 import { SignedUserManager, SoFiUserPublic } from "sofi-module";
 import EnvironmentManager from "../EnvironmentManager.js";

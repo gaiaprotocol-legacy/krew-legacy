@@ -1,4 +1,4 @@
-import { el, msg, Router, Tabs, View, ViewParams } from "common-app-module";
+import { el, msg, Router, Tabs, View, ViewParams } from "@common-module/app";
 import { SoFiUserPublic } from "sofi-module";
 import Layout from "../../layout/Layout.js";
 import MaterialIcon from "../../MaterialIcon.js";

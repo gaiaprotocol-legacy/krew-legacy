@@ -1,4 +1,4 @@
-import { DomNode, el } from "common-app-module";
+import { DomNode, el } from "@common-module/app";
 import MaterialIcon from "../MaterialIcon.js";
 
 export default class TopicChatRoomHeader extends DomNode {

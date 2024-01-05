@@ -6,7 +6,7 @@ import {
   el,
   msg,
   Popup,
-} from "common-app-module";
+} from "@common-module/app";
 import { ethers } from "ethers";
 import KrewContract from "../contracts/KrewContract.js";
 import KrewPersonalContract from "../contracts/KrewPersonalContract.js";

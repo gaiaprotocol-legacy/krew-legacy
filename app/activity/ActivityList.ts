@@ -1,4 +1,4 @@
-import { DomNode, ListLoadingBar, Store } from "common-app-module";
+import { DomNode, ListLoadingBar, Store } from "@common-module/app";
 import Activity from "../database-interface/Activity.js";
 import ActivityListItem from "./ActivityListItem.js";
 
@@ -17,10 +17,10 @@ export default abstract class ActivityList extends DomNode {
     this.store = options.storeName ? new Store(options.storeName) : undefined;
     this.domElement.setAttribute("data-empty-message", options.emptyMessage);
 
-    const cachedEvents = this.store?.get<Activity[]>("cached-events");
-    if (cachedEvents && cachedEvents.length > 0) {
-      for (const e of cachedEvents) {
-        this.append(new ActivityListItem(e));
+    const cachedActivities = this.store?.get<Activity[]>("cached-activities");
+    if (cachedActivities && cachedActivities.length > 0) {
+      for (const a of cachedActivities) {
+        this.append(new ActivityListItem(a));
       }
     }
   }
@@ -30,15 +30,16 @@ export default abstract class ActivityList extends DomNode {
   private async refresh() {
     this.append(new ListLoadingBar());
 
-    const events = await this.fetchActivities();
-    this.store?.set("cached-events", events, true);
+    this.lastCreatedAt = undefined;
+    const activities = await this.fetchActivities();
+    this.store?.set("cached-activities", activities, true);
 
     if (!this.deleted) {
       this.empty();
-      for (const e of events) {
-        this.append(new ActivityListItem(e));
+      for (const a of activities) {
+        this.append(new ActivityListItem(a));
       }
-      this.lastCreatedAt = events[events.length - 1]?.created_at;
+      this.lastCreatedAt = activities[activities.length - 1]?.created_at;
       this.refreshed = true;
     }
   }

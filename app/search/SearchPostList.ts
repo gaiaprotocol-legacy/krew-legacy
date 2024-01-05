@@ -1,4 +1,4 @@
-import { msg } from "common-app-module";
+import { msg } from "@common-module/app";
 import { PostList } from "sofi-module";
 import KrewLoadingAnimation from "../KrewLoadingAnimation.js";
 import KrewPost from "../database-interface/KrewPost.js";

@@ -1,4 +1,4 @@
-import { SupabaseService } from "common-app-module";
+import { SupabaseService } from "@common-module/app";
 import WalletData from "../database-interface/WalletData.js";
 
 class WalletService extends SupabaseService<WalletData> {

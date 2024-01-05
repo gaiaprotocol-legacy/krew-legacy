@@ -1,4 +1,4 @@
-import { ListLoadingBar, msg } from "common-app-module";
+import { ListLoadingBar, msg } from "@common-module/app";
 import ChatRoomList from "../chat/ChatRoomList.js";
 import Krew from "../database-interface/Krew.js";
 import KrewService from "../krew/KrewService.js";

@@ -1,6 +1,5 @@
-import { DropdownMenu, el, msg, Router } from "common-app-module";
+import { DropdownMenu, el, msg, Router } from "@common-module/app";
 import KrewSignedUserManager from "../../user/KrewSignedUserManager.js";
-import MaterialIcon from "../../MaterialIcon.js";
 
 export default class TitleBarDropdownMenu extends DropdownMenu {
   constructor(options: {

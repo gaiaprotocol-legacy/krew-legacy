@@ -1,4 +1,4 @@
-import { DomNode, el, Router } from "common-app-module";
+import { DomNode, el, Router } from "@common-module/app";
 import { AuthorUtil, SoFiUserPublic } from "sofi-module";
 
 export default class UserListItem extends DomNode {
