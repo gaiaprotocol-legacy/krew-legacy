@@ -20,7 +20,7 @@ begin
                 insert into krews (
                     id, owner, name, image, metadata
                 ) values (
-                    new.krew, new.wallet_address, owner_data.display_name, owner_data.avatar_thumb, owner_data.metadata
+                    new.krew, new.wallet_address, owner_data.display_name, owner_data.avatar, owner_data.metadata
                 );
             ELSE
                 insert into krews (

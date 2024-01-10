@@ -122,7 +122,7 @@ end;$$;
 
 ALTER FUNCTION "public"."decrease_repost_count"() OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_stored_profile_image" "text", "author_stored_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+CREATE OR REPLACE FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_avatar" "text", "author_avatar_thumb" "text", "author_stored_avatar" "text", "author_stored_avatar_thumb" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -133,10 +133,10 @@ BEGIN
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -165,7 +165,7 @@ $$;
 
 ALTER FUNCTION "public"."find_posts"("p_user_id" "uuid", "search_string" "text", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("user_id" "uuid", "wallet_address" "text", "display_name" "text", "profile_image" "text", "profile_image_thumbnail" "text", "profile_image_stored" boolean, "x_username" "text", "metadata" "jsonb", "follower_count" integer, "following_count" integer, "blocked" boolean, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "followed_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("user_id" "uuid", "wallet_address" "text", "display_name" "text", "avatar" "text", "avatar_thumb" "text", "avatar_stored" boolean, "x_username" "text", "metadata" "jsonb", "follower_count" integer, "following_count" integer, "blocked" boolean, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "followed_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -174,9 +174,9 @@ BEGIN
         u.user_id,
         u.wallet_address,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.profile_image_stored,
+        u.avatar,
+        u.avatar_thumb,
+        u.avatar_stored,
         u.x_username,
         u.metadata,
         u.follower_count,
@@ -201,7 +201,7 @@ $$;
 
 ALTER FUNCTION "public"."get_followers"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_stored_profile_image" "text", "author_stored_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+CREATE OR REPLACE FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_avatar" "text", "author_avatar_thumb" "text", "author_stored_avatar" "text", "author_stored_avatar_thumb" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -212,10 +212,10 @@ BEGIN
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -246,7 +246,7 @@ $$;
 
 ALTER FUNCTION "public"."get_following_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("user_id" "uuid", "wallet_address" "text", "display_name" "text", "profile_image" "text", "profile_image_thumbnail" "text", "profile_image_stored" boolean, "x_username" "text", "metadata" "jsonb", "follower_count" integer, "following_count" integer, "blocked" boolean, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "followed_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("user_id" "uuid", "wallet_address" "text", "display_name" "text", "avatar" "text", "avatar_thumb" "text", "avatar_stored" boolean, "x_username" "text", "metadata" "jsonb", "follower_count" integer, "following_count" integer, "blocked" boolean, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "followed_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -255,9 +255,9 @@ BEGIN
         u.user_id,
         u.wallet_address,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.profile_image_stored,
+        u.avatar,
+        u.avatar_thumb,
+        u.avatar_stored,
         u.x_username,
         u.metadata,
         u.follower_count,
@@ -282,7 +282,7 @@ $$;
 
 ALTER FUNCTION "public"."get_following_users"("p_user_id" "uuid", "last_fetched_followed_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_stored_profile_image" "text", "user_stored_profile_image_thumbnail" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text", "created_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_avatar" "text", "user_avatar_thumb" "text", "user_stored_avatar" "text", "user_stored_avatar_thumb" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text", "created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -295,10 +295,10 @@ BEGIN
         a.wallet_address,
         u.user_id as user_id,
         u.display_name as user_display_name,
-        u.profile_image as user_profile_image,
-        u.profile_image_thumbnail as user_profile_image_thumbnail,
-        u.stored_profile_image as user_stored_profile_image,
-        u.stored_profile_image_thumbnail as user_stored_profile_image_thumbnail,
+        u.avatar as user_avatar,
+        u.avatar_thumb as user_avatar_thumb,
+        u.stored_avatar as user_stored_avatar,
+        u.stored_avatar_thumb as user_stored_avatar_thumb,
         u.x_username as user_x_username,
         a.krew,
         k.id AS krew_id,
@@ -323,7 +323,7 @@ $$;
 
 ALTER FUNCTION "public"."get_global_krew_contract_events"("last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_global_posts"("last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50, "signed_user_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_stored_profile_image" "text", "author_stored_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+CREATE OR REPLACE FUNCTION "public"."get_global_posts"("last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50, "signed_user_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_avatar" "text", "author_avatar_thumb" "text", "author_stored_avatar" "text", "author_stored_avatar_thumb" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -334,10 +334,10 @@ BEGIN
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -374,7 +374,7 @@ $$;
 
 ALTER FUNCTION "public"."get_global_posts"("last_post_id" bigint, "max_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_stored_profile_image" "text", "user_stored_profile_image_thumbnail" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text", "created_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_key_held_krew_contract_events"("p_wallet_address" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "user_id" "uuid", "user_display_name" "text", "user_avatar" "text", "user_avatar_thumb" "text", "user_stored_avatar" "text", "user_stored_avatar_thumb" "text", "user_x_username" "text", "krew" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text", "created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -387,10 +387,10 @@ BEGIN
         a.wallet_address,
         u.user_id as user_id,
         u.display_name as user_display_name,
-        u.profile_image as user_profile_image,
-        u.profile_image_thumbnail as user_profile_image_thumbnail,
-        u.stored_profile_image as user_stored_profile_image,
-        u.stored_profile_image_thumbnail as user_stored_profile_image_thumbnail,
+        u.avatar as user_avatar,
+        u.avatar_thumb as user_avatar_thumb,
+        u.stored_avatar as user_stored_avatar,
+        u.stored_avatar_thumb as user_stored_avatar_thumb,
         u.x_username as user_x_username,
         a.krew,
         k.id AS krew_id,
@@ -457,7 +457,7 @@ $$;
 
 ALTER FUNCTION "public"."get_key_held_krews"("p_wallet_address" "text", "last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_stored_profile_image" "text", "author_stored_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+CREATE OR REPLACE FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_avatar" "text", "author_avatar_thumb" "text", "author_stored_avatar" "text", "author_stored_avatar_thumb" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -468,10 +468,10 @@ BEGIN
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -503,7 +503,7 @@ $$;
 
 ALTER FUNCTION "public"."get_key_held_posts"("p_user_id" "uuid", "p_wallet_address" "text", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_krew_activities"("p_krew_id" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "krew" "text", "user" "uuid", "created_at" timestamp with time zone, "user_id" "uuid", "user_display_name" "text", "user_profile_image" "text", "user_profile_image_thumbnail" "text", "user_stored_profile_image" "text", "user_stored_profile_image_thumbnail" "text", "user_x_username" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text")
+CREATE OR REPLACE FUNCTION "public"."get_krew_activities"("p_krew_id" "text", "last_created_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 100) RETURNS TABLE("block_number" bigint, "log_index" bigint, "event_type" smallint, "args" "text"[], "wallet_address" "text", "krew" "text", "user" "uuid", "created_at" timestamp with time zone, "user_id" "uuid", "user_display_name" "text", "user_avatar" "text", "user_avatar_thumb" "text", "user_stored_avatar" "text", "user_stored_avatar_thumb" "text", "user_x_username" "text", "krew_id" "text", "krew_name" "text", "krew_image" "text")
     LANGUAGE "plpgsql" STABLE
     AS $$
 BEGIN
@@ -519,10 +519,10 @@ BEGIN
         a.created_at,
         u.user_id,
         u.display_name as user_display_name,
-        u.profile_image as user_profile_image,
-        u.profile_image_thumbnail as user_profile_image_thumbnail,
-        u.stored_profile_image as user_stored_profile_image,
-        u.stored_profile_image_thumbnail as user_stored_profile_image_thumbnail,
+        u.avatar as user_avatar,
+        u.avatar_thumb as user_avatar_thumb,
+        u.stored_avatar as user_stored_avatar,
+        u.stored_avatar_thumb as user_stored_avatar_thumb,
         u.x_username as user_x_username,
         k.id AS krew_id,
         k.name AS krew_name,
@@ -553,9 +553,9 @@ CREATE TABLE IF NOT EXISTS "public"."users_public" (
     "user_id" "uuid" DEFAULT "auth"."uid"() NOT NULL,
     "wallet_address" "text",
     "display_name" "text",
-    "profile_image" "text",
-    "profile_image_thumbnail" "text",
-    "profile_image_stored" boolean DEFAULT false NOT NULL,
+    "avatar" "text",
+    "avatar_thumb" "text",
+    "avatar_stored" boolean DEFAULT false NOT NULL,
     "x_username" "text",
     "metadata" "jsonb",
     "follower_count" integer DEFAULT 0 NOT NULL,
@@ -563,8 +563,8 @@ CREATE TABLE IF NOT EXISTS "public"."users_public" (
     "blocked" boolean DEFAULT false NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "updated_at" timestamp with time zone,
-    "stored_profile_image" "text",
-    "stored_profile_image_thumbnail" "text"
+    "stored_avatar" "text",
+    "stored_avatar_thumb" "text"
 );
 
 ALTER TABLE "public"."users_public" OWNER TO "postgres";
@@ -593,7 +593,7 @@ $$;
 
 ALTER FUNCTION "public"."get_krew_holders"("p_krew_id" "text", "last_created_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_stored_profile_image" "text", "author_stored_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "like_created_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_liked_posts"("p_user_id" "uuid", "last_liked_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_avatar" "text", "author_avatar_thumb" "text", "author_stored_avatar" "text", "author_stored_avatar_thumb" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "like_created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -604,10 +604,10 @@ BEGIN
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -715,7 +715,7 @@ $$;
 
 ALTER FUNCTION "public"."get_portfolio_value"("p_wallet_address" "text") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint DEFAULT NULL::bigint, "max_comment_count" integer DEFAULT 50, "signed_user_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_stored_profile_image" "text", "author_stored_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "depth" integer)
+CREATE OR REPLACE FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint DEFAULT NULL::bigint, "max_comment_count" integer DEFAULT 50, "signed_user_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_avatar" "text", "author_avatar_thumb" "text", "author_stored_avatar" "text", "author_stored_avatar_thumb" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "depth" integer)
     LANGUAGE "sql"
     AS $$
 WITH RECURSIVE ancestors AS (
@@ -725,10 +725,10 @@ WITH RECURSIVE ancestors AS (
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -763,10 +763,10 @@ WITH RECURSIVE ancestors AS (
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -802,10 +802,10 @@ comments AS (
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -845,7 +845,7 @@ $$;
 
 ALTER FUNCTION "public"."get_post_and_comments"("p_post_id" bigint, "last_comment_id" bigint, "max_comment_count" integer, "signed_user_id" "uuid") OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_reposts"("p_user_id" "uuid", "last_reposted_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_stored_profile_image" "text", "author_stored_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "repost_created_at" timestamp with time zone)
+CREATE OR REPLACE FUNCTION "public"."get_reposts"("p_user_id" "uuid", "last_reposted_at" timestamp with time zone DEFAULT NULL::timestamp with time zone, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_avatar" "text", "author_avatar_thumb" "text", "author_stored_avatar" "text", "author_stored_avatar_thumb" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean, "repost_created_at" timestamp with time zone)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -856,10 +856,10 @@ BEGIN
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -891,7 +891,7 @@ $$;
 
 ALTER FUNCTION "public"."get_reposts"("p_user_id" "uuid", "last_reposted_at" timestamp with time zone, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_user_comment_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_stored_profile_image" "text", "author_stored_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+CREATE OR REPLACE FUNCTION "public"."get_user_comment_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_avatar" "text", "author_avatar_thumb" "text", "author_stored_avatar" "text", "author_stored_avatar_thumb" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -902,10 +902,10 @@ BEGIN
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -935,7 +935,7 @@ $$;
 
 ALTER FUNCTION "public"."get_user_comment_posts"("p_user_id" "uuid", "last_post_id" bigint, "max_count" integer) OWNER TO "postgres";
 
-CREATE OR REPLACE FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_profile_image" "text", "author_profile_image_thumbnail" "text", "author_stored_profile_image" "text", "author_stored_profile_image_thumbnail" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
+CREATE OR REPLACE FUNCTION "public"."get_user_posts"("p_user_id" "uuid", "last_post_id" bigint DEFAULT NULL::bigint, "max_count" integer DEFAULT 50) RETURNS TABLE("id" bigint, "target" smallint, "krew" "text", "author" "uuid", "author_display_name" "text", "author_avatar" "text", "author_avatar_thumb" "text", "author_stored_avatar" "text", "author_stored_avatar_thumb" "text", "author_x_username" "text", "message" "text", "translated" "jsonb", "rich" "jsonb", "parent" bigint, "comment_count" integer, "repost_count" integer, "like_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "liked" boolean, "reposted" boolean)
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
@@ -946,10 +946,10 @@ BEGIN
         p.krew,
         p.author,
         u.display_name,
-        u.profile_image,
-        u.profile_image_thumbnail,
-        u.stored_profile_image,
-        u.stored_profile_image_thumbnail,
+        u.avatar,
+        u.avatar_thumb,
+        u.stored_avatar,
+        u.stored_avatar_thumb,
         u.x_username,
         p.message,
         p.translated,
@@ -1141,7 +1141,7 @@ begin
 
         IF position('p_' in new.krew) = 1 THEN
 
-            SELECT display_name, profile_image, profile_image_thumbnail, metadata 
+            SELECT display_name, avatar, avatar_thumb, metadata 
             INTO owner_data
             FROM users_public 
             WHERE wallet_address = new.wallet_address;
@@ -1150,7 +1150,7 @@ begin
                 insert into krews (
                     id, owner, name, image, metadata
                 ) values (
-                    new.krew, new.wallet_address, owner_data.display_name, owner_data.profile_image_thumbnail, owner_data.metadata
+                    new.krew, new.wallet_address, owner_data.display_name, owner_data.avatar, owner_data.metadata
                 );
             ELSE
                 insert into krews (
@@ -1357,22 +1357,33 @@ CREATE OR REPLACE FUNCTION "public"."set_user_metadata_to_public"() RETURNS "tri
     AS $$
 begin
   if strpos(new.raw_user_meta_data ->> 'iss', 'twitter') > 0 then
-    insert into public.users_public (user_id, display_name, profile_image, profile_image_thumbnail, profile_image_stored, x_username)
+    insert into public.users_public (user_id, display_name, avatar, avatar_thumb, avatar_stored, x_username)
     values (
       new.id,
       new.raw_user_meta_data ->> 'full_name',
+      case 
+        when strpos(new.raw_user_meta_data ->> 'avatar_url', '_normal') > 0 then
+          replace(new.raw_user_meta_data ->> 'avatar_url', '_normal', '')
+        else
+          new.raw_user_meta_data ->> 'avatar_url'
+      end,
       new.raw_user_meta_data ->> 'avatar_url',
       false,
       new.raw_user_meta_data ->> 'user_name'
     ) on conflict (user_id) do update
     set
       display_name = new.raw_user_meta_data ->> 'full_name',
-      profile_image = new.raw_user_meta_data ->> 'avatar_url',
-      profile_image_thumbnail = new.raw_user_meta_data ->> 'avatar_url',
-      profile_image_stored = false,
+      avatar = case 
+                        when strpos(new.raw_user_meta_data ->> 'avatar_url', '_normal') > 0 then
+                          replace(new.raw_user_meta_data ->> 'avatar_url', '_normal', '')
+                        else
+                          new.raw_user_meta_data ->> 'avatar_url'
+                      end,
+      avatar_thumb = new.raw_user_meta_data ->> 'avatar_url',
+      avatar_stored = false,
       x_username = new.raw_user_meta_data ->> 'user_name';
   else
-    insert into public.users_public (user_id, display_name, profile_image, profile_image_thumbnail, profile_image_stored)
+    insert into public.users_public (user_id, display_name, avatar, avatar_thumb, avatar_stored)
     values (
       new.id,
       new.raw_user_meta_data ->> 'full_name',
@@ -1381,9 +1392,9 @@ begin
     ) on conflict (user_id) do update
     set
       display_name = new.raw_user_meta_data ->> 'full_name',
-      profile_image = new.raw_user_meta_data ->> 'avatar_url',
-      profile_image_thumbnail = new.raw_user_meta_data ->> 'avatar_url',
-      profile_image_stored = false;
+      avatar = new.raw_user_meta_data ->> 'avatar_url',
+      avatar_thumb = new.raw_user_meta_data ->> 'avatar_url',
+      avatar_stored = false;
   end if;
   return new;
 end;
@@ -1741,57 +1752,57 @@ ALTER TABLE ONLY "public"."wallet_linking_nonces"
 ALTER TABLE ONLY "public"."wallets"
     ADD CONSTRAINT "wallets_pkey" PRIMARY KEY ("wallet_address");
 
-CREATE TRIGGER "append_galxe_credential_personal_buy_keys" AFTER INSERT ON "public"."krew_contract_events" FOR EACH ROW EXECUTE FUNCTION "public"."append_galxe_credential_personal_buy_keys"();
+CREATE OR REPLACE TRIGGER "append_galxe_credential_personal_buy_keys" AFTER INSERT ON "public"."krew_contract_events" FOR EACH ROW EXECUTE FUNCTION "public"."append_galxe_credential_personal_buy_keys"();
 
-CREATE TRIGGER "decrease_follow_count" AFTER DELETE ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_follow_count"();
+CREATE OR REPLACE TRIGGER "decrease_follow_count" AFTER DELETE ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_follow_count"();
 
-CREATE TRIGGER "decrease_post_comment_count" AFTER DELETE ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_post_comment_count"();
+CREATE OR REPLACE TRIGGER "decrease_post_comment_count" AFTER DELETE ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_post_comment_count"();
 
-CREATE TRIGGER "decrease_post_like_count" AFTER DELETE ON "public"."post_likes" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_post_like_count"();
+CREATE OR REPLACE TRIGGER "decrease_post_like_count" AFTER DELETE ON "public"."post_likes" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_post_like_count"();
 
-CREATE TRIGGER "decrease_repost_count" AFTER DELETE ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_repost_count"();
+CREATE OR REPLACE TRIGGER "decrease_repost_count" AFTER DELETE ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."decrease_repost_count"();
 
-CREATE TRIGGER "increase_follow_count" AFTER INSERT ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."increase_follow_count"();
+CREATE OR REPLACE TRIGGER "increase_follow_count" AFTER INSERT ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."increase_follow_count"();
 
-CREATE TRIGGER "increase_key_holder_count" AFTER INSERT ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."increase_key_holder_count"();
+CREATE OR REPLACE TRIGGER "increase_key_holder_count" AFTER INSERT ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."increase_key_holder_count"();
 
-CREATE TRIGGER "increase_post_comment_count" AFTER INSERT ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."increase_post_comment_count"();
+CREATE OR REPLACE TRIGGER "increase_post_comment_count" AFTER INSERT ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."increase_post_comment_count"();
 
-CREATE TRIGGER "increase_post_like_count" AFTER INSERT ON "public"."post_likes" FOR EACH ROW EXECUTE FUNCTION "public"."increase_post_like_count"();
+CREATE OR REPLACE TRIGGER "increase_post_like_count" AFTER INSERT ON "public"."post_likes" FOR EACH ROW EXECUTE FUNCTION "public"."increase_post_like_count"();
 
-CREATE TRIGGER "increase_repost_count" AFTER INSERT ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."increase_repost_count"();
+CREATE OR REPLACE TRIGGER "increase_repost_count" AFTER INSERT ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."increase_repost_count"();
 
-CREATE TRIGGER "notify_follow_event" AFTER INSERT ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."notify_follow_event"();
+CREATE OR REPLACE TRIGGER "notify_follow_event" AFTER INSERT ON "public"."follows" FOR EACH ROW EXECUTE FUNCTION "public"."notify_follow_event"();
 
-CREATE TRIGGER "notify_post_comment_event" AFTER INSERT ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."notify_post_comment_event"();
+CREATE OR REPLACE TRIGGER "notify_post_comment_event" AFTER INSERT ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."notify_post_comment_event"();
 
-CREATE TRIGGER "notify_post_like_event" AFTER INSERT ON "public"."post_likes" FOR EACH ROW EXECUTE FUNCTION "public"."notify_post_like_event"();
+CREATE OR REPLACE TRIGGER "notify_post_like_event" AFTER INSERT ON "public"."post_likes" FOR EACH ROW EXECUTE FUNCTION "public"."notify_post_like_event"();
 
-CREATE TRIGGER "notify_repost_event" AFTER INSERT ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."notify_repost_event"();
+CREATE OR REPLACE TRIGGER "notify_repost_event" AFTER INSERT ON "public"."reposts" FOR EACH ROW EXECUTE FUNCTION "public"."notify_repost_event"();
 
-CREATE TRIGGER "parse_krew_contract_event" AFTER INSERT ON "public"."krew_contract_events" FOR EACH ROW EXECUTE FUNCTION "public"."parse_krew_contract_event"();
+CREATE OR REPLACE TRIGGER "parse_krew_contract_event" AFTER INSERT ON "public"."krew_contract_events" FOR EACH ROW EXECUTE FUNCTION "public"."parse_krew_contract_event"();
 
-CREATE TRIGGER "set_krew_key_holders_updated_at" BEFORE UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+CREATE OR REPLACE TRIGGER "set_krew_key_holders_updated_at" BEFORE UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
-CREATE TRIGGER "set_krew_last_message" AFTER INSERT ON "public"."krew_chat_messages" FOR EACH ROW EXECUTE FUNCTION "public"."set_krew_last_message"();
+CREATE OR REPLACE TRIGGER "set_krew_last_message" AFTER INSERT ON "public"."krew_chat_messages" FOR EACH ROW EXECUTE FUNCTION "public"."set_krew_last_message"();
 
-CREATE TRIGGER "set_krews_updated_at" BEFORE UPDATE ON "public"."krews" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+CREATE OR REPLACE TRIGGER "set_krews_updated_at" BEFORE UPDATE ON "public"."krews" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
-CREATE TRIGGER "set_notification_read_at" BEFORE UPDATE ON "public"."notifications" FOR EACH ROW EXECUTE FUNCTION "public"."set_notification_read_at"();
+CREATE OR REPLACE TRIGGER "set_notification_read_at" BEFORE UPDATE ON "public"."notifications" FOR EACH ROW EXECUTE FUNCTION "public"."set_notification_read_at"();
 
-CREATE TRIGGER "set_posts_updated_at" BEFORE UPDATE ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+CREATE OR REPLACE TRIGGER "set_posts_updated_at" BEFORE UPDATE ON "public"."posts" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
-CREATE TRIGGER "set_topic_last_message" AFTER INSERT ON "public"."topic_chat_messages" FOR EACH ROW EXECUTE FUNCTION "public"."set_topic_last_message"();
+CREATE OR REPLACE TRIGGER "set_topic_last_message" AFTER INSERT ON "public"."topic_chat_messages" FOR EACH ROW EXECUTE FUNCTION "public"."set_topic_last_message"();
 
-CREATE TRIGGER "set_topics_updated_at" BEFORE UPDATE ON "public"."topics" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+CREATE OR REPLACE TRIGGER "set_topics_updated_at" BEFORE UPDATE ON "public"."topics" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
-CREATE TRIGGER "set_tracked_event_blocks_updated_at" BEFORE UPDATE ON "public"."tracked_event_blocks" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+CREATE OR REPLACE TRIGGER "set_tracked_event_blocks_updated_at" BEFORE UPDATE ON "public"."tracked_event_blocks" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
-CREATE TRIGGER "set_users_public_updated_at" BEFORE UPDATE ON "public"."users_public" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+CREATE OR REPLACE TRIGGER "set_users_public_updated_at" BEFORE UPDATE ON "public"."users_public" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
-CREATE TRIGGER "set_wallets_updated_at" BEFORE UPDATE ON "public"."wallets" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+CREATE OR REPLACE TRIGGER "set_wallets_updated_at" BEFORE UPDATE ON "public"."wallets" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
 
-CREATE TRIGGER "update_key_holder_count" AFTER UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."update_key_holder_count"();
+CREATE OR REPLACE TRIGGER "update_key_holder_count" AFTER UPDATE ON "public"."krew_key_holders" FOR EACH ROW EXECUTE FUNCTION "public"."update_key_holder_count"();
 
 ALTER TABLE ONLY "public"."activities"
     ADD CONSTRAINT "activities_krew_fkey" FOREIGN KEY ("krew") REFERENCES "public"."krews"("id");
