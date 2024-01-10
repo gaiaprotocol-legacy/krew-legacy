@@ -1,6 +1,7 @@
 import { Button, DomNode, el, msg, View, ViewParams } from "@common-module/app";
 import Layout from "../layout/Layout.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
+import WalletManager from "../wallet/WalletManager.js";
 
 export default class SettingsView extends View {
   private linkWalletSection: DomNode | undefined;
@@ -47,6 +48,10 @@ export default class SettingsView extends View {
       ),
       el(
         "footer",
+        /*new Button({
+          title: "Connect Wallet",
+          click: async () => await WalletManager.connect(),
+        }),*/
         new Button({
           title: msg("settings-view-link-wallet-button"),
           click: async (event, button) => {
