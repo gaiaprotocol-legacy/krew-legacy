@@ -226,6 +226,10 @@ button.component.contained {
   background: rgba(255, 255, 255, 0.05);
   color: #fff;
 }
+.dropdown-menu.component > footer.social > a > img {
+  width: 24px;
+  height: 24px;
+}
 .splash-screen.component {
   position: fixed;
   top: 0;
