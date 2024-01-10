@@ -13,7 +13,7 @@ const communalContract = new KrewCommunalContract(signer);
 
 serveWithOptions(async (req) => {
   const { krew, walletAddress } = await req.json();
-  if (!krew) throw new Error("Missing subjects");
+  if (!krew) throw new Error("Missing krew");
   if (!walletAddress) throw new Error("Missing wallet address");
 
   const krewId = BigNumber.from(krew.substring(2));

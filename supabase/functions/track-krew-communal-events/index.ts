@@ -40,17 +40,19 @@ serveWithOptions(async () => {
       krew = "c_" + event.args[1];
     }
 
-    const { error: saveEventError } = await supabase
-      .from("krew_contract_events")
-      .upsert({
-        block_number: event.blockNumber,
-        log_index: event.logIndex,
-        event_type,
-        args: event.args.map((arg: any) => arg.toString()),
-        wallet_address,
-        krew,
-      });
-    if (saveEventError) throw saveEventError;
+    if (event_type !== undefined) {
+      const { error: saveEventError } = await supabase
+        .from("krew_contract_events")
+        .upsert({
+          block_number: event.blockNumber,
+          log_index: event.logIndex,
+          event_type,
+          args: event.args.map((arg: any) => arg.toString()),
+          wallet_address,
+          krew,
+        });
+      if (saveEventError) throw saveEventError;
+    }
   }
 
   const { error: saveEventBlockError } = await supabase.from(
