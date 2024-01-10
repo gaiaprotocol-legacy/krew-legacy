@@ -2282,6 +2282,29 @@ p {
   justify-content: flex-end;
   gap: 8px;
 }
+.connect-wallet-popup {
+  max-width: 420px !important;
+}
+.connect-wallet-popup > header {
+  display: flex;
+}
+.connect-wallet-popup > header > h1 {
+  flex-grow: 1;
+}
+.connect-wallet-popup > main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.connect-wallet-popup > main > button {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
+.connect-wallet-popup > main > button > img {
+  height: 24px;
+  border-radius: 4px;
+}
 .switch-to-kroma-popup > main {
   display: flex;
   flex-direction: column;
