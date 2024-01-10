@@ -371,7 +371,10 @@ button.component.contained {
   background-color: var(--bg2-color);
   padding: 16px;
 }
-.chat-message-display .rich-display {
+.chat-message-display > .message {
+  word-break: break-all;
+}
+.chat-message-display > .rich-display {
   margin-top: 16px;
 }
 .chat-message-list {
@@ -516,6 +519,7 @@ button.component.contained {
 }
 .post-display.sofi-component .message {
   margin-top: 6px;
+  word-break: break-all;
 }
 .post-display.sofi-component .rich-display {
   margin-top: 20px;
@@ -612,6 +616,7 @@ button.component.contained {
 }
 .post-content-display.sofi-component .message {
   margin-top: 6px;
+  word-break: break-all;
 }
 .post-thread.sofi-component {
   display: flex;
