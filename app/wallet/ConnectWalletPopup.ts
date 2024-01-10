@@ -48,7 +48,8 @@ export default class ConnectWalletPopup extends Popup {
               "img",
               { src: "/images/wallet-logos/walletconnect.png" },
             ),
-            title: "Connect using WalletConnect",
+            title:
+              "Connect using WalletConnect\n(Metamask, Trust Wallet, etc.)",
             click: async () => {
               await WalletConnectManager.connect();
               this.resolve?.();
