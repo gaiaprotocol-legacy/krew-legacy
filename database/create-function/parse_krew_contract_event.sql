@@ -11,7 +11,7 @@ begin
 
         IF position('p_' in new.krew) = 1 THEN
 
-            SELECT display_name, profile_image, profile_image_thumbnail, metadata 
+            SELECT display_name, avatar, avatar_thumb, metadata 
             INTO owner_data
             FROM users_public 
             WHERE wallet_address = new.wallet_address;
@@ -20,7 +20,7 @@ begin
                 insert into krews (
                     id, owner, name, image, metadata
                 ) values (
-                    new.krew, new.wallet_address, owner_data.display_name, owner_data.profile_image_thumbnail, owner_data.metadata
+                    new.krew, new.wallet_address, owner_data.display_name, owner_data.avatar_thumb, owner_data.metadata
                 );
             ELSE
                 insert into krews (

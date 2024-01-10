@@ -19,10 +19,10 @@ class ActivityService extends SupabaseService<Activity> {
       activity.user = !activity.user_id ? undefined : {
         user_id: activity.user_id,
         display_name: activity.user_display_name,
-        profile_image: activity.user_profile_image,
-        profile_image_thumbnail: activity.user_profile_image_thumbnail,
-        stored_profile_image: activity.user_stored_profile_image,
-        stored_profile_image_thumbnail: activity.user_stored_profile_image_thumbnail,
+        avatar: activity.user_avatar,
+        avatar_thumb: activity.user_avatar_thumb,
+        stored_avatar: activity.user_stored_avatar,
+        stored_avatar_thumb: activity.user_stored_avatar_thumb,
         x_username: activity.user_x_username,
       };
     }
