@@ -23,9 +23,9 @@ export default class KrewNotificationListItem
           "click",
           () =>
             Router.go(
-              `/krew/${
-                notification.krew?.id.startsWith("p_") ? "personal" : "communal"
-              }/${notification.krew?.id.substring(2)}`,
+              `/${notification.krew?.id.startsWith("p_") ? "p" : "c"}/${
+                notification.krew?.id.substring(2)
+              }`,
             ),
         );
     } else if (notification.type === KrewNotificationType.BUY_KEY) {

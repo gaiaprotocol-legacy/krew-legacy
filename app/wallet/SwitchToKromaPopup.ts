@@ -1,15 +1,15 @@
-import { getNetwork, switchNetwork } from "@wagmi/core";
 import {
   Alert,
   Button,
   ButtonType,
   Component,
-  ErrorAlert,
-  Popup,
   el,
+  ErrorAlert,
   msg,
+  Popup,
 } from "@common-module/app";
-import EnvironmentManager from "../EnvironmentManager.js";
+import Env from "../Env.js";
+import WalletManager from "./WalletManager.js";
 
 export default class SwitchToKromaPopup extends Popup {
   private resolve: (() => void) | undefined;
@@ -58,9 +58,7 @@ export default class SwitchToKromaPopup extends Popup {
               this.switchButton.title = el(".loading-spinner");
 
               try {
-                await switchNetwork({
-                  chainId: EnvironmentManager.kromaChainId,
-                });
+                await WalletManager.switchToKroma();
               } catch (e) {
                 this.switchButton.title = msg(
                   "switch-to-kroma-popup-switch-button",
@@ -72,8 +70,8 @@ export default class SwitchToKromaPopup extends Popup {
                 throw new Error("Invalid network");
               }
 
-              const { chain } = getNetwork();
-              if (!chain) {
+              const chainId = await WalletManager.getChainId();
+              if (!chainId) {
                 this.switchButton.title = msg(
                   "switch-to-kroma-popup-switch-button",
                 );
@@ -87,7 +85,7 @@ export default class SwitchToKromaPopup extends Popup {
               this.switchButton.title = msg(
                 "switch-to-kroma-popup-switch-button",
               );
-              if (chain.id === EnvironmentManager.kromaChainId) {
+              if (chainId === Env.kromaChainId) {
                 this.resolve?.();
                 this.reject = undefined;
                 this.delete();

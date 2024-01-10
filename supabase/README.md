@@ -15,7 +15,7 @@ select * from cron.job;
 ```
 
 ```sql
-select * from cron.job_run_details;
+select * from cron.job_run_details order by start_time desc;
 ```
 
 ```sql

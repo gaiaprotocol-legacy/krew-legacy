@@ -9,7 +9,7 @@ import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 
 class KrewService extends SupabaseService<Krew> {
   constructor() {
-    super("krews", KrewSelectQuery, 1000);
+    super("krews", KrewSelectQuery, 50);
   }
 
   public async updateKrew(

@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import EnvironmentManager from "./EnvironmentManager.js";
+import Env from "./Env.js";
 
 class BlockTimeCacher {
   private blockNumber!: number;
@@ -7,7 +7,7 @@ class BlockTimeCacher {
 
   public async init() {
     const provider = new ethers.providers.JsonRpcProvider(
-      EnvironmentManager.kromaRpc,
+      Env.kromaRpc,
     );
     const block = await provider.getBlock("latest");
     this.blockNumber = block!.number;

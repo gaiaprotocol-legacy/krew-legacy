@@ -20,7 +20,11 @@ export default abstract class ActivityList extends DomNode {
     const cachedActivities = this.store?.get<Activity[]>("cached-activities");
     if (cachedActivities && cachedActivities.length > 0) {
       for (const a of cachedActivities) {
-        this.append(new ActivityListItem(a));
+        try {
+          this.append(new ActivityListItem(a));
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
   }

@@ -1,7 +1,6 @@
 import { Confirm, ErrorAlert, EventContainer, msg } from "@common-module/app";
-import { getNetwork, getWalletClient } from "@wagmi/core";
 import { BaseContract, ContractInterface, ethers } from "ethers";
-import EnvironmentManager from "../EnvironmentManager.js";
+import Env from "../Env.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import SwitchToKromaPopup from "../wallet/SwitchToKromaPopup.js";
 import WalletManager from "../wallet/WalletManager.js";
@@ -22,7 +21,7 @@ export default abstract class Contract<CT extends BaseContract>
     this.viewContract = new ethers.Contract(
       this.address,
       this.abi,
-      new ethers.providers.JsonRpcProvider(EnvironmentManager.kromaRpc),
+      new ethers.providers.JsonRpcProvider(Env.kromaRpc),
     ) as any;
   }
 
@@ -39,16 +38,7 @@ export default abstract class Contract<CT extends BaseContract>
       }
     }
 
-    if (WalletManager.connected !== true) await WalletManager.connect();
-
-    const walletClient = await getWalletClient();
-    if (!walletClient) {
-      new ErrorAlert({
-        title: msg("no-wallet-connected-title"),
-        message: msg("no-wallet-connected-message"),
-      });
-      throw new Error("No wallet connected");
-    }
+    if (await WalletManager.connected() !== true) await WalletManager.connect();
 
     if (!KrewSignedUserManager.user?.wallet_address) {
       try {
@@ -63,8 +53,10 @@ export default abstract class Contract<CT extends BaseContract>
       }
     }
 
-    const { account } = walletClient;
-    if (account.address !== KrewSignedUserManager.user?.wallet_address) {
+    if (
+      await WalletManager.getAddress() !==
+        KrewSignedUserManager.user?.wallet_address
+    ) {
       new ErrorAlert({
         title: msg("wallet-address-mismatch-title"),
         message: msg("wallet-address-mismatch-message"),
@@ -72,8 +64,8 @@ export default abstract class Contract<CT extends BaseContract>
       throw new Error("Wallet address mismatch");
     }
 
-    const { chain } = getNetwork();
-    if (!chain) {
+    const chainId = await WalletManager.getChainId();
+    if (!chainId) {
       new ErrorAlert({
         title: msg("invalid-network-title"),
         message: msg("invalid-network-message"),
@@ -81,7 +73,7 @@ export default abstract class Contract<CT extends BaseContract>
       throw new Error("Invalid network");
     }
 
-    if (chain.id !== EnvironmentManager.kromaChainId) {
+    if (chainId !== Env.kromaChainId) {
       await new SwitchToKromaPopup().wait();
     }
 

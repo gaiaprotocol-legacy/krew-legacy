@@ -1,95 +1,85 @@
-import {
-  configureChains,
-  createConfig,
-  fetchBalance,
-  getAccount,
-  signMessage,
-  watchAccount,
-} from "@wagmi/core";
-import { kroma, kromaSepolia } from "@wagmi/core/chains";
-import {
-  EthereumClient,
-  w3mConnectors,
-  w3mProvider,
-} from "@web3modal/ethereum";
-import { Web3Modal } from "@web3modal/html";
 import { EventContainer } from "@common-module/app";
+import { ethers } from "ethers";
+import ConnectWalletPopup from "./ConnectWalletPopup.js";
+import FaceWalletManager from "./FaceWalletManager.js";
+import InternalWalletManager from "./InternalWalletManager.js";
+import WalletConnectManager from "./WalletConnectManager.js";
+
+const wallets = [FaceWalletManager, WalletConnectManager];
 
 class WalletManager extends EventContainer {
-  private web3modal!: Web3Modal;
-  private _resolveConnection?: () => void;
-
-  public connected = false;
-
-  public get address() {
-    return getAccount().address;
-  }
+  private internalWallet: (InternalWalletManager & EventContainer) | undefined;
 
   constructor() {
     super();
     this.addAllowedEvents("accountChanged");
   }
 
-  public init(projectId: string) {
-    const chains = [kroma, kromaSepolia];
-
-    const { publicClient } = configureChains(chains, [
-      w3mProvider({ projectId }),
-    ]);
-
-    const wagmiConfig = createConfig({
-      autoConnect: true,
-      connectors: w3mConnectors({ projectId, chains }),
-      publicClient,
-    });
-
-    const ethereumClient = new EthereumClient(wagmiConfig, chains);
-
-    this.web3modal = new Web3Modal({
-      projectId,
-      themeMode: "dark",
-      themeVariables: {
-        "--w3m-accent-color": "#25D366",
-        "--w3m-background-color": "#25D366",
-        "--w3m-z-index": "999999",
-      },
-    }, ethereumClient);
-
-    this.connected = this.address !== undefined;
-
-    let cachedAddress = this.address;
-    watchAccount((account) => {
-      this.connected = account.address !== undefined;
-      if (this.connected && this._resolveConnection) {
-        this._resolveConnection();
-      }
-      if (cachedAddress !== account.address) {
-        this.fireEvent("accountChanged");
-        cachedAddress = account.address;
-      }
-    });
+  private async findInternalWallet() {
+    await Promise.all(
+      wallets.map(async (wallet) => {
+        if (await wallet.getAddress()) {
+          this.internalWallet = wallet;
+        }
+      }),
+    );
   }
 
-  public async signMessage(message: string) {
-    if (!this.address) throw new Error("Wallet is not connected");
-    return await signMessage({ message });
+  public async connected() {
+    await this.findInternalWallet();
+    return await this.internalWallet?.connected() ?? false;
+  }
+
+  public async getAddress(): Promise<string> {
+    if (this.internalWallet) this.offDelegate(this.internalWallet);
+
+    const addresses = await Promise.all(
+      wallets.map(async (wallet) => {
+        const address = await wallet.getAddress();
+        if (address) this.internalWallet = wallet;
+        return address;
+      }),
+    );
+
+    if (this.internalWallet) {
+      this.onDelegate(
+        this.internalWallet,
+        "accountChanged",
+        () => this.fireEvent("accountChanged"),
+      );
+    }
+
+    const address = addresses.find((address) => !!address);
+    if (!address) throw new Error("No wallet connected");
+    return address;
+  }
+
+  public async getChainId(): Promise<number | undefined> {
+    await this.findInternalWallet();
+    if (!this.internalWallet) throw new Error("No wallet connected");
+    return await this.internalWallet.getChainId();
   }
 
   public async connect() {
-    if (this.address !== undefined) {
-      this.connected = true;
-      this.fireEvent("accountChanged");
-    }
-    return new Promise<void>((resolve) => {
-      this._resolveConnection = resolve;
-      this.web3modal.openModal();
-    });
+    await new ConnectWalletPopup().wait();
   }
 
-  public async getBalance(): Promise<bigint> {
-    if (!this.address) throw new Error("Wallet is not connected");
-    const result = await fetchBalance({ address: this.address });
-    return result.value;
+  public async signMessage(message: string): Promise<string> {
+    await this.findInternalWallet();
+    if (!this.internalWallet) throw new Error("No wallet connected");
+    return await this.internalWallet.signMessage(message);
+  }
+
+  public async getSigner(): Promise<ethers.providers.JsonRpcSigner> {
+    await this.findInternalWallet();
+    if (!this.internalWallet) throw new Error("No wallet connected");
+    return await this.internalWallet.getSigner();
+  }
+
+  public async switchToKroma() {
+    await this.findInternalWallet();
+    if (!this.internalWallet) throw new Error("No wallet connected");
+    await this.internalWallet.switchToKroma();
   }
 }
 

@@ -9,13 +9,7 @@ import {
   SplashLoader,
   Store,
 } from "@common-module/app";
-import {
-  AuthUtil,
-  inject_sofi_msg,
-  TestChatView,
-  TestPostListView,
-  TestPostView,
-} from "@common-module/social";
+import { AuthUtil, inject_sofi_msg } from "@common-module/social";
 import messages_en from "../locales/en.yml";
 import messages_ja from "../locales/ja.yml";
 import messages_zh from "../locales/zh.yml";
@@ -29,7 +23,7 @@ import ChatsView from "./chat/ChatsView.js";
 import Config from "./Config.js";
 import KrewCommunalContract from "./contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "./contracts/KrewPersonalContract.js";
-import EnvironmentManager from "./EnvironmentManager.js";
+import Env from "./Env.js";
 import ExploreView from "./explore/ExploreView.js";
 import KrewService from "./krew/KrewService.js";
 import MyKrewsView from "./krew/MyKrewsView.js";
@@ -43,7 +37,8 @@ import SettingsView from "./settings/SettingsView.js";
 import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
 import UserConnectionsView from "./user/user-connections/UserConnectionsView.js";
 import UserView from "./user/UserView.js";
-import WalletManager from "./wallet/WalletManager.js";
+import FaceWalletManager from "./wallet/FaceWalletManager.js";
+import WalletConnectManager from "./wallet/WalletConnectManager.js";
 import WelcomeToKrewPopup from "./WelcomeToKrewPopup.js";
 
 inject_sofi_msg();
@@ -66,11 +61,13 @@ export default async function initialize(config: Config) {
     config.dev,
   );
 
-  EnvironmentManager.messageForWalletLinking = config.messageForWalletLinking;
-  EnvironmentManager.kromaRpc = config.kromaRpc;
-  EnvironmentManager.kromaChainId = config.kromaChainId;
+  Env.dev = config.dev;
+  Env.messageForWalletLinking = config.messageForWalletLinking;
+  Env.kromaRpc = config.kromaRpc;
+  Env.kromaChainId = config.kromaChainId;
 
-  WalletManager.init(config.walletConnectProjectId);
+  FaceWalletManager.init(config.faceWalletApiKey);
+  WalletConnectManager.init(config.walletConnectProjectId);
   KrewPersonalContract.init(config.krewPersonalAddress);
   KrewCommunalContract.init(config.krewCommunalAddress);
 
@@ -136,9 +133,4 @@ export default async function initialize(config: Config) {
   ) {
     new WelcomeToKrewPopup();
   }
-
-  /*const face = new Face({
-    network: config.dev ? Network.KROMA_SEPOLIA : Network.KROMA,
-    apiKey: config.faceWalletApiKey,
-  });*/
 }
