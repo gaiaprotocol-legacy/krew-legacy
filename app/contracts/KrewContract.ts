@@ -1,20 +1,25 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 export default interface KrewContract {
-  getBuyPrice(krewId: bigint, amount: bigint): Promise<bigint>;
-  getSellPrice(krewId: bigint, amount: bigint): Promise<bigint>;
-  getBuyPriceAfterFee(krewId: bigint, amount: bigint): Promise<bigint>;
-  getSellPriceAfterFee(krewId: bigint, amount: bigint): Promise<bigint>;
-  getBalance(krewId: bigint, walletAddress: string): Promise<bigint>;
-  getClaimableFee(krewId: bigint, walletAddress: string): Promise<bigint>;
-  createKrew(): Promise<bigint>;
+  getBuyPrice(krewId: BigNumber, amount: BigNumber): Promise<BigNumber>;
+  getSellPrice(krewId: BigNumber, amount: BigNumber): Promise<BigNumber>;
+  getBuyPriceAfterFee(krewId: BigNumber, amount: BigNumber): Promise<BigNumber>;
+  getSellPriceAfterFee(
+    krewId: BigNumber,
+    amount: BigNumber,
+  ): Promise<BigNumber>;
+  getBalance(krewId: BigNumber, walletAddress: string): Promise<BigNumber>;
+  getClaimableFee(krewId: BigNumber, walletAddress: string): Promise<BigNumber>;
+  createKrew(): Promise<BigNumber>;
   buyKeys(
-    krewId: bigint,
-    amount: bigint,
-  ): Promise<ethers.ContractTransactionReceipt | null>;
+    krewId: BigNumber,
+    amount: BigNumber,
+  ): Promise<ethers.ContractReceipt | null>;
   sellKeys(
-    krewId: bigint,
-    amount: bigint,
-  ): Promise<ethers.ContractTransactionReceipt | null>;
-  claimFee(krewId: bigint): Promise<ethers.ContractTransactionReceipt | null>;
+    krewId: BigNumber,
+    amount: BigNumber,
+  ): Promise<ethers.ContractReceipt | null>;
+  claimFee(
+    krewId: BigNumber,
+  ): Promise<ethers.ContractReceipt | null>;
 }

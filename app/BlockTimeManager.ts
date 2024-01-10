@@ -6,7 +6,9 @@ class BlockTimeCacher {
   private blockTime!: number;
 
   public async init() {
-    const provider = new ethers.JsonRpcProvider(EnvironmentManager.kromaRpc);
+    const provider = new ethers.providers.JsonRpcProvider(
+      EnvironmentManager.kromaRpc,
+    );
     const block = await provider.getBlock("latest");
     this.blockNumber = block!.number;
     this.blockTime = block!.timestamp * 1000;

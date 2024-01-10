@@ -9,8 +9,8 @@ import {
   Router,
   Tabs,
 } from "@common-module/app";
-import { ethers } from "ethers";
 import { AuthorUtil } from "@common-module/social";
+import { BigNumber, ethers } from "ethers";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
 import Krew from "../database-interface/Krew.js";
@@ -160,7 +160,7 @@ export default class KrewPopup extends Popup {
     this.krew = await KrewService.fetchKrew(this.krewId);
     if (this.krew) {
       this.holderCountDisplay.text = this.krew.key_holder_count.toString();
-      this.priceDisplay.text = ethers.formatEther(
+      this.priceDisplay.text = ethers.utils.formatEther(
         this.krew.last_fetched_key_price,
       );
 
@@ -177,14 +177,14 @@ export default class KrewPopup extends Popup {
       if (this.krewId.startsWith("p_")) {
         this.balanceDisplay.text = String(
           await KrewPersonalContract.getBalance(
-            BigInt(this.krewId.substring(2)),
+            BigNumber.from(this.krewId.substring(2)),
             walletAddress,
           ),
         );
       } else if (this.krewId.startsWith("c_")) {
         this.balanceDisplay.text = String(
           await KrewCommunalContract.getBalance(
-            BigInt(this.krewId.substring(2)),
+            BigNumber.from(this.krewId.substring(2)),
             walletAddress,
           ),
         );
@@ -227,9 +227,9 @@ export default class KrewPopup extends Popup {
             window.open(`https://kromascan.com/address/${this.krew?.owner}`),
         );
       } else {
-        AuthorUtil.selectLoadableProfileImage(this.ownerProfileImage, [
-          owner.profile_image_thumbnail,
-          owner.stored_profile_image_thumbnail,
+        AuthorUtil.selectLoadableAvatar(this.ownerProfileImage, [
+          owner.avatar_thumb,
+          owner.stored_avatar_thumb,
         ]);
 
         this.ownerName.text = owner.display_name ?? "";

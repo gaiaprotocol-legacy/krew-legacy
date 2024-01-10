@@ -8,8 +8,9 @@ import {
   msg,
   Router,
 } from "@common-module/app";
+import { FollowService, PreviewUserPublic } from "@common-module/social";
 import { ethers } from "ethers";
-import { FollowService, PreviewUserPublic, SoFiUserPublic } from "@common-module/social";
+import KrewUserPublic from "../../database-interface/KrewUserPublic.js";
 import KrewService from "../../krew/KrewService.js";
 import MaterialIcon from "../../MaterialIcon.js";
 import WalletDataService from "../../wallet/WalletDataService.js";
@@ -106,7 +107,7 @@ export default class UserProfile extends DomNode {
     });
   }
 
-  public set user(user: SoFiUserPublic | undefined) {
+  public set user(user: KrewUserPublic | undefined) {
     if (user) {
       this.userId = user.user_id;
       this.renderUser(user);
@@ -131,7 +132,7 @@ export default class UserProfile extends DomNode {
     this.infoContainer.empty().append(
       el(".profile-image", {
         style: {
-          backgroundImage: `url(${user.profile_image})`,
+          backgroundImage: `url(${user.avatar})`,
         },
       }),
       el(
@@ -193,7 +194,7 @@ export default class UserProfile extends DomNode {
 
     const walletData = await WalletDataService.fetch(walletAddress);
     this.feesEarnedDisplay.text = walletData
-      ? ethers.formatEther(
+      ? ethers.utils.formatEther(
         walletData.total_earned_trading_fees,
       )
       : "0";
@@ -207,7 +208,7 @@ export default class UserProfile extends DomNode {
     this.portfolioValueFetched = true;
 
     const value = await KrewUserService.fetchPortfolioValue(walletAddress);
-    this.portfolioValueDisplay.text = ethers.formatEther(value);
+    this.portfolioValueDisplay.text = ethers.utils.formatEther(value);
   }
 
   private async fetchKrews(walletAddress: string) {

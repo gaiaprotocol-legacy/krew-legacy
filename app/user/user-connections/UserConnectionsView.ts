@@ -1,5 +1,5 @@
 import { el, msg, Router, Tabs, View, ViewParams } from "@common-module/app";
-import { SoFiUserPublic } from "@common-module/social";
+import KrewUserPublic from "../../database-interface/KrewUserPublic.js";
 import Layout from "../../layout/Layout.js";
 import MaterialIcon from "../../MaterialIcon.js";
 import KrewUserService from "../KrewUserService.js";
@@ -30,7 +30,7 @@ export default class UserConnectionsView extends View {
   private async render(
     xUsername: string,
     currentTab: string,
-    previewUserPublic?: SoFiUserPublic,
+    previewUserPublic?: KrewUserPublic,
   ) {
     let userId = previewUserPublic?.user_id;
     let walletAddress = previewUserPublic?.wallet_address;

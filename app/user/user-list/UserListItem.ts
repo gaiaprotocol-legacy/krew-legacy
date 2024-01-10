@@ -7,9 +7,9 @@ export default class UserListItem extends DomNode {
 
     const profileImage = el(".profile-image");
 
-    AuthorUtil.selectLoadableProfileImage(profileImage, [
-      user.profile_image_thumbnail,
-      user.stored_profile_image_thumbnail,
+    AuthorUtil.selectLoadableAvatar(profileImage, [
+      user.avatar_thumb,
+      user.stored_avatar_thumb,
     ]);
 
     this.append(

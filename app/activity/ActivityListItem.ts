@@ -1,7 +1,7 @@
 import { DateUtil, DomNode, el, Router } from "@common-module/app";
 import { msgs } from "@common-module/app/lib/i18n/msg.js";
-import { ethers } from "ethers";
 import { AuthorUtil } from "@common-module/social";
+import { ethers } from "ethers";
 import BlockTimeManager from "../BlockTimeManager.js";
 import Activity, { EventType } from "../database-interface/Activity.js";
 import KrewPopup from "../krew/KrewPopup.js";
@@ -43,15 +43,15 @@ export default class ActivityListItem extends DomNode {
     if (activity.event_type === EventType.Trade) {
       const isBuy = activity.args[2] === "true";
       const amount = activity.args[3];
-      const price = ethers.formatEther(activity.args[4]);
+      const price = ethers.utils.formatEther(activity.args[4]);
 
       const traderProfileImage = el(".trader-profile-image", {
         click: () => Router.go(`/${activity.user?.x_username}`),
       });
 
-      AuthorUtil.selectLoadableProfileImage(traderProfileImage, [
-        activity.user?.profile_image_thumbnail,
-        activity.user?.stored_profile_image_thumbnail,
+      AuthorUtil.selectLoadableAvatar(traderProfileImage, [
+        activity.user?.avatar_thumb,
+        activity.user?.stored_avatar_thumb,
       ]);
 
       this.append(

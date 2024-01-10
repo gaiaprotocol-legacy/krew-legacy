@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import Contract from "./Contract.js";
 import KrewContract from "./KrewContract.js";
@@ -12,43 +13,43 @@ class KrewPersonalContract extends Contract<KrewPersonal>
     super(KrewPersonalArtifact.abi);
   }
 
-  public async getPrice(supply: bigint, amount: bigint) {
+  public async getPrice(supply: BigNumber, amount: BigNumber) {
     return await this.viewContract.getPrice(supply, amount);
   }
 
-  public async getSupply(krewId: bigint) {
+  public async getSupply(krewId: BigNumber) {
     return (await this.viewContract.krews(krewId)).supply;
   }
 
-  public async existsKrew(krewId: bigint) {
+  public async existsKrew(krewId: BigNumber) {
     return await this.viewContract.existsKrew(krewId);
   }
 
-  public async getBuyPrice(krewId: bigint, amount: bigint) {
+  public async getBuyPrice(krewId: BigNumber, amount: BigNumber) {
     return await this.viewContract.getBuyPrice(krewId, amount);
   }
 
-  public async getSellPrice(krewId: bigint, amount: bigint) {
+  public async getSellPrice(krewId: BigNumber, amount: BigNumber) {
     return await this.viewContract.getSellPrice(krewId, amount);
   }
 
-  public async getBuyPriceAfterFee(krewId: bigint, amount: bigint) {
+  public async getBuyPriceAfterFee(krewId: BigNumber, amount: BigNumber) {
     return await this.viewContract.getBuyPriceAfterFee(krewId, amount);
   }
 
-  public async getSellPriceAfterFee(krewId: bigint, amount: bigint) {
+  public async getSellPriceAfterFee(krewId: BigNumber, amount: BigNumber) {
     return await this.viewContract.getSellPriceAfterFee(krewId, amount);
   }
 
-  public async getBalance(krewId: bigint, walletAddress: string) {
+  public async getBalance(krewId: BigNumber, walletAddress: string) {
     return await this.viewContract.holderBalance(krewId, walletAddress);
   }
 
-  public async getClaimableFee(krewId: bigint) {
+  public async getClaimableFee(krewId: BigNumber) {
     return (await this.viewContract.krews(krewId)).accumulatedFee;
   }
 
-  public async createKrew(): Promise<bigint> {
+  public async createKrew(): Promise<BigNumber> {
     const writeContract = await this.getWriteContract();
     const tx = await writeContract.createKrew();
     const receipt = await tx.wait();
@@ -66,7 +67,7 @@ class KrewPersonalContract extends Contract<KrewPersonal>
     return events[0].args?.[0];
   }
 
-  public async buyKeys(krewId: bigint, amount: bigint) {
+  public async buyKeys(krewId: BigNumber, amount: BigNumber) {
     const writeContract = await this.getWriteContract();
     const tx = await writeContract.buyKeys(krewId, amount, "0x", {
       value: await this.getBuyPriceAfterFee(krewId, amount),
@@ -74,13 +75,13 @@ class KrewPersonalContract extends Contract<KrewPersonal>
     return tx.wait();
   }
 
-  public async sellKeys(krewId: bigint, amount: bigint) {
+  public async sellKeys(krewId: BigNumber, amount: BigNumber) {
     const writeContract = await this.getWriteContract();
     const tx = await writeContract.sellKeys(krewId, amount, "0x");
     return tx.wait();
   }
 
-  public async claimFee(krewId: bigint) {
+  public async claimFee(krewId: BigNumber) {
     const writeContract = await this.getWriteContract();
     const tx = await writeContract.claimKrewFee(krewId);
     return tx.wait();

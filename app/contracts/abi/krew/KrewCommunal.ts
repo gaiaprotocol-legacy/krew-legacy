@@ -3,29 +3,64 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumber,
   BigNumberish,
   BytesLike,
-  FunctionFragment,
-  Result,
-  Interface,
-  EventFragment,
-  AddressLike,
-  ContractRunner,
-  ContractMethod,
-  Listener,
+  CallOverrides,
+  ContractTransaction,
+  Overrides,
+  PayableOverrides,
+  PopulatedTransaction,
+  Signer,
+  utils,
 } from "ethers";
 import type {
-  TypedContractEvent,
-  TypedDeferredTopicFilter,
-  TypedEventLog,
-  TypedLogDescription,
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
+import type { Listener, Provider } from "@ethersproject/providers";
+import type {
+  TypedEventFilter,
+  TypedEvent,
   TypedListener,
-  TypedContractMethod,
+  OnEvent,
+  PromiseOrValue,
 } from "../common";
 
-export interface KrewCommunalInterface extends Interface {
+export interface KrewCommunalInterface extends utils.Interface {
+  functions: {
+    "buyKeys(uint256,uint256,bytes)": FunctionFragment;
+    "calculateAdditionalTokenOwnerFee(uint256,bytes)": FunctionFragment;
+    "claimHolderFee(uint256)": FunctionFragment;
+    "claimableHolderFee(uint256,address)": FunctionFragment;
+    "createKrew()": FunctionFragment;
+    "existsKrew(uint256)": FunctionFragment;
+    "getBuyPrice(uint256,uint256)": FunctionFragment;
+    "getBuyPriceAfterFee(uint256,uint256)": FunctionFragment;
+    "getPrice(uint256,uint256)": FunctionFragment;
+    "getSellPrice(uint256,uint256)": FunctionFragment;
+    "getSellPriceAfterFee(uint256,uint256)": FunctionFragment;
+    "holderFeePercent()": FunctionFragment;
+    "holders(uint256,address)": FunctionFragment;
+    "initialize(address,uint256,uint256)": FunctionFragment;
+    "krews(uint256)": FunctionFragment;
+    "nextKrewId()": FunctionFragment;
+    "oracleAddress()": FunctionFragment;
+    "owner()": FunctionFragment;
+    "protocolFeeDestination()": FunctionFragment;
+    "protocolFeePercent()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "sellKeys(uint256,uint256,bytes)": FunctionFragment;
+    "setHolderFeePercent(uint256)": FunctionFragment;
+    "setOracleAddress(address)": FunctionFragment;
+    "setProtocolFeeDestination(address)": FunctionFragment;
+    "setProtocolFeePercent(uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+  };
+
   getFunction(
-    nameOrSignature:
+    nameOrSignatureOrTopic:
       | "buyKeys"
       | "calculateAdditionalTokenOwnerFee"
       | "claimHolderFee"
@@ -55,34 +90,25 @@ export interface KrewCommunalInterface extends Interface {
       | "transferOwnership"
   ): FunctionFragment;
 
-  getEvent(
-    nameOrSignatureOrTopic:
-      | "ClaimHolderFee"
-      | "Initialized"
-      | "KrewCreated"
-      | "OwnershipTransferred"
-      | "SetHolderFeePercent"
-      | "SetOracleAddress"
-      | "SetProtocolFeeDestination"
-      | "SetProtocolFeePercent"
-      | "Trade"
-  ): EventFragment;
-
   encodeFunctionData(
     functionFragment: "buyKeys",
-    values: [BigNumberish, BigNumberish, BytesLike]
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "calculateAdditionalTokenOwnerFee",
-    values: [BigNumberish, BytesLike]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: "claimHolderFee",
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "claimableHolderFee",
-    values: [BigNumberish, AddressLike]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "createKrew",
@@ -90,27 +116,27 @@ export interface KrewCommunalInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "existsKrew",
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getBuyPrice",
-    values: [BigNumberish, BigNumberish]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getBuyPriceAfterFee",
-    values: [BigNumberish, BigNumberish]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getPrice",
-    values: [BigNumberish, BigNumberish]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getSellPrice",
-    values: [BigNumberish, BigNumberish]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getSellPriceAfterFee",
-    values: [BigNumberish, BigNumberish]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "holderFeePercent",
@@ -118,13 +144,20 @@ export interface KrewCommunalInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "holders",
-    values: [BigNumberish, AddressLike]
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [AddressLike, BigNumberish, BigNumberish]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
-  encodeFunctionData(functionFragment: "krews", values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "krews",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
     functionFragment: "nextKrewId",
     values?: undefined
@@ -148,27 +181,31 @@ export interface KrewCommunalInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "sellKeys",
-    values: [BigNumberish, BigNumberish, BytesLike]
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "setHolderFeePercent",
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "setOracleAddress",
-    values: [AddressLike]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "setProtocolFeeDestination",
-    values: [AddressLike]
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "setProtocolFeePercent",
-    values: [BigNumberish]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
-    values: [AddressLike]
+    values: [PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(functionFragment: "buyKeys", data: BytesLike): Result;
@@ -249,625 +286,913 @@ export interface KrewCommunalInterface extends Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+
+  events: {
+    "ClaimHolderFee(address,uint256,uint256)": EventFragment;
+    "Initialized(uint8)": EventFragment;
+    "KrewCreated(uint256,address)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "SetHolderFeePercent(uint256)": EventFragment;
+    "SetOracleAddress(address)": EventFragment;
+    "SetProtocolFeeDestination(address)": EventFragment;
+    "SetProtocolFeePercent(uint256)": EventFragment;
+    "Trade(address,uint256,bool,uint256,uint256,uint256,uint256,uint256,uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "ClaimHolderFee"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "KrewCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetHolderFeePercent"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetOracleAddress"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetProtocolFeeDestination"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetProtocolFeePercent"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Trade"): EventFragment;
 }
 
-export namespace ClaimHolderFeeEvent {
-  export type InputTuple = [
-    holder: AddressLike,
-    krew: BigNumberish,
-    fee: BigNumberish
-  ];
-  export type OutputTuple = [holder: string, krew: bigint, fee: bigint];
-  export interface OutputObject {
-    holder: string;
-    krew: bigint;
-    fee: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
+export interface ClaimHolderFeeEventObject {
+  holder: string;
+  krew: BigNumber;
+  fee: BigNumber;
 }
+export type ClaimHolderFeeEvent = TypedEvent<
+  [string, BigNumber, BigNumber],
+  ClaimHolderFeeEventObject
+>;
 
-export namespace InitializedEvent {
-  export type InputTuple = [version: BigNumberish];
-  export type OutputTuple = [version: bigint];
-  export interface OutputObject {
-    version: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
+export type ClaimHolderFeeEventFilter = TypedEventFilter<ClaimHolderFeeEvent>;
 
-export namespace KrewCreatedEvent {
-  export type InputTuple = [krewId: BigNumberish, creator: AddressLike];
-  export type OutputTuple = [krewId: bigint, creator: string];
-  export interface OutputObject {
-    krewId: bigint;
-    creator: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
+export interface InitializedEventObject {
+  version: number;
 }
+export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
-export namespace OwnershipTransferredEvent {
-  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
-  export type OutputTuple = [previousOwner: string, newOwner: string];
-  export interface OutputObject {
-    previousOwner: string;
-    newOwner: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
+export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
-export namespace SetHolderFeePercentEvent {
-  export type InputTuple = [percent: BigNumberish];
-  export type OutputTuple = [percent: bigint];
-  export interface OutputObject {
-    percent: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
+export interface KrewCreatedEventObject {
+  krewId: BigNumber;
+  creator: string;
 }
+export type KrewCreatedEvent = TypedEvent<
+  [BigNumber, string],
+  KrewCreatedEventObject
+>;
 
-export namespace SetOracleAddressEvent {
-  export type InputTuple = [oracle: AddressLike];
-  export type OutputTuple = [oracle: string];
-  export interface OutputObject {
-    oracle: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
+export type KrewCreatedEventFilter = TypedEventFilter<KrewCreatedEvent>;
 
-export namespace SetProtocolFeeDestinationEvent {
-  export type InputTuple = [destination: AddressLike];
-  export type OutputTuple = [destination: string];
-  export interface OutputObject {
-    destination: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
 }
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
 
-export namespace SetProtocolFeePercentEvent {
-  export type InputTuple = [percent: BigNumberish];
-  export type OutputTuple = [percent: bigint];
-  export interface OutputObject {
-    percent: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
 
-export namespace TradeEvent {
-  export type InputTuple = [
-    trader: AddressLike,
-    krew: BigNumberish,
-    isBuy: boolean,
-    amount: BigNumberish,
-    price: BigNumberish,
-    protocolFee: BigNumberish,
-    holderFee: BigNumberish,
-    additionalFee: BigNumberish,
-    supply: BigNumberish
-  ];
-  export type OutputTuple = [
-    trader: string,
-    krew: bigint,
-    isBuy: boolean,
-    amount: bigint,
-    price: bigint,
-    protocolFee: bigint,
-    holderFee: bigint,
-    additionalFee: bigint,
-    supply: bigint
-  ];
-  export interface OutputObject {
-    trader: string;
-    krew: bigint;
-    isBuy: boolean;
-    amount: bigint;
-    price: bigint;
-    protocolFee: bigint;
-    holderFee: bigint;
-    additionalFee: bigint;
-    supply: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
+export interface SetHolderFeePercentEventObject {
+  percent: BigNumber;
 }
+export type SetHolderFeePercentEvent = TypedEvent<
+  [BigNumber],
+  SetHolderFeePercentEventObject
+>;
+
+export type SetHolderFeePercentEventFilter =
+  TypedEventFilter<SetHolderFeePercentEvent>;
+
+export interface SetOracleAddressEventObject {
+  oracle: string;
+}
+export type SetOracleAddressEvent = TypedEvent<
+  [string],
+  SetOracleAddressEventObject
+>;
+
+export type SetOracleAddressEventFilter =
+  TypedEventFilter<SetOracleAddressEvent>;
+
+export interface SetProtocolFeeDestinationEventObject {
+  destination: string;
+}
+export type SetProtocolFeeDestinationEvent = TypedEvent<
+  [string],
+  SetProtocolFeeDestinationEventObject
+>;
+
+export type SetProtocolFeeDestinationEventFilter =
+  TypedEventFilter<SetProtocolFeeDestinationEvent>;
+
+export interface SetProtocolFeePercentEventObject {
+  percent: BigNumber;
+}
+export type SetProtocolFeePercentEvent = TypedEvent<
+  [BigNumber],
+  SetProtocolFeePercentEventObject
+>;
+
+export type SetProtocolFeePercentEventFilter =
+  TypedEventFilter<SetProtocolFeePercentEvent>;
+
+export interface TradeEventObject {
+  trader: string;
+  krew: BigNumber;
+  isBuy: boolean;
+  amount: BigNumber;
+  price: BigNumber;
+  protocolFee: BigNumber;
+  holderFee: BigNumber;
+  additionalFee: BigNumber;
+  supply: BigNumber;
+}
+export type TradeEvent = TypedEvent<
+  [
+    string,
+    BigNumber,
+    boolean,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber
+  ],
+  TradeEventObject
+>;
+
+export type TradeEventFilter = TypedEventFilter<TradeEvent>;
 
 export interface KrewCommunal extends BaseContract {
-  connect(runner?: ContractRunner | null): KrewCommunal;
-  waitForDeployment(): Promise<this>;
+  connect(signerOrProvider: Signer | Provider | string): this;
+  attach(addressOrName: string): this;
+  deployed(): Promise<this>;
 
   interface: KrewCommunalInterface;
 
-  queryFilter<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
+  queryFilter<TEvent extends TypedEvent>(
+    event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TypedEventLog<TCEvent>>>;
-  queryFilter<TCEvent extends TypedContractEvent>(
-    filter: TypedDeferredTopicFilter<TCEvent>,
-    fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
-  ): Promise<Array<TypedEventLog<TCEvent>>>;
+  ): Promise<Array<TEvent>>;
 
-  on<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
-    listener: TypedListener<TCEvent>
-  ): Promise<this>;
-  on<TCEvent extends TypedContractEvent>(
-    filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
-  ): Promise<this>;
+  listeners<TEvent extends TypedEvent>(
+    eventFilter?: TypedEventFilter<TEvent>
+  ): Array<TypedListener<TEvent>>;
+  listeners(eventName?: string): Array<Listener>;
+  removeAllListeners<TEvent extends TypedEvent>(
+    eventFilter: TypedEventFilter<TEvent>
+  ): this;
+  removeAllListeners(eventName?: string): this;
+  off: OnEvent<this>;
+  on: OnEvent<this>;
+  once: OnEvent<this>;
+  removeListener: OnEvent<this>;
 
-  once<TCEvent extends TypedContractEvent>(
-    event: TCEvent,
-    listener: TypedListener<TCEvent>
-  ): Promise<this>;
-  once<TCEvent extends TypedContractEvent>(
-    filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
-  ): Promise<this>;
+  functions: {
+    buyKeys(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
-  listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
-  ): Promise<Array<TypedListener<TCEvent>>>;
-  listeners(eventName?: string): Promise<Array<Listener>>;
-  removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
-  ): Promise<this>;
+    calculateAdditionalTokenOwnerFee(
+      price: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
-  buyKeys: TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish, oracleSignature: BytesLike],
-    [void],
-    "payable"
+    claimHolderFee(
+      krew: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    claimableHolderFee(
+      krew: PromiseOrValue<BigNumberish>,
+      holder: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { claimableFee: BigNumber }>;
+
+    createKrew(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    existsKrew(
+      krewId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    getBuyPrice(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getBuyPriceAfterFee(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getPrice(
+      supply: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getSellPrice(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getSellPriceAfterFee(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    holderFeePercent(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    holders(
+      arg0: PromiseOrValue<BigNumberish>,
+      arg1: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { balance: BigNumber; feeDebt: BigNumber }
+    >;
+
+    initialize(
+      _protocolFeeDestination: PromiseOrValue<string>,
+      _protocolFeePercent: PromiseOrValue<BigNumberish>,
+      _holderFeePercent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    krews(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { supply: BigNumber; accFeePerUnit: BigNumber }
+    >;
+
+    nextKrewId(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    oracleAddress(overrides?: CallOverrides): Promise<[string]>;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    protocolFeeDestination(overrides?: CallOverrides): Promise<[string]>;
+
+    protocolFeePercent(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    sellKeys(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setHolderFeePercent(
+      _feePercent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setOracleAddress(
+      _oracle: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setProtocolFeeDestination(
+      _feeDestination: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setProtocolFeePercent(
+      _feePercent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+  };
+
+  buyKeys(
+    krew: PromiseOrValue<BigNumberish>,
+    amount: PromiseOrValue<BigNumberish>,
+    oracleSignature: PromiseOrValue<BytesLike>,
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  calculateAdditionalTokenOwnerFee(
+    price: PromiseOrValue<BigNumberish>,
+    oracleSignature: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  claimHolderFee(
+    krew: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  claimableHolderFee(
+    krew: PromiseOrValue<BigNumberish>,
+    holder: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  createKrew(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  existsKrew(
+    krewId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  getBuyPrice(
+    krew: PromiseOrValue<BigNumberish>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getBuyPriceAfterFee(
+    krew: PromiseOrValue<BigNumberish>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getPrice(
+    supply: PromiseOrValue<BigNumberish>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getSellPrice(
+    krew: PromiseOrValue<BigNumberish>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getSellPriceAfterFee(
+    krew: PromiseOrValue<BigNumberish>,
+    amount: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  holderFeePercent(overrides?: CallOverrides): Promise<BigNumber>;
+
+  holders(
+    arg0: PromiseOrValue<BigNumberish>,
+    arg1: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber] & { balance: BigNumber; feeDebt: BigNumber }
   >;
 
-  calculateAdditionalTokenOwnerFee: TypedContractMethod<
-    [price: BigNumberish, oracleSignature: BytesLike],
-    [bigint],
-    "view"
+  initialize(
+    _protocolFeeDestination: PromiseOrValue<string>,
+    _protocolFeePercent: PromiseOrValue<BigNumberish>,
+    _holderFeePercent: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  krews(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber] & { supply: BigNumber; accFeePerUnit: BigNumber }
   >;
 
-  claimHolderFee: TypedContractMethod<
-    [krew: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+  nextKrewId(overrides?: CallOverrides): Promise<BigNumber>;
 
-  claimableHolderFee: TypedContractMethod<
-    [krew: BigNumberish, holder: AddressLike],
-    [bigint],
-    "view"
-  >;
+  oracleAddress(overrides?: CallOverrides): Promise<string>;
 
-  createKrew: TypedContractMethod<[], [void], "nonpayable">;
+  owner(overrides?: CallOverrides): Promise<string>;
 
-  existsKrew: TypedContractMethod<[krewId: BigNumberish], [boolean], "view">;
+  protocolFeeDestination(overrides?: CallOverrides): Promise<string>;
 
-  getBuyPrice: TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
+  protocolFeePercent(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getBuyPriceAfterFee: TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
+  renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  getPrice: TypedContractMethod<
-    [supply: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
+  sellKeys(
+    krew: PromiseOrValue<BigNumberish>,
+    amount: PromiseOrValue<BigNumberish>,
+    oracleSignature: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  getSellPrice: TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
+  setHolderFeePercent(
+    _feePercent: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  getSellPriceAfterFee: TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
+  setOracleAddress(
+    _oracle: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  holderFeePercent: TypedContractMethod<[], [bigint], "view">;
+  setProtocolFeeDestination(
+    _feeDestination: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  holders: TypedContractMethod<
-    [arg0: BigNumberish, arg1: AddressLike],
-    [[bigint, bigint] & { balance: bigint; feeDebt: bigint }],
-    "view"
-  >;
+  setProtocolFeePercent(
+    _feePercent: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  initialize: TypedContractMethod<
-    [
-      _protocolFeeDestination: AddressLike,
-      _protocolFeePercent: BigNumberish,
-      _holderFeePercent: BigNumberish
-    ],
-    [void],
-    "nonpayable"
-  >;
+  transferOwnership(
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
-  krews: TypedContractMethod<
-    [arg0: BigNumberish],
-    [[bigint, bigint] & { supply: bigint; accFeePerUnit: bigint }],
-    "view"
-  >;
+  callStatic: {
+    buyKeys(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-  nextKrewId: TypedContractMethod<[], [bigint], "view">;
+    calculateAdditionalTokenOwnerFee(
+      price: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-  oracleAddress: TypedContractMethod<[], [string], "view">;
+    claimHolderFee(
+      krew: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-  owner: TypedContractMethod<[], [string], "view">;
+    claimableHolderFee(
+      krew: PromiseOrValue<BigNumberish>,
+      holder: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-  protocolFeeDestination: TypedContractMethod<[], [string], "view">;
+    createKrew(overrides?: CallOverrides): Promise<void>;
 
-  protocolFeePercent: TypedContractMethod<[], [bigint], "view">;
+    existsKrew(
+      krewId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+    getBuyPrice(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-  sellKeys: TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish, oracleSignature: BytesLike],
-    [void],
-    "nonpayable"
-  >;
+    getBuyPriceAfterFee(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-  setHolderFeePercent: TypedContractMethod<
-    [_feePercent: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+    getPrice(
+      supply: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-  setOracleAddress: TypedContractMethod<
-    [_oracle: AddressLike],
-    [void],
-    "nonpayable"
-  >;
+    getSellPrice(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-  setProtocolFeeDestination: TypedContractMethod<
-    [_feeDestination: AddressLike],
-    [void],
-    "nonpayable"
-  >;
+    getSellPriceAfterFee(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-  setProtocolFeePercent: TypedContractMethod<
-    [_feePercent: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
+    holderFeePercent(overrides?: CallOverrides): Promise<BigNumber>;
 
-  transferOwnership: TypedContractMethod<
-    [newOwner: AddressLike],
-    [void],
-    "nonpayable"
-  >;
+    holders(
+      arg0: PromiseOrValue<BigNumberish>,
+      arg1: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { balance: BigNumber; feeDebt: BigNumber }
+    >;
 
-  getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
-  ): T;
+    initialize(
+      _protocolFeeDestination: PromiseOrValue<string>,
+      _protocolFeePercent: PromiseOrValue<BigNumberish>,
+      _holderFeePercent: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-  getFunction(
-    nameOrSignature: "buyKeys"
-  ): TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish, oracleSignature: BytesLike],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "calculateAdditionalTokenOwnerFee"
-  ): TypedContractMethod<
-    [price: BigNumberish, oracleSignature: BytesLike],
-    [bigint],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "claimHolderFee"
-  ): TypedContractMethod<[krew: BigNumberish], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "claimableHolderFee"
-  ): TypedContractMethod<
-    [krew: BigNumberish, holder: AddressLike],
-    [bigint],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "createKrew"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "existsKrew"
-  ): TypedContractMethod<[krewId: BigNumberish], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "getBuyPrice"
-  ): TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "getBuyPriceAfterFee"
-  ): TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "getPrice"
-  ): TypedContractMethod<
-    [supply: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "getSellPrice"
-  ): TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "getSellPriceAfterFee"
-  ): TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish],
-    [bigint],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "holderFeePercent"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "holders"
-  ): TypedContractMethod<
-    [arg0: BigNumberish, arg1: AddressLike],
-    [[bigint, bigint] & { balance: bigint; feeDebt: bigint }],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "initialize"
-  ): TypedContractMethod<
-    [
-      _protocolFeeDestination: AddressLike,
-      _protocolFeePercent: BigNumberish,
-      _holderFeePercent: BigNumberish
-    ],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "krews"
-  ): TypedContractMethod<
-    [arg0: BigNumberish],
-    [[bigint, bigint] & { supply: bigint; accFeePerUnit: bigint }],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "nextKrewId"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "oracleAddress"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "protocolFeeDestination"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "protocolFeePercent"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "sellKeys"
-  ): TypedContractMethod<
-    [krew: BigNumberish, amount: BigNumberish, oracleSignature: BytesLike],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "setHolderFeePercent"
-  ): TypedContractMethod<[_feePercent: BigNumberish], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setOracleAddress"
-  ): TypedContractMethod<[_oracle: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setProtocolFeeDestination"
-  ): TypedContractMethod<[_feeDestination: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setProtocolFeePercent"
-  ): TypedContractMethod<[_feePercent: BigNumberish], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+    krews(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { supply: BigNumber; accFeePerUnit: BigNumber }
+    >;
 
-  getEvent(
-    key: "ClaimHolderFee"
-  ): TypedContractEvent<
-    ClaimHolderFeeEvent.InputTuple,
-    ClaimHolderFeeEvent.OutputTuple,
-    ClaimHolderFeeEvent.OutputObject
-  >;
-  getEvent(
-    key: "Initialized"
-  ): TypedContractEvent<
-    InitializedEvent.InputTuple,
-    InitializedEvent.OutputTuple,
-    InitializedEvent.OutputObject
-  >;
-  getEvent(
-    key: "KrewCreated"
-  ): TypedContractEvent<
-    KrewCreatedEvent.InputTuple,
-    KrewCreatedEvent.OutputTuple,
-    KrewCreatedEvent.OutputObject
-  >;
-  getEvent(
-    key: "OwnershipTransferred"
-  ): TypedContractEvent<
-    OwnershipTransferredEvent.InputTuple,
-    OwnershipTransferredEvent.OutputTuple,
-    OwnershipTransferredEvent.OutputObject
-  >;
-  getEvent(
-    key: "SetHolderFeePercent"
-  ): TypedContractEvent<
-    SetHolderFeePercentEvent.InputTuple,
-    SetHolderFeePercentEvent.OutputTuple,
-    SetHolderFeePercentEvent.OutputObject
-  >;
-  getEvent(
-    key: "SetOracleAddress"
-  ): TypedContractEvent<
-    SetOracleAddressEvent.InputTuple,
-    SetOracleAddressEvent.OutputTuple,
-    SetOracleAddressEvent.OutputObject
-  >;
-  getEvent(
-    key: "SetProtocolFeeDestination"
-  ): TypedContractEvent<
-    SetProtocolFeeDestinationEvent.InputTuple,
-    SetProtocolFeeDestinationEvent.OutputTuple,
-    SetProtocolFeeDestinationEvent.OutputObject
-  >;
-  getEvent(
-    key: "SetProtocolFeePercent"
-  ): TypedContractEvent<
-    SetProtocolFeePercentEvent.InputTuple,
-    SetProtocolFeePercentEvent.OutputTuple,
-    SetProtocolFeePercentEvent.OutputObject
-  >;
-  getEvent(
-    key: "Trade"
-  ): TypedContractEvent<
-    TradeEvent.InputTuple,
-    TradeEvent.OutputTuple,
-    TradeEvent.OutputObject
-  >;
+    nextKrewId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    oracleAddress(overrides?: CallOverrides): Promise<string>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    protocolFeeDestination(overrides?: CallOverrides): Promise<string>;
+
+    protocolFeePercent(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    sellKeys(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setHolderFeePercent(
+      _feePercent: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setOracleAddress(
+      _oracle: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setProtocolFeeDestination(
+      _feeDestination: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setProtocolFeePercent(
+      _feePercent: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+  };
 
   filters: {
-    "ClaimHolderFee(address,uint256,uint256)": TypedContractEvent<
-      ClaimHolderFeeEvent.InputTuple,
-      ClaimHolderFeeEvent.OutputTuple,
-      ClaimHolderFeeEvent.OutputObject
-    >;
-    ClaimHolderFee: TypedContractEvent<
-      ClaimHolderFeeEvent.InputTuple,
-      ClaimHolderFeeEvent.OutputTuple,
-      ClaimHolderFeeEvent.OutputObject
-    >;
+    "ClaimHolderFee(address,uint256,uint256)"(
+      holder?: PromiseOrValue<string> | null,
+      krew?: PromiseOrValue<BigNumberish> | null,
+      fee?: null
+    ): ClaimHolderFeeEventFilter;
+    ClaimHolderFee(
+      holder?: PromiseOrValue<string> | null,
+      krew?: PromiseOrValue<BigNumberish> | null,
+      fee?: null
+    ): ClaimHolderFeeEventFilter;
 
-    "Initialized(uint8)": TypedContractEvent<
-      InitializedEvent.InputTuple,
-      InitializedEvent.OutputTuple,
-      InitializedEvent.OutputObject
-    >;
-    Initialized: TypedContractEvent<
-      InitializedEvent.InputTuple,
-      InitializedEvent.OutputTuple,
-      InitializedEvent.OutputObject
-    >;
+    "Initialized(uint8)"(version?: null): InitializedEventFilter;
+    Initialized(version?: null): InitializedEventFilter;
 
-    "KrewCreated(uint256,address)": TypedContractEvent<
-      KrewCreatedEvent.InputTuple,
-      KrewCreatedEvent.OutputTuple,
-      KrewCreatedEvent.OutputObject
-    >;
-    KrewCreated: TypedContractEvent<
-      KrewCreatedEvent.InputTuple,
-      KrewCreatedEvent.OutputTuple,
-      KrewCreatedEvent.OutputObject
-    >;
+    "KrewCreated(uint256,address)"(
+      krewId?: PromiseOrValue<BigNumberish> | null,
+      creator?: PromiseOrValue<string> | null
+    ): KrewCreatedEventFilter;
+    KrewCreated(
+      krewId?: PromiseOrValue<BigNumberish> | null,
+      creator?: PromiseOrValue<string> | null
+    ): KrewCreatedEventFilter;
 
-    "OwnershipTransferred(address,address)": TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
-    >;
-    OwnershipTransferred: TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
-    >;
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
 
-    "SetHolderFeePercent(uint256)": TypedContractEvent<
-      SetHolderFeePercentEvent.InputTuple,
-      SetHolderFeePercentEvent.OutputTuple,
-      SetHolderFeePercentEvent.OutputObject
-    >;
-    SetHolderFeePercent: TypedContractEvent<
-      SetHolderFeePercentEvent.InputTuple,
-      SetHolderFeePercentEvent.OutputTuple,
-      SetHolderFeePercentEvent.OutputObject
-    >;
+    "SetHolderFeePercent(uint256)"(
+      percent?: null
+    ): SetHolderFeePercentEventFilter;
+    SetHolderFeePercent(percent?: null): SetHolderFeePercentEventFilter;
 
-    "SetOracleAddress(address)": TypedContractEvent<
-      SetOracleAddressEvent.InputTuple,
-      SetOracleAddressEvent.OutputTuple,
-      SetOracleAddressEvent.OutputObject
-    >;
-    SetOracleAddress: TypedContractEvent<
-      SetOracleAddressEvent.InputTuple,
-      SetOracleAddressEvent.OutputTuple,
-      SetOracleAddressEvent.OutputObject
-    >;
+    "SetOracleAddress(address)"(
+      oracle?: PromiseOrValue<string> | null
+    ): SetOracleAddressEventFilter;
+    SetOracleAddress(
+      oracle?: PromiseOrValue<string> | null
+    ): SetOracleAddressEventFilter;
 
-    "SetProtocolFeeDestination(address)": TypedContractEvent<
-      SetProtocolFeeDestinationEvent.InputTuple,
-      SetProtocolFeeDestinationEvent.OutputTuple,
-      SetProtocolFeeDestinationEvent.OutputObject
-    >;
-    SetProtocolFeeDestination: TypedContractEvent<
-      SetProtocolFeeDestinationEvent.InputTuple,
-      SetProtocolFeeDestinationEvent.OutputTuple,
-      SetProtocolFeeDestinationEvent.OutputObject
-    >;
+    "SetProtocolFeeDestination(address)"(
+      destination?: PromiseOrValue<string> | null
+    ): SetProtocolFeeDestinationEventFilter;
+    SetProtocolFeeDestination(
+      destination?: PromiseOrValue<string> | null
+    ): SetProtocolFeeDestinationEventFilter;
 
-    "SetProtocolFeePercent(uint256)": TypedContractEvent<
-      SetProtocolFeePercentEvent.InputTuple,
-      SetProtocolFeePercentEvent.OutputTuple,
-      SetProtocolFeePercentEvent.OutputObject
-    >;
-    SetProtocolFeePercent: TypedContractEvent<
-      SetProtocolFeePercentEvent.InputTuple,
-      SetProtocolFeePercentEvent.OutputTuple,
-      SetProtocolFeePercentEvent.OutputObject
-    >;
+    "SetProtocolFeePercent(uint256)"(
+      percent?: null
+    ): SetProtocolFeePercentEventFilter;
+    SetProtocolFeePercent(percent?: null): SetProtocolFeePercentEventFilter;
 
-    "Trade(address,uint256,bool,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
-      TradeEvent.InputTuple,
-      TradeEvent.OutputTuple,
-      TradeEvent.OutputObject
-    >;
-    Trade: TypedContractEvent<
-      TradeEvent.InputTuple,
-      TradeEvent.OutputTuple,
-      TradeEvent.OutputObject
-    >;
+    "Trade(address,uint256,bool,uint256,uint256,uint256,uint256,uint256,uint256)"(
+      trader?: PromiseOrValue<string> | null,
+      krew?: PromiseOrValue<BigNumberish> | null,
+      isBuy?: PromiseOrValue<boolean> | null,
+      amount?: null,
+      price?: null,
+      protocolFee?: null,
+      holderFee?: null,
+      additionalFee?: null,
+      supply?: null
+    ): TradeEventFilter;
+    Trade(
+      trader?: PromiseOrValue<string> | null,
+      krew?: PromiseOrValue<BigNumberish> | null,
+      isBuy?: PromiseOrValue<boolean> | null,
+      amount?: null,
+      price?: null,
+      protocolFee?: null,
+      holderFee?: null,
+      additionalFee?: null,
+      supply?: null
+    ): TradeEventFilter;
+  };
+
+  estimateGas: {
+    buyKeys(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    calculateAdditionalTokenOwnerFee(
+      price: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    claimHolderFee(
+      krew: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    claimableHolderFee(
+      krew: PromiseOrValue<BigNumberish>,
+      holder: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    createKrew(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    existsKrew(
+      krewId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getBuyPrice(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getBuyPriceAfterFee(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPrice(
+      supply: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSellPrice(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSellPriceAfterFee(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    holderFeePercent(overrides?: CallOverrides): Promise<BigNumber>;
+
+    holders(
+      arg0: PromiseOrValue<BigNumberish>,
+      arg1: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    initialize(
+      _protocolFeeDestination: PromiseOrValue<string>,
+      _protocolFeePercent: PromiseOrValue<BigNumberish>,
+      _holderFeePercent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    krews(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    nextKrewId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    oracleAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    protocolFeeDestination(overrides?: CallOverrides): Promise<BigNumber>;
+
+    protocolFeePercent(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    sellKeys(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setHolderFeePercent(
+      _feePercent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setOracleAddress(
+      _oracle: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setProtocolFeeDestination(
+      _feeDestination: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setProtocolFeePercent(
+      _feePercent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+  };
+
+  populateTransaction: {
+    buyKeys(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    calculateAdditionalTokenOwnerFee(
+      price: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    claimHolderFee(
+      krew: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    claimableHolderFee(
+      krew: PromiseOrValue<BigNumberish>,
+      holder: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    createKrew(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    existsKrew(
+      krewId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getBuyPrice(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getBuyPriceAfterFee(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPrice(
+      supply: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSellPrice(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSellPriceAfterFee(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    holderFeePercent(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    holders(
+      arg0: PromiseOrValue<BigNumberish>,
+      arg1: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    initialize(
+      _protocolFeeDestination: PromiseOrValue<string>,
+      _protocolFeePercent: PromiseOrValue<BigNumberish>,
+      _holderFeePercent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    krews(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    nextKrewId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    oracleAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    protocolFeeDestination(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    protocolFeePercent(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    sellKeys(
+      krew: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      oracleSignature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setHolderFeePercent(
+      _feePercent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setOracleAddress(
+      _oracle: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setProtocolFeeDestination(
+      _feeDestination: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setProtocolFeePercent(
+      _feePercent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }

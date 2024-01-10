@@ -1,14 +1,19 @@
-import { getNetwork, getWalletClient } from "@wagmi/core";
 import { Supabase } from "@common-module/app";
-import { BrowserProvider, JsonRpcSigner } from "ethers";
-import { SignedUserManager, SoFiUserPublic } from "@common-module/social";
+import { SignedUserManager } from "@common-module/social";
+import { getNetwork, getWalletClient } from "@wagmi/core";
+import { ethers } from "ethers";
 import EnvironmentManager from "../EnvironmentManager.js";
+import KrewUserPublic from "../database-interface/KrewUserPublic.js";
 import WalletManager from "../wallet/WalletManager.js";
 import KrewUserService from "./KrewUserService.js";
 
-class KrewSignedUserManager extends SignedUserManager<SoFiUserPublic> {
+class KrewSignedUserManager extends SignedUserManager<KrewUserPublic> {
   protected async fetchUser(userId: string) {
     return await KrewUserService.fetchUser(userId);
+  }
+
+  public get walletLinked() {
+    return this.user?.wallet_address !== undefined;
   }
 
   public async signIn() {
@@ -66,14 +71,12 @@ class KrewSignedUserManager extends SignedUserManager<SoFiUserPublic> {
     }
 
     if (chain && account && transport) {
-      return new JsonRpcSigner(
-        new BrowserProvider(transport, {
-          chainId: chain.id,
-          name: chain.name,
-          ensAddress: chain.contracts?.ensRegistry?.address,
-        }),
-        account.address,
-      );
+      const provider = new ethers.providers.Web3Provider(transport, {
+        chainId: chain.id,
+        name: chain.name,
+        ensAddress: chain.contracts?.ensRegistry?.address,
+      });
+      return provider.getSigner(account.address);
     }
   }
 }

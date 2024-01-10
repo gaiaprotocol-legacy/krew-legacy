@@ -16,11 +16,18 @@ export const response = (data: string | object) => {
   });
 };
 
-const responseError = (errorMessage: string) => {
-  return new Response(errorMessage, {
-    status: 500,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
+export const responseError = (error: string | object) => {
+  if (typeof error === "string") {
+    return new Response(error, { status: 500, headers: corsHeaders });
+  } else {
+    return new Response(
+      JSON.stringify(error),
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
+  }
 };
 
 export const serveWithOptions = (

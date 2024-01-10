@@ -1,11 +1,13 @@
-import { ethers } from "https://esm.sh/ethers@6.7.0";
+import { BigNumber, ethers } from "https://esm.sh/ethers@5.6.8";
 import KrewCommunalContract from "../_shared/contracts/KrewCommunalContract.ts";
 import KrewPersonalContract from "../_shared/contracts/KrewPersonalContract.ts";
 import { serveWithOptions } from "../_shared/cors.ts";
 import supabase from "../_shared/supabase.ts";
 
-const provider = new ethers.JsonRpcProvider(Deno.env.get("KROMA_RPC")!);
-const signer = new ethers.JsonRpcSigner(provider, ethers.ZeroAddress);
+const provider = new ethers.providers.JsonRpcProvider(
+  Deno.env.get("KROMA_RPC")!,
+);
+const signer = provider.getSigner(ethers.constants.AddressZero);
 const personalContract = new KrewPersonalContract(signer);
 const communalContract = new KrewCommunalContract(signer);
 
@@ -14,11 +16,11 @@ serveWithOptions(async (req) => {
   if (!krew) throw new Error("Missing subjects");
   if (!walletAddress) throw new Error("Missing wallet address");
 
-  const krewId = BigInt(krew.substring(2));
+  const krewId = BigNumber.from(krew.substring(2));
   const contract = krew.startsWith("c_") ? communalContract : personalContract;
 
   const [price, balance] = await Promise.all([
-    contract.getBuyPrice(krewId, BigInt(1)),
+    contract.getBuyPrice(krewId, BigNumber.from(1)),
     contract.getBalance(krewId, walletAddress),
   ]);
 

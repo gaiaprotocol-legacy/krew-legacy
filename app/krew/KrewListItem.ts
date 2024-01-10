@@ -38,7 +38,7 @@ export default class KrewListItem extends DomNode {
             el("h3", "Price"),
             el(
               ".value",
-              ethers.formatEther(krew.last_fetched_key_price) + " ETH",
+              ethers.utils.formatEther(krew.last_fetched_key_price) + " ETH",
             ),
           ),
         ),

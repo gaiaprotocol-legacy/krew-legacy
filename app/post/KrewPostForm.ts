@@ -14,8 +14,8 @@ export default class KrewPostForm extends PostForm {
     private callback?: (post: KrewPost) => void,
   ) {
     super([
-      KrewSignedUserManager.user?.profile_image_thumbnail,
-      KrewSignedUserManager.user?.stored_profile_image_thumbnail,
+      KrewSignedUserManager.user?.avatar_thumb,
+      KrewSignedUserManager.user?.stored_avatar_thumb,
     ], focus);
   }
 

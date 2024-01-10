@@ -1,14 +1,14 @@
-import { ethers } from "https://esm.sh/ethers@6.7.0";
+import { BigNumber, ethers } from "https://esm.sh/ethers@5.6.8";
 import Contract from "./Contract.ts";
 import KrewPersonalArtifact from "./abi/krew/KrewPersonal.json" assert {
-  type: "json"
+  type: "json",
 };
 import { KrewPersonal } from "./abi/krew/KrewPersonal.ts";
 
 export default class KrewPersonalContract extends Contract<KrewPersonal> {
-  public krewCreatedEventFilter: ethers.TopicFilter | undefined;
-  public tradeEventFilter: ethers.TopicFilter | undefined;
-  public claimKrewFeeEventFilter: ethers.TopicFilter | undefined;
+  public krewCreatedEventFilter: ethers.EventFilter | undefined;
+  public tradeEventFilter: ethers.EventFilter | undefined;
+  public claimKrewFeeEventFilter: ethers.EventFilter | undefined;
 
   constructor(signer: ethers.Signer) {
     super(
@@ -18,11 +18,11 @@ export default class KrewPersonalContract extends Contract<KrewPersonal> {
     );
   }
 
-  public async getBuyPrice(krewId: bigint, amount: bigint) {
+  public async getBuyPrice(krewId: BigNumber, amount: BigNumber) {
     return await this.ethersContract.getBuyPrice(krewId, amount);
   }
 
-  public async getBalance(krewId: bigint, walletAddress: string) {
+  public async getBalance(krewId: BigNumber, walletAddress: string) {
     return await this.ethersContract.holderBalance(krewId, walletAddress);
   }
 
@@ -31,20 +31,19 @@ export default class KrewPersonalContract extends Contract<KrewPersonal> {
       !this.krewCreatedEventFilter || !this.tradeEventFilter ||
       !this.claimKrewFeeEventFilter
     ) {
-      this.krewCreatedEventFilter = await this.ethersContract.filters
-        .KrewCreated()
-        .getTopicFilter();
-      this.tradeEventFilter = await this.ethersContract.filters.Trade()
-        .getTopicFilter();
-      this.claimKrewFeeEventFilter = await this.ethersContract.filters
-        .ClaimKrewFee().getTopicFilter();
+      this.krewCreatedEventFilter = this.ethersContract.filters
+        .KrewCreated();
+      this.tradeEventFilter = this.ethersContract.filters.Trade();
+      this.claimKrewFeeEventFilter = this.ethersContract.filters
+        .ClaimKrewFee();
     }
 
     return await this.ethersContract.queryFilter(
-      [this.krewCreatedEventFilter.concat(
+      [
+        this.krewCreatedEventFilter,
         this.tradeEventFilter,
         this.claimKrewFeeEventFilter,
-      )] as any,
+      ] as any,
       startBlock,
       endBlock,
     );

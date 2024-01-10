@@ -7,7 +7,7 @@ import {
   msg,
   Popup,
 } from "@common-module/app";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import KrewContract from "../contracts/KrewContract.js";
 import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
 import Krew from "../database-interface/Krew.js";
@@ -107,20 +107,23 @@ export default class SellKeyPopup extends Popup {
   }
 
   private get krewId() {
-    return BigInt(this.krew.id.substring(2));
+    return BigNumber.from(this.krew.id.substring(2));
   }
 
   private async fetchPrice() {
-    const price = await this.krewContract.getSellPrice(this.krewId, 1n);
-    this.priceDisplay.text = `${ethers.formatEther(price)}`;
+    const price = await this.krewContract.getSellPrice(
+      this.krewId,
+      BigNumber.from(1),
+    );
+    this.priceDisplay.text = `${ethers.utils.formatEther(price)}`;
   }
 
   private async fetchTotalPrice() {
     const price = await this.krewContract.getSellPriceAfterFee(
       this.krewId,
-      1n,
+      BigNumber.from(1),
     );
-    this.totalPriceDisplay.text = `${ethers.formatEther(price)}`;
+    this.totalPriceDisplay.text = `${ethers.utils.formatEther(price)}`;
   }
 
   private async trackEvents() {
@@ -135,7 +138,7 @@ export default class SellKeyPopup extends Popup {
     this.sellButton.title = el(".loading-spinner");
 
     try {
-      await this.krewContract.sellKeys(this.krewId, 1n);
+      await this.krewContract.sellKeys(this.krewId, BigNumber.from(1));
       await Promise.all([
         this.trackEvents(),
         KrewService.trackKeyPriceAndBalance(this.krew.id),

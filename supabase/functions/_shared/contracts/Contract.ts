@@ -1,16 +1,15 @@
 import {
   BaseContract,
+  ContractInterface,
   ethers,
-  Interface,
-  InterfaceAbi,
-} from "https://esm.sh/ethers@6.7.0";
+} from "https://esm.sh/ethers@5.6.8";
 
 export default abstract class Contract<CT extends BaseContract> {
   protected ethersContract: CT;
 
   constructor(
     address: string,
-    abi: Interface | InterfaceAbi,
+    abi: ContractInterface,
     signer: ethers.Signer,
   ) {
     this.ethersContract = new ethers.Contract(

@@ -1,5 +1,4 @@
-import { responseError } from "../../../../pal/supabase/functions/_shared/cors.ts";
-import { serveWithOptions } from "../_shared/cors.ts";
+import { responseError, serveWithOptions } from "../_shared/cors.ts";
 
 serveWithOptions(async (req) => {
   const { walletAddress } = await req.json();

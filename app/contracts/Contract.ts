@@ -1,6 +1,6 @@
-import { getNetwork, getWalletClient } from "@wagmi/core";
 import { Confirm, ErrorAlert, EventContainer, msg } from "@common-module/app";
-import { BaseContract, Interface, InterfaceAbi, ethers } from "ethers";
+import { getNetwork, getWalletClient } from "@wagmi/core";
+import { BaseContract, ContractInterface, ethers } from "ethers";
 import EnvironmentManager from "../EnvironmentManager.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import SwitchToKromaPopup from "../wallet/SwitchToKromaPopup.js";
@@ -12,7 +12,7 @@ export default abstract class Contract<CT extends BaseContract>
 
   private address!: string;
 
-  constructor(private abi: Interface | InterfaceAbi) {
+  constructor(private abi: ContractInterface) {
     super();
   }
 
@@ -22,7 +22,7 @@ export default abstract class Contract<CT extends BaseContract>
     this.viewContract = new ethers.Contract(
       this.address,
       this.abi,
-      new ethers.JsonRpcProvider(EnvironmentManager.kromaRpc),
+      new ethers.providers.JsonRpcProvider(EnvironmentManager.kromaRpc),
     ) as any;
   }
 

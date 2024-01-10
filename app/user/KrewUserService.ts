@@ -1,7 +1,8 @@
 import { Supabase } from "@common-module/app";
-import { SoFiUserPublic, SoFiUserService } from "@common-module/social";
+import { SoFiUserService } from "@common-module/social";
+import KrewUserPublic from "../database-interface/KrewUserPublic.js";
 
-class KrewUserService extends SoFiUserService<SoFiUserPublic> {
+class KrewUserService extends SoFiUserService<KrewUserPublic> {
   constructor() {
     super("users_public", "*", 50);
   }
@@ -17,7 +18,7 @@ class KrewUserService extends SoFiUserService<SoFiUserPublic> {
   public async fetchKrewHolders(
     krew: string,
     lastCreatedAt?: string,
-  ): Promise<SoFiUserPublic[]> {
+  ): Promise<KrewUserPublic[]> {
     const { data, error } = await Supabase.client.rpc("get_krew_holders", {
       p_krew_id: krew,
       last_created_at: lastCreatedAt,

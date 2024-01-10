@@ -1,5 +1,5 @@
 import { Button, DomNode, el } from "@common-module/app";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import KrewCommunalContract from "../../contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "../../contracts/KrewPersonalContract.js";
 import Krew from "../../database-interface/Krew.js";
@@ -36,7 +36,7 @@ export default class OwnedKrewListItem extends DomNode {
               el("h3", "Price"),
               el(
                 ".value",
-                ethers.formatEther(krew.last_fetched_key_price) + " ETH",
+                ethers.utils.formatEther(krew.last_fetched_key_price) + " ETH",
               ),
             ),
           ),
@@ -72,15 +72,15 @@ export default class OwnedKrewListItem extends DomNode {
     if (this.claimableFee) {
       if (KrewSignedUserManager.user?.wallet_address) {
         if (this.krew.id.startsWith("p_")) {
-          this.claimableFee.text = ethers.formatEther(
+          this.claimableFee.text = ethers.utils.formatEther(
             await KrewPersonalContract.getClaimableFee(
-              BigInt(this.krew.id.substring(2)),
+              BigNumber.from(this.krew.id.substring(2)),
             ),
           ) + " ETH";
         } else if (this.krew.id.startsWith("c_")) {
-          this.claimableFee.text = ethers.formatEther(
+          this.claimableFee.text = ethers.utils.formatEther(
             await KrewCommunalContract.getClaimableFee(
-              BigInt(this.krew.id.substring(2)),
+              BigNumber.from(this.krew.id.substring(2)),
               KrewSignedUserManager.user.wallet_address,
             ),
           ) + " ETH";
@@ -94,11 +94,11 @@ export default class OwnedKrewListItem extends DomNode {
   private async claimFee() {
     if (this.krew.id.startsWith("p_")) {
       await KrewPersonalContract.claimFee(
-        BigInt(this.krew.id.substring(2)),
+        BigNumber.from(this.krew.id.substring(2)),
       );
     } else if (this.krew.id.startsWith("c_")) {
       await KrewCommunalContract.claimFee(
-        BigInt(this.krew.id.substring(2)),
+        BigNumber.from(this.krew.id.substring(2)),
       );
     }
   }
