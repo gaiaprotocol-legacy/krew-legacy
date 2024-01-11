@@ -1,7 +1,7 @@
 import { Button, DomNode, el, msg, View, ViewParams } from "@common-module/app";
 import Layout from "../layout/Layout.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
-import WalletManager from "../wallet/WalletManager.js";
+import ConnectWalletPopup from "../wallet/ConnectWalletPopup.js";
 
 export default class SettingsView extends View {
   private linkWalletSection: DomNode | undefined;
@@ -58,7 +58,8 @@ export default class SettingsView extends View {
             button.domElement.setAttribute("disabled", "disabled");
             button.text = msg("no-wallet-linked-linking");
             try {
-              await KrewSignedUserManager.linkWallet();
+              const wallet = await (new ConnectWalletPopup()).wait();
+              await KrewSignedUserManager.linkWallet(wallet);
               this.renderLinkWalletSection();
             } catch (e) {
               console.error(e);

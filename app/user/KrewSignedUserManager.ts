@@ -3,6 +3,7 @@ import { SignedUserManager } from "@common-module/social";
 import { ethers } from "ethers";
 import Env from "../Env.js";
 import KrewUserPublic from "../database-interface/KrewUserPublic.js";
+import UnifiedWalletManager from "../wallet/UnifiedWalletManager.js";
 import WalletManager from "../wallet/WalletManager.js";
 import KrewUserService from "./KrewUserService.js";
 
@@ -19,10 +20,12 @@ class KrewSignedUserManager extends SignedUserManager<KrewUserPublic> {
     await Supabase.signIn("twitter");
   }
 
-  public async linkWallet() {
-    if (!await WalletManager.connected()) await WalletManager.connect();
+  public async linkWallet(wallet: WalletManager) {
+    if (!await wallet.connected()) {
+      if (!await wallet.connect()) throw new Error("Wallet connection failed");
+    }
 
-    const walletAddress = await WalletManager.getAddress();
+    const walletAddress = await wallet.getAddress();
     if (!walletAddress) throw new Error("Wallet is not connected");
 
     const { data: nonceData, error: nonceError } = await Supabase.client
@@ -31,7 +34,7 @@ class KrewSignedUserManager extends SignedUserManager<KrewUserPublic> {
       });
     if (nonceError) throw nonceError;
 
-    const signedMessage = await WalletManager.signMessage(
+    const signedMessage = await wallet.signMessage(
       `${Env.messageForWalletLinking}\n\nNonce: ${nonceData.nonce}`,
     );
 
@@ -50,17 +53,13 @@ class KrewSignedUserManager extends SignedUserManager<KrewUserPublic> {
 
   public async getContractSigner(): Promise<ethers.providers.JsonRpcSigner> {
     if (!this.user) throw new Error("User not signed in");
-    if (await WalletManager.connected() !== true) {
-      throw new Error("Wallet not connected");
-    }
     if (!this.user.wallet_address) throw new Error("Wallet not linked");
-    if (await WalletManager.getAddress() !== this.user.wallet_address) {
-      throw new Error("Wallet address mismatch");
-    }
-    if (await WalletManager.getChainId() !== Env.kromaChainId) {
-      throw new Error("Wrong chain");
-    }
-    return await WalletManager.getSigner();
+    const wallet = await UnifiedWalletManager.findWallet(
+      this.user.wallet_address,
+      Env.kromaChainId,
+    );
+    if (!wallet) throw new Error("Wallet not found");
+    return await wallet.getSigner();
   }
 }
 

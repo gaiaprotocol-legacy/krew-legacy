@@ -1,29 +1,22 @@
-import { Face, Network } from "@haechi-labs/face-sdk";
+import { EventContainer } from "@common-module/app";
+import { Face } from "@haechi-labs/face-sdk";
+import { Network } from "@haechi-labs/face-types";
 import { ethers } from "ethers";
 import Env from "../Env.js";
-import WalletManager from "./WalletManager.js";
+import InternalWalletManager from "./InternalWalletManager.js";
 
-class FaceWalletManager implements WalletManager {
+class FaceWalletManager extends EventContainer
+  implements InternalWalletManager {
   private face!: Face;
   private provider!: ethers.providers.Web3Provider;
 
-  public init(apiKey: string) {
-    this.face = new Face({
-      network: Env.dev ? Network.KROMA_SEPOLIA : Network.KROMA,
-      apiKey,
-    });
-    this.provider = new ethers.providers.Web3Provider(
-      this.face.getEthLikeProvider(),
-    );
-  }
-
   public async connected(): Promise<boolean> {
-    return await this.face.auth.isLoggedIn();
-  }
-
-  public async connect(): Promise<boolean> {
-    const result = await this.face.auth.login();
-    return result?.wallet !== undefined;
+    try {
+      return await this.getAddress() !== undefined;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 
   public async getAddress(): Promise<string | undefined> {
@@ -38,6 +31,25 @@ class FaceWalletManager implements WalletManager {
   public async getChainId(): Promise<number | undefined> {
     const { chainId } = await this.provider.getNetwork();
     return chainId;
+  }
+
+  constructor() {
+    super();
+    this.addAllowedEvents("accountChanged");
+  }
+
+  public init(faceWalletApiKey: string) {
+    this.face = new Face({
+      network: Env.dev ? Network.KROMA_SEPOLIA : Network.KROMA,
+      apiKey: faceWalletApiKey,
+    });
+    this.provider = new ethers.providers.Web3Provider(
+      this.face.getEthLikeProvider(),
+    );
+  }
+
+  public async connect(): Promise<void> {
+    await this.face.auth.login();
   }
 
   public async signMessage(message: string): Promise<string> {

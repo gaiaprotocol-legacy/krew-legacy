@@ -8,9 +8,10 @@ import {
 } from "@common-module/app";
 import FaceWalletManager from "./FaceWalletManager.js";
 import WalletConnectManager from "./WalletConnectManager.js";
+import WalletManager from "./WalletManager.js";
 
 export default class ConnectWalletPopup extends Popup {
-  private resolve: (() => void) | undefined;
+  private resolve: ((value: WalletManager) => void) | undefined;
   private reject: (() => void) | undefined;
 
   constructor() {
@@ -37,10 +38,12 @@ export default class ConnectWalletPopup extends Popup {
             ),
             title: "Connect using Face Wallet",
             click: async () => {
-              await FaceWalletManager.connect();
-              this.resolve?.();
-              this.reject = undefined;
-              this.delete();
+              const connected = await FaceWalletManager.connect();
+              if (connected) {
+                this.resolve?.(FaceWalletManager);
+                this.reject = undefined;
+                this.delete();
+              }
             },
           }),
           new Button({
@@ -51,10 +54,12 @@ export default class ConnectWalletPopup extends Popup {
             title:
               "Connect using WalletConnect\n(Metamask, Trust Wallet, etc.)",
             click: async () => {
-              await WalletConnectManager.connect();
-              this.resolve?.();
-              this.reject = undefined;
-              this.delete();
+              const connected = await WalletConnectManager.connect();
+              if (connected) {
+                this.resolve?.(WalletConnectManager);
+                this.reject = undefined;
+                this.delete();
+              }
             },
           }),
         ),
@@ -71,7 +76,7 @@ export default class ConnectWalletPopup extends Popup {
     this.on("delete", () => this.reject?.());
   }
 
-  public async wait(): Promise<void> {
+  public async wait(): Promise<WalletManager> {
     return new Promise((resolve, reject) => {
       this.resolve = resolve;
       this.reject = reject;

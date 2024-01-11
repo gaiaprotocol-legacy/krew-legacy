@@ -1,4 +1,4 @@
-import { ErrorAlert, msg } from "@common-module/app";
+import { ErrorAlert, EventContainer, msg } from "@common-module/app";
 import {
   configureChains,
   createConfig,
@@ -18,15 +18,33 @@ import {
 import { Web3Modal } from "@web3modal/html";
 import { ethers } from "ethers";
 import Env from "../Env.js";
-import WalletManager from "./WalletManager.js";
+import InternalWalletManager from "./InternalWalletManager.js";
 
-class WalletConnectManager implements WalletManager {
+class WalletConnectManager extends EventContainer
+  implements InternalWalletManager {
   private web3modal!: Web3Modal;
-
-  private _connected = false;
   private _resolveConnection?: () => void;
-  private get _address() {
+  private _connected = false;
+
+  public async connected(): Promise<boolean> {
+    return this._connected;
+  }
+
+  private get address() {
     return getAccount().address;
+  }
+
+  public async getAddress() {
+    return this.address;
+  }
+
+  public async getChainId() {
+    return getNetwork().chain?.id;
+  }
+
+  constructor() {
+    super();
+    this.addAllowedEvents("accountChanged");
   }
 
   public init(projectId: string) {
@@ -54,52 +72,38 @@ class WalletConnectManager implements WalletManager {
       },
     }, ethereumClient);
 
-    this._connected = this._address !== undefined;
+    this._connected = this.address !== undefined;
 
-    let cachedAddress = this._address;
+    let cachedAddress = this.address;
     watchAccount((account) => {
       this._connected = account.address !== undefined;
       if (this._connected && this._resolveConnection) {
         this._resolveConnection();
       }
       if (cachedAddress !== account.address) {
-        //this.fireEvent("accountChanged");
+        this.fireEvent("accountChanged");
         cachedAddress = account.address;
       }
     });
   }
 
-  public async connected(): Promise<boolean> {
-    return this._connected;
-  }
-
-  public async connect(): Promise<boolean> {
-    if (this._address !== undefined) {
+  public async connect() {
+    if (this.address !== undefined) {
       this._connected = true;
-      //this.fireEvent("accountChanged");
-      return true;
+      this.fireEvent("accountChanged");
     }
-    await new Promise<void>(async (resolve) => {
+    return new Promise<void>((resolve) => {
       this._resolveConnection = resolve;
-      await this.web3modal.openModal();
+      this.web3modal.openModal();
     });
-    return this._connected;
   }
 
-  public async getAddress(): Promise<string | undefined> {
-    return this._address;
-  }
-
-  public async getChainId(): Promise<number | undefined> {
-    return getNetwork().chain?.id;
-  }
-
-  public async signMessage(message: string): Promise<string> {
-    if (!this._address) throw new Error("Wallet is not connected");
+  public async signMessage(message: string) {
+    if (!this.address) throw new Error("Wallet is not connected");
     return await signMessage({ message });
   }
 
-  public async switchToKroma(): Promise<void> {
+  public async switchToKroma() {
     await switchNetwork({ chainId: Env.kromaChainId });
   }
 

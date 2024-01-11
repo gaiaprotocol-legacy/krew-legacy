@@ -1,9 +1,8 @@
-import { Confirm, ErrorAlert, EventContainer, msg } from "@common-module/app";
+import { Confirm, EventContainer, msg } from "@common-module/app";
 import { BaseContract, ContractInterface, ethers } from "ethers";
 import Env from "../Env.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
-import SwitchToKromaPopup from "../wallet/SwitchToKromaPopup.js";
-import WalletManager from "../wallet/WalletManager.js";
+import ConnectWalletPopup from "../wallet/ConnectWalletPopup.js";
 
 export default abstract class Contract<CT extends BaseContract>
   extends EventContainer {
@@ -38,8 +37,6 @@ export default abstract class Contract<CT extends BaseContract>
       }
     }
 
-    if (await WalletManager.connected() !== true) await WalletManager.connect();
-
     if (!KrewSignedUserManager.user?.wallet_address) {
       try {
         await new Confirm({
@@ -47,34 +44,13 @@ export default abstract class Contract<CT extends BaseContract>
           message: msg("no-wallet-linked-message"),
           confirmTitle: msg("no-wallet-linked-confirm"),
           loadingTitle: msg("no-wallet-linked-linking"),
-        }, () => KrewSignedUserManager.linkWallet()).wait();
+        }, async () => {
+          const wallet = await (new ConnectWalletPopup()).wait();
+          await KrewSignedUserManager.linkWallet(wallet);
+        }).wait();
       } catch (e) {
         throw new Error("No wallet linked");
       }
-    }
-
-    if (
-      await WalletManager.getAddress() !==
-        KrewSignedUserManager.user?.wallet_address
-    ) {
-      new ErrorAlert({
-        title: msg("wallet-address-mismatch-title"),
-        message: msg("wallet-address-mismatch-message"),
-      });
-      throw new Error("Wallet address mismatch");
-    }
-
-    const chainId = await WalletManager.getChainId();
-    if (!chainId) {
-      new ErrorAlert({
-        title: msg("invalid-network-title"),
-        message: msg("invalid-network-message"),
-      });
-      throw new Error("Invalid network");
-    }
-
-    if (chainId !== Env.kromaChainId) {
-      await new SwitchToKromaPopup().wait();
     }
 
     const signer = await KrewSignedUserManager.getContractSigner();
