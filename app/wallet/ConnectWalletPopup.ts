@@ -36,7 +36,7 @@ export default class ConnectWalletPopup extends Popup {
               "img",
               { src: "/images/wallet-logos/facewallet.png" },
             ),
-            title: "Connect using Face Wallet",
+            title: "Social Login (via Face Wallet)",
             click: async () => {
               const connected = await FaceWalletManager.connect();
               if (connected) {
@@ -52,7 +52,7 @@ export default class ConnectWalletPopup extends Popup {
               { src: "/images/wallet-logos/walletconnect.png" },
             ),
             title:
-              "Connect using WalletConnect\n(Metamask, Trust Wallet, etc.)",
+              "WalletConnect (MetaMask, etc.)",
             click: async () => {
               const connected = await WalletConnectManager.connect();
               if (connected) {
