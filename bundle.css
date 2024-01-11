@@ -2304,9 +2304,10 @@ p {
   display: flex;
   gap: 8px;
   justify-content: flex-start;
+  height: 58px;
 }
 .connect-wallet-popup > main > button > img {
-  height: 24px;
+  height: 32px;
   border-radius: 4px;
 }
 .switch-to-kroma-popup > main {
