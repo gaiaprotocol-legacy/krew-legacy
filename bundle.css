@@ -2387,6 +2387,8 @@ p {
 .settings-view > main > section > footer {
   border-top: 1px solid var(--line-color);
   padding: 16px;
+  display: flex;
+  gap: 16px;
 }
 .profile-view {
   padding: 32px;
