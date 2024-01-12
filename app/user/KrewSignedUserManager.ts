@@ -3,6 +3,7 @@ import { SignedUserManager } from "@common-module/social";
 import { ethers } from "ethers";
 import Env from "../Env.js";
 import KrewUserPublic from "../database-interface/KrewUserPublic.js";
+import ConnectWalletPopup from "../wallet/ConnectWalletPopup.js";
 import UnifiedWalletManager from "../wallet/UnifiedWalletManager.js";
 import WalletManager from "../wallet/WalletManager.js";
 import KrewUserService from "./KrewUserService.js";
@@ -54,11 +55,18 @@ class KrewSignedUserManager extends SignedUserManager<KrewUserPublic> {
   public async getContractSigner(): Promise<ethers.providers.JsonRpcSigner> {
     if (!this.user) throw new Error("User not signed in");
     if (!this.user.wallet_address) throw new Error("Wallet not linked");
-    const wallet = await UnifiedWalletManager.findWallet(
+    let wallet = await UnifiedWalletManager.findWallet(
       this.user.wallet_address,
       Env.kromaChainId,
     );
-    if (!wallet) throw new Error("Wallet not found");
+    if (!wallet) {
+      await new ConnectWalletPopup().wait();
+      wallet = await UnifiedWalletManager.findWallet(
+        this.user.wallet_address,
+        Env.kromaChainId,
+      );
+      if (!wallet) throw new Error("Wallet not found");
+    }
     return await wallet.getSigner();
   }
 }
