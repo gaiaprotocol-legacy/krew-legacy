@@ -1,10 +1,18 @@
 import { Supabase } from "@common-module/app";
-import { SoFiUserService } from "@common-module/social";
+import { SocialUserService } from "@common-module/social";
 import KrewUserPublic from "../database-interface/KrewUserPublic.js";
 
-class KrewUserService extends SoFiUserService<KrewUserPublic> {
+class KrewUserService extends SocialUserService<KrewUserPublic> {
   constructor() {
     super("users_public", "*", 50);
+  }
+
+  public async fetchByWalletAddress(
+    walletAddress: string,
+  ): Promise<KrewUserPublic | undefined> {
+    return await this.safeSelectSingle((b) =>
+      b.eq("wallet_address", walletAddress)
+    );
   }
 
   public async fetchPortfolioValue(walletAddress: string): Promise<bigint> {

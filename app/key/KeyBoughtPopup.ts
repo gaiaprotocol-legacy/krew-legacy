@@ -29,7 +29,7 @@ export default class KeyBoughtPopup extends Popup {
         ),
         el(
           "main",
-          new LottieAnimation(animationData),
+          new LottieAnimation(".firecracker-animation", animationData),
           el(
             "p",
             msg("key-bought-popup-message", {

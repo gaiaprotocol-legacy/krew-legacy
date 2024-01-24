@@ -1,5 +1,5 @@
 import { DomNode, ListLoadingBar, Store } from "@common-module/app";
-import { SoFiUserPublic } from "@common-module/social";
+import { SocialUserPublic } from "@common-module/social";
 import UserListItem from "./UserListItem.js";
 
 export interface UserListOptions {
@@ -18,7 +18,7 @@ export default abstract class UserList extends DomNode {
     this.domElement.setAttribute("data-empty-message", options.emptyMessage);
 
     if (this.store) {
-      const cached = this.store.get<SoFiUserPublic[]>("cached-users");
+      const cached = this.store.get<SocialUserPublic[]>("cached-users");
       if (cached) {
         for (const user of cached) {
           this.addUserItem(user);
@@ -27,9 +27,9 @@ export default abstract class UserList extends DomNode {
     }
   }
 
-  protected abstract fetchUsers(): Promise<SoFiUserPublic[]>;
+  protected abstract fetchUsers(): Promise<SocialUserPublic[]>;
 
-  protected addUserItem(user: SoFiUserPublic) {
+  protected addUserItem(user: SocialUserPublic) {
     new UserListItem(user).appendTo(this);
   }
 

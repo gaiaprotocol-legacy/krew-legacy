@@ -9,7 +9,7 @@ import {
   SplashLoader,
   Store,
 } from "@common-module/app";
-import { AuthUtil, inject_sofi_msg } from "@common-module/social";
+import { AuthUtil, inject_social_msg } from "@common-module/social";
 import messages_en from "../locales/en.yml";
 import messages_ja from "../locales/ja.yml";
 import messages_zh from "../locales/zh.yml";
@@ -41,7 +41,7 @@ import FaceWalletManager from "./wallet/FaceWalletManager.js";
 import WalletConnectManager from "./wallet/WalletConnectManager.js";
 import WelcomeToKrewPopup from "./WelcomeToKrewPopup.js";
 
-inject_sofi_msg();
+inject_social_msg();
 msg.setMessages({
   en: messages_en,
   zh: messages_zh,

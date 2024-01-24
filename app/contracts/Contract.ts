@@ -43,7 +43,6 @@ export default abstract class Contract<CT extends BaseContract>
           title: msg("no-wallet-linked-title"),
           message: msg("no-wallet-linked-message"),
           confirmTitle: msg("no-wallet-linked-confirm"),
-          loadingTitle: msg("no-wallet-linked-linking"),
         }, async () => {
           const wallet = await (new ConnectWalletPopup()).wait();
           await KrewSignedUserManager.linkWallet(wallet);

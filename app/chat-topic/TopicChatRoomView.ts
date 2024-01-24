@@ -16,7 +16,7 @@ export default class TopicChatRoomView extends ChatRoomView {
     this.render(params.topic);
   }
 
-  private async render(topic: string | undefined) {
+  private render(topic: string | undefined) {
     this.container.deleteClass("mobile-hidden");
     if (!topic) this.container.addClass("mobile-hidden");
     topic = topic ? topic.toLowerCase() : "general";

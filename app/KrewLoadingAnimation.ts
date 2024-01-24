@@ -6,6 +6,6 @@ import animationData from "./krew-loading-animation.json" assert {
 export default class KrewLoadingAnimation extends DomNode {
   constructor() {
     super(".krew-loading-animation");
-    this.append(new LottieAnimation(animationData));
+    this.append(new LottieAnimation(".krew-loading-animation", animationData));
   }
 }

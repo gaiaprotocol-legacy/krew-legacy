@@ -30,7 +30,7 @@ export default class KrewChatRoomList extends ChatRoomList {
         KrewSignedUserManager.user.wallet_address,
         undefined,
       );
-      this.store.set("cached-krews", krews);
+      this.store.set("cached-krews", krews, true);
 
       if (!this.deleted) {
         this.empty();

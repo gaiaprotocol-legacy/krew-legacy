@@ -5,4 +5,5 @@ activities
 	args - text[] - not null
 	wallet_address - text - not null
 	krew - text - not null
+	user - uuid - nullable
 	created_at - timestampz - now()

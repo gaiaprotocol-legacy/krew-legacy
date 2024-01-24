@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import Env from "./Env.js";
 
-class BlockTimeCacher {
+class BlockTimeManager {
   private blockNumber!: number;
   private blockTime!: number;
 
@@ -20,4 +20,4 @@ class BlockTimeCacher {
   }
 }
 
-export default new BlockTimeCacher();
+export default new BlockTimeManager();

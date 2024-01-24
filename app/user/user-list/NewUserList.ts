@@ -1,5 +1,5 @@
 import { msg } from "@common-module/app";
-import { SoFiUserPublic } from "@common-module/social";
+import { SocialUserPublic } from "@common-module/social";
 import KrewUserService from "../KrewUserService.js";
 import UserList from "../user-list/UserList.js";
 
@@ -11,7 +11,7 @@ export default class NewUserList extends UserList {
     });
   }
 
-  protected async fetchUsers(): Promise<SoFiUserPublic[]> {
+  protected async fetchUsers(): Promise<SocialUserPublic[]> {
     return await KrewUserService.fetchNewUsers(this.lastCreatedAt);
   }
 }

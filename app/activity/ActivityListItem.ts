@@ -1,6 +1,6 @@
 import { DateUtil, DomNode, el, Router } from "@common-module/app";
 import { msgs } from "@common-module/app/lib/i18n/msg.js";
-import { AuthorUtil } from "@common-module/social";
+import { AvatarUtil } from "@common-module/social";
 import { ethers } from "ethers";
 import BlockTimeManager from "../BlockTimeManager.js";
 import Activity, { EventType } from "../database-interface/Activity.js";
@@ -45,17 +45,17 @@ export default class ActivityListItem extends DomNode {
       const amount = activity.args[3];
       const price = ethers.utils.formatEther(activity.args[4]);
 
-      const traderProfileImage = el(".trader-profile-image", {
+      const traderAvatar = el(".trader-avatar", {
         click: () => Router.go(`/${activity.user?.x_username}`),
       });
 
-      AuthorUtil.selectLoadableAvatar(traderProfileImage, [
+      AvatarUtil.selectLoadable(traderAvatar, [
         activity.user?.avatar_thumb,
         activity.user?.stored_avatar_thumb,
       ]);
 
       this.append(
-        el("header", traderProfileImage, krewImage),
+        el("header", traderAvatar, krewImage),
         el(
           "p.description",
           ...msgs(

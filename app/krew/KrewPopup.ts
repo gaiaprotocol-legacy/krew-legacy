@@ -9,7 +9,7 @@ import {
   Router,
   Tabs,
 } from "@common-module/app";
-import { AuthorUtil } from "@common-module/social";
+import { AvatarUtil } from "@common-module/social";
 import { BigNumber, ethers } from "ethers";
 import KrewCommunalContract from "../contracts/KrewCommunalContract.js";
 import KrewPersonalContract from "../contracts/KrewPersonalContract.js";
@@ -227,7 +227,7 @@ export default class KrewPopup extends Popup {
             window.open(`https://kromascan.com/address/${this.krew?.owner}`),
         );
       } else {
-        AuthorUtil.selectLoadableAvatar(this.ownerProfileImage, [
+        AvatarUtil.selectLoadable(this.ownerProfileImage, [
           owner.avatar_thumb,
           owner.stored_avatar_thumb,
         ]);

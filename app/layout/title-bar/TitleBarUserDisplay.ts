@@ -1,15 +1,15 @@
 import { DomNode, el } from "@common-module/app";
-import { AuthorUtil, SoFiUserPublic } from "@common-module/social";
+import { AvatarUtil, SocialUserPublic } from "@common-module/social";
 import MaterialIcon from "../../MaterialIcon.js";
 import TitleBarDropdownMenu from "./TitleBarDropdownMenu.js";
 
 export default class TitleBarUserDisplay extends DomNode {
-  constructor(user: SoFiUserPublic) {
+  constructor(user: SocialUserPublic) {
     super(".title-bar-user-display");
 
     const profileImage = el(".profile-image");
 
-    AuthorUtil.selectLoadableAvatar(profileImage, [
+    AvatarUtil.selectLoadable(profileImage, [
       user.avatar_thumb,
       user.stored_avatar_thumb,
     ]);

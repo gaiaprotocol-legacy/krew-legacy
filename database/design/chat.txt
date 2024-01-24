@@ -1,6 +1,6 @@
 topic_chat_messages
 	id - int8 - pk
-	source - int2 - not null
+	source - text - not null
 	topic - text - not null
 	author - uuid, fk to users_public.user_id - auth.uid() - nullable
 	external_author_id - text - nullable
@@ -14,7 +14,7 @@ topic_chat_messages
 
 krew_chat_messages
 	id - int8 - pk
-	source - int2 - not null
+	source - text - not null
 	krew - text - not null
 	author - uuid, fk to users_public.user_id - auth.uid() - nullable
 	external_author_id - text - nullable

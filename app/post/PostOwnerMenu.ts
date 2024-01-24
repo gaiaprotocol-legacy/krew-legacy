@@ -16,7 +16,6 @@ export default class PostOwnerMenu extends DropdownMenu {
             title: msg("delete-post-confirm-title"),
             message: msg("delete-post-confirm-message"),
             confirmTitle: msg("delete-post-confirm-delete-button"),
-            loadingTitle: msg("delete-post-confirm-deleting-button"),
           }, () => KrewPostService.deleteMessage(postId));
         },
       }],

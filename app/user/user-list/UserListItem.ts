@@ -1,13 +1,13 @@
 import { DomNode, el, Router } from "@common-module/app";
-import { AuthorUtil, SoFiUserPublic } from "@common-module/social";
+import { AvatarUtil, SocialUserPublic } from "@common-module/social";
 
 export default class UserListItem extends DomNode {
-  constructor(user: SoFiUserPublic) {
+  constructor(user: SocialUserPublic) {
     super(".user-list-item");
 
     const profileImage = el(".profile-image");
 
-    AuthorUtil.selectLoadableAvatar(profileImage, [
+    AvatarUtil.selectLoadable(profileImage, [
       user.avatar_thumb,
       user.stored_avatar_thumb,
     ]);
