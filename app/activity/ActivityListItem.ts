@@ -1,6 +1,5 @@
-import { DateUtil, DomNode, el, Router } from "@common-module/app";
+import { AvatarUtil, DateUtil, DomNode, el, Router } from "@common-module/app";
 import { msgs } from "@common-module/app/lib/i18n/msg.js";
-import { AvatarUtil } from "@common-module/social";
 import { ethers } from "ethers";
 import BlockTimeManager from "../BlockTimeManager.js";
 import Activity, { EventType } from "../database-interface/Activity.js";

@@ -1,6 +1,7 @@
 //import { Face, Network } from "@haechi-labs/face-sdk";
 import {
   AppInitializer,
+  AuthUtil,
   el,
   MaterialIconSystem,
   msg,
@@ -9,7 +10,7 @@ import {
   SplashLoader,
   Store,
 } from "@common-module/app";
-import { AuthUtil, inject_social_msg } from "@common-module/social";
+import { inject_social_msg } from "@common-module/social";
 import messages_en from "../locales/en.yml";
 import messages_ja from "../locales/ja.yml";
 import messages_zh from "../locales/zh.yml";

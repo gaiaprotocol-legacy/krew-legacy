@@ -1,5 +1,5 @@
-import { DomNode, el } from "@common-module/app";
-import { AvatarUtil, SocialUserPublic } from "@common-module/social";
+import { AvatarUtil, DomNode, el } from "@common-module/app";
+import { SocialUserPublic } from "@common-module/social";
 import MaterialIcon from "../../MaterialIcon.js";
 import TitleBarDropdownMenu from "./TitleBarDropdownMenu.js";
 

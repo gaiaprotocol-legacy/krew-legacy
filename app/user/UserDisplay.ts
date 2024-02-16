@@ -1,5 +1,6 @@
 import { DomNode, el, msg, Tabs } from "@common-module/app";
-import { PreviewUserPublic, SocialUserPublic } from "@common-module/social";
+import { PreviewUserPublic } from "@common-module/social";
+import KrewUserPublic from "../database-interface/KrewUserPublic.js";
 import UserCommentPostList from "./user-display/user-posts/UserCommentPostList.js";
 import UserLikedPostList from "./user-display/user-posts/UserLikedPostList.js";
 import UserPostList from "./user-display/user-posts/UserPostList.js";
@@ -35,7 +36,7 @@ export default class UserDisplay extends DomNode {
     if (previewUser) this.renderPosts(previewUser.user_id);
   }
 
-  public set user(user: SocialUserPublic | undefined) {
+  public set user(user: KrewUserPublic | undefined) {
     this.userProfile.user = user;
     if (user) this.renderPosts(user.user_id);
   }

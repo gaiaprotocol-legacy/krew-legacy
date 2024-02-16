@@ -3,7 +3,7 @@ import Env from "./Env.js";
 
 class BlockTimeManager {
   private blockNumber!: number;
-  private blockTime!: number;
+  private initBlockTime!: number;
 
   public async init() {
     const provider = new ethers.providers.JsonRpcProvider(
@@ -11,12 +11,12 @@ class BlockTimeManager {
     );
     const block = await provider.getBlock("latest");
     this.blockNumber = block!.number;
-    this.blockTime = block!.timestamp * 1000;
+    this.initBlockTime = block!.timestamp * 1000;
   }
 
   public blockToTime(blockNumber: number): number {
     // kroma chain (2s block time)
-    return this.blockTime + (blockNumber - this.blockNumber) * 2 * 1000;
+    return this.initBlockTime + (blockNumber - this.blockNumber) * 2 * 1000;
   }
 }
 

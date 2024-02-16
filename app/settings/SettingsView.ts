@@ -1,4 +1,12 @@
-import { Button, DomNode, el, msg, View, ViewParams } from "@common-module/app";
+import {
+  Button,
+  DomNode,
+  el,
+  LoadingSpinner,
+  msg,
+  View,
+  ViewParams,
+} from "@common-module/app";
 import Layout from "../layout/Layout.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
 import ConnectWalletPopup from "../wallet/ConnectWalletPopup.js";
@@ -55,16 +63,14 @@ export default class SettingsView extends View {
         new Button({
           title: msg("settings-view-link-wallet-button"),
           click: async (event, button) => {
-            button.domElement.setAttribute("disabled", "disabled");
-            button.text = msg("no-wallet-linked-linking");
+            button.loading = true;
             try {
               const wallet = await (new ConnectWalletPopup()).wait();
               await KrewSignedUserManager.linkWallet(wallet);
               this.renderLinkWalletSection();
             } catch (e) {
               console.error(e);
-              button.domElement.removeAttribute("disabled");
-              button.text = msg("settings-view-link-wallet-button");
+              button.loading = false;
             }
           },
         }),

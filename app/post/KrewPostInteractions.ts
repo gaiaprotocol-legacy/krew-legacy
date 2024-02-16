@@ -1,4 +1,4 @@
-import { Router } from "@common-module/app";
+import { DomNode, Router } from "@common-module/app";
 import { Author, PostInteractions } from "@common-module/social";
 import KrewPost from "../database-interface/KrewPost.js";
 import KrewSignedUserManager from "../user/KrewSignedUserManager.js";
@@ -28,6 +28,10 @@ class KrewPostInteractions implements PostInteractions<KrewPost> {
     } else {
       new PostCommentPopup(post);
     }
+  }
+
+  public displayTarget(post: KrewPost): DomNode<HTMLElement> {
+    throw new Error("Method not implemented.");
   }
 }
 

@@ -34,8 +34,8 @@ search-krew-list-empty-message: No krews found
 owned-krew-list-empty-message: No owned krews yet
 
 activity-list-item-created-krew-text: "{user} created {krew} krew."
-activity-list-item-bought-key-text: "{user} bought {amount} {krew} key for {price} ETH."
-activity-list-item-sold-key-text: "{user} sold {amount} {krew} key for {price} ETH."
+activity-list-item-bought-key-text: "{user} bought {amount} {krew} key(s) for {price} ETH."
+activity-list-item-sold-key-text: "{user} sold {amount} {krew} key(s) for {price} ETH."
 
 notification-title: Notifications
 notification-more-button: More
