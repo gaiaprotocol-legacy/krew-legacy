@@ -28,7 +28,7 @@ ALTER TABLE ONLY "public"."topic_chat_messages"
 ALTER TABLE ONLY "public"."topic_chat_messages"
     ADD CONSTRAINT "topic_chat_messages_author_fkey" FOREIGN KEY ("author") REFERENCES "public"."users_public"("user_id");
 
-CREATE POLICY "can write only authed" ON "public"."topic_chat_messages" FOR INSERT TO "authenticated" WITH CHECK ((((("message" IS NOT NULL) AND ("message" <> ''::"text") AND ("length"("message") <= 1000)) OR (("message" IS NULL) AND ("rich" IS NOT NULL))) AND ("author" = "auth"."uid"())));
+CREATE POLICY "can write only authed" ON "public"."topic_chat_messages" FOR INSERT TO "authenticated" WITH CHECK (((((message IS NOT NULL) AND (message <> ''::text) AND (length(message) <= 1000)) OR ((message IS NULL) AND (rich IS NOT NULL))) AND (author = auth.uid()) and ((SELECT blocked from users_public where user_id = auth.uid()) <> true)));
 
 ALTER TABLE "public"."topic_chat_messages" ENABLE ROW LEVEL SECURITY;
 

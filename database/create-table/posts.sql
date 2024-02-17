@@ -32,7 +32,7 @@ ALTER TABLE ONLY "public"."posts"
 
 CREATE POLICY "can delete only authed" ON "public"."posts" FOR DELETE TO "authenticated" USING (("author" = "auth"."uid"()));
 
-CREATE POLICY "can write only authed" ON "public"."posts" FOR INSERT TO "authenticated" WITH CHECK ((("message" <> ''::"text") AND ("length"("message") <= 2000) AND ("author" = "auth"."uid"()) AND (("krew" IS NULL) OR (EXISTS ( SELECT 1
+CREATE POLICY "can write only authed" ON "public"."posts" FOR INSERT TO "authenticated" WITH CHECK ((("message" <> ''::"text") AND ("length"("message") <= 2000) AND ("author" = "auth"."uid"()) and ((SELECT blocked from users_public where user_id = auth.uid()) <> true) AND (("krew" IS NULL) OR (EXISTS ( SELECT 1
    FROM "public"."krews"
   WHERE (("krews"."id" = "posts"."krew") AND (((position('p_' in "krews"."id") = 1) AND ("krews"."owner" = ( SELECT "users_public"."wallet_address"
            FROM "public"."users_public"
