@@ -1,0 +1,148 @@
+.krew-popup {
+    >header {
+        display    : flex;
+        align-items: center;
+        gap        : 12px;
+
+        >.krew-image {
+            .profile-image();
+        }
+
+        >h1 {
+            display    : flex;
+            align-items: center;
+            gap        : 12px !important;
+
+            >.id {
+                font-size    : 12px;
+                color        : #474B54;
+                border       : 1px solid #474B54;
+                padding      : 4px 8px;
+                border-radius: 8px;
+            }
+        }
+
+        >a.edit {
+            cursor: pointer;
+
+            &.hidden {
+                display: none;
+            }
+        }
+    }
+
+    >.owner {
+        margin-top   : 16px;
+        padding      : 8px 16px 8px 8px;
+        border       : 1px solid var(--line-color);
+        border-radius: 8px;
+        cursor       : pointer;
+
+        >.info-container {
+            margin-top : 8px;
+            display    : flex;
+            align-items: center;
+            gap        : 12px;
+
+            >.info {
+                flex-grow: 1;
+
+                >.name {
+                    font-size  : 16px;
+                    font-weight: bold;
+                }
+
+                >.x-username {
+                    margin-top: 4px;
+                    font-size : 12px;
+                }
+            }
+        }
+    }
+
+    >.metric-container {
+        margin-top : 16px;
+        display    : flex;
+        gap        : 12px;
+        align-items: center;
+
+        >section {
+            flex-grow    : 1;
+            width        : 50%;
+            display      : flex;
+            padding      : 8px 16px 8px 8px;
+            gap          : 8px;
+            align-items  : center;
+            border       : 1px solid var(--line-color);
+            border-radius: 8px;
+
+            &.price {
+                grid-column: auto / span 2;
+            }
+
+            >.icon-container {
+                padding: 4px;
+                display: flex;
+            }
+
+            >.metric {
+                display       : flex;
+                flex-direction: column;
+
+                >h3 {
+                    font-size     : 12px;
+                    text-transform: capitalize;
+                }
+
+                >.value {
+                    font-size     : 12px;
+                    font-weight   : bold;
+                    text-transform: capitalize;
+                    white-space   : nowrap;
+                }
+            }
+        }
+    }
+
+    >.balance-container {
+        margin-top   : 16px;
+        display      : flex;
+        padding      : 8px 16px;
+        gap          : 8px;
+        align-items  : center;
+        border       : 1px solid var(--line-color);
+        border-radius: 8px;
+
+        >.balance {
+            flex-grow: 1;
+
+            >h3 {
+                font-size     : 12px;
+                text-transform: capitalize;
+            }
+
+            >.value {
+                margin-top : 4px;
+                font-size  : 16px;
+                font-weight: bold;
+            }
+        }
+    }
+
+    >.tabs {
+        margin-left : -20px;
+        margin-right: -20px;
+    }
+
+    >.krew-holder-list,
+    >.krew-activity-list {
+        margin-left : -20px;
+        margin-right: -20px;
+        max-height  : 300px;
+        overflow-y  : scroll;
+
+        @media @phone {
+            max-height: 200px;
+        }
+    }
+}

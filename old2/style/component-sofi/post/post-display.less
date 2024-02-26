@@ -1,0 +1,120 @@
+.post-display.sofi-component {
+    position: relative;
+    display : flex;
+    gap     : 10px;
+    cursor  : pointer;
+    padding : 20px;
+
+    @media @phone {
+        gap: 6px;
+    }
+
+    >main {
+        flex-grow: 1;
+    }
+
+    .author-avatar {
+        .avatar();
+        cursor: pointer;
+    }
+
+    .author {
+        padding-top: 4px;
+        display    : flex;
+        gap        : 4px;
+
+        >.name {
+            font-weight: 700;
+            cursor     : pointer;
+        }
+
+        >.x-username {
+            color : #595959;
+            cursor: pointer;
+        }
+    }
+
+    button.owner-menu {
+        position: absolute;
+        top     : 20px;
+        right   : 20px;
+        cursor  : pointer;
+
+        &:active {}
+    }
+
+    .message {
+        margin-top: 6px;
+        word-break: break-all;
+    }
+
+    .rich-display {
+        margin-top: 20px;
+    }
+
+    .date {
+        margin-top: 20px;
+        color     : #595959;
+        font-size : 12px;
+    }
+
+    .actions {
+        margin-top: 20px;
+        display   : flex;
+        gap       : 30px;
+
+        >button {
+            display    : flex;
+            gap        : 16px;
+            cursor     : pointer;
+            align-items: center;
+
+            &:hover {
+                &.comment {}
+
+                &.repost {}
+
+                &.like {}
+            }
+
+            &.repost.reposted {
+                color: #25D366;
+            }
+
+            &.like.liked {
+                color: #D8093B;
+            }
+        }
+    }
+
+    &.in-view {
+        display: block;
+        cursor : inherit;
+
+        >header {
+            display    : flex;
+            gap        : 12px;
+            align-items: center;
+            font-size  : 16px;
+
+            >.author {
+                padding-top   : 0;
+                flex-direction: column;
+                gap           : 4px;
+            }
+        }
+
+        .message {
+            margin-top: 12px;
+            font-size : 16px;
+
+            @media @phone {
+                font-size: 14px;
+            }
+        }
+
+        .actions {
+            margin-top: 20px;
+        }
+    }
+}

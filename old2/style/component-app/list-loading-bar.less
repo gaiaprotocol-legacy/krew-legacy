@@ -1,0 +1,30 @@
+@keyframes list-loading-bar-loading {
+    0% {
+        left: -50%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+.list-loading-bar.component {
+    position        : absolute;
+    left            : 0;
+    top             : 0;
+    width           : 100%;
+    height          : 3px;
+    background-color: rgba(37, 211, 102, 0.1);
+    z-index         : 999997;
+    overflow        : hidden;
+
+    &::before {
+        content         : '';
+        position        : absolute;
+        left            : -50%;
+        width           : 50%;
+        height          : 100%;
+        background-color: rgba(37, 211, 102, 0.5);
+        animation       : list-loading-bar-loading 2s linear infinite;
+    }
+}

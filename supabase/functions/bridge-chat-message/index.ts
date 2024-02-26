@@ -73,7 +73,7 @@ serveWithOptions(async (req) => {
       }),
     });
   } else if (from === "discord") {
-    const { error } = await supabase.from("topic_chat_messages").insert({
+    const { data, error } = await supabase.from("topic_chat_messages").insert({
       source: 1,
       topic,
       external_author_id: author.id,
@@ -82,10 +82,10 @@ serveWithOptions(async (req) => {
       external_message_id: messageId,
       message,
       rich,
-    });
+    }).select();
     if (error) throw error;
 
-    await messageSyncerTelegramBot.api.sendMessage(
+    const result = await messageSyncerTelegramBot.api.sendMessage(
       messageSyncerTelegramChatId,
       `${author.name} from Discord: ${message}`,
       {
@@ -94,8 +94,18 @@ serveWithOptions(async (req) => {
           : undefined,
       },
     );
+
+    await supabase.from("topic_chat_messages")
+      .update({
+        bridged: {
+          telegram: {
+            chat_id: result.chat.id,
+            message_id: result.message_id,
+          },
+        },
+      }).eq("id", data?.[0].id);
   } else if (from === "telegram") {
-    const { error } = await supabase.from("topic_chat_messages").insert({
+    const { data, error } = await supabase.from("topic_chat_messages").insert({
       source: 2,
       topic,
       external_author_id: author.id,
@@ -103,10 +113,10 @@ serveWithOptions(async (req) => {
       external_message_id: messageId,
       message,
       rich,
-    });
+    }).select();
     if (error) throw error;
 
-    await fetch(discordWebhookUrl, {
+    const response = await fetch(discordWebhookUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -116,5 +126,15 @@ serveWithOptions(async (req) => {
         content: message,
       }),
     });
+
+    const result = await response.json();
+    await supabase.from("topic_chat_messages")
+      .update({
+        bridged: {
+          discord: {
+            message_id: result.id,
+          },
+        },
+      }).eq("id", data?.[0].id);
   }
 });

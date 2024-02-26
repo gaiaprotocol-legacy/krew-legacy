@@ -1,0 +1,17 @@
+.rich-display.component {
+    &:empty {
+        display: none;
+    }
+
+    >.image-container {
+        >a {
+            cursor: pointer;
+
+            >img {
+                border-radius: 12px;
+                max-height   : 320px;
+                object-fit   : cover;
+            }
+        }
+    }
+}

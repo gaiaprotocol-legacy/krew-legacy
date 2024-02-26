@@ -1,137 +1,130 @@
-//import { Face, Network } from "@haechi-labs/face-sdk";
 import {
   AppInitializer,
   AuthUtil,
   el,
   MaterialIconSystem,
-  msg,
-  RichDisplay,
   Router,
   SplashLoader,
-  Store,
 } from "@common-module/app";
-import { inject_social_msg } from "@common-module/social";
-import messages_en from "../locales/en.yml";
-import messages_ja from "../locales/ja.yml";
-import messages_zh from "../locales/zh.yml";
-import messages_zh_HK from "../locales/zh_HK.yml";
-import messages_zh_TW from "../locales/zh_TW.yml";
-import ActivityView from "./activity/ActivityView.js";
-import BlockTimeManager from "./BlockTimeManager.js";
-import KrewChatRoomView from "./chat-krew/KrewChatRoomView.js";
-import TopicChatRoomView from "./chat-topic/TopicChatRoomView.js";
-import ChatsView from "./chat/ChatsView.js";
+import {
+  ESFEnv,
+  ESFSignedUserManager,
+  PointLeaderboardView,
+  PointsView,
+  SettingsView,
+  WalletConnectManager,
+} from "esf-module";
+import {
+  BlockTimeManager,
+  ContractType,
+  CreatorChatRoomView,
+  CreatorsView,
+  FSESFEnv,
+  FSESFLayout,
+  GroupChatRoomView,
+  GroupsView,
+  HashtagChatRoomView,
+  HashtagsView,
+  inject_fsesf_msg,
+  MyCreatorsView,
+  MyGroupsView,
+  NewCreatorsView,
+  NewGroupsView,
+  TopCreatorsView,
+  TopGroupsView,
+  TrendingCreatorsView,
+  TrendingGroupsView,
+} from "fsesf";
+import { fantom, fantomSonicTestnet, fantomTestnet } from "viem/chains";
+import AboutView from "./AboutView.js";
 import Config from "./Config.js";
-import KrewCommunalContract from "./contracts/KrewCommunalContract.js";
-import KrewPersonalContract from "./contracts/KrewPersonalContract.js";
-import Env from "./Env.js";
-import ExploreView from "./explore/ExploreView.js";
-import KrewService from "./krew/KrewService.js";
-import MyKrewsView from "./krew/MyKrewsView.js";
-import Layout from "./layout/Layout.js";
-import NotificationsView from "./notification/NotificationsView.js";
-import PostsView from "./post/PostsView.js";
-import PostView from "./post/PostView.js";
-import SearchView from "./search/SearchView.js";
-import ProfileView from "./settings/ProfileView.js";
-import SettingsView from "./settings/SettingsView.js";
-import KrewSignedUserManager from "./user/KrewSignedUserManager.js";
-import UserConnectionsView from "./user/user-connections/UserConnectionsView.js";
-import UserView from "./user/UserView.js";
-import FaceWalletManager from "./wallet/FaceWalletManager.js";
-import WalletConnectManager from "./wallet/WalletConnectManager.js";
-import WelcomeToKrewPopup from "./WelcomeToKrewPopup.js";
+import TDMyPointsView from "./TDMyPointsView.js";
+import FaceWalletManager from "./FaceWalletManager.js";
 
-inject_social_msg();
-msg.setMessages({
-  en: messages_en,
-  zh: messages_zh,
-  "zh-tw": messages_zh_TW,
-  "zh-hk": messages_zh_HK,
-  ja: messages_ja,
-});
+inject_fsesf_msg();
 
 MaterialIconSystem.launch();
 
-RichDisplay.NOT_FOUND_IMAGE = "/images/no-longer-available.jpg";
-
 export default async function initialize(config: Config) {
+  ESFEnv.domain = "thunderdome.so";
+  ESFEnv.keyName = "ticket";
+  ESFEnv.messageForWalletLinking = "Link Wallet to Thunder Dome";
+  ESFEnv.Layout = FSESFLayout;
+
+  FSESFEnv.blockchain = {
+    ...config.blockchain,
+    symbolDisplay: "FTM",
+  };
+  FSESFEnv.contractAddresses = {
+    [ContractType.CreatorKeys]: "0x298c92D5af8eEFA02b55dE45cb2337704af1b894",
+    [ContractType.GroupKeys]: "0xe741b5DF37FB86eaB58F616dA0f4BfF10251C37a",
+    [ContractType.HashtagKeys]: "0x23e0035F44cB5Bb4fb83e3F4CA413DB39c6f7BF0",
+  };
+  FSESFEnv.defaultHashtag = "thunderdome";
+
   AppInitializer.initialize(
     config.supabaseUrl,
     config.supabaseAnonKey,
     config.dev,
   );
 
-  Env.dev = config.dev;
-  Env.messageForWalletLinking = config.messageForWalletLinking;
-  Env.kromaRpc = config.kromaRpc;
-  Env.kromaChainId = config.kromaChainId;
-
-  FaceWalletManager.init(config.faceWalletApiKey);
-  WalletConnectManager.init(config.walletConnectProjectId);
-  KrewPersonalContract.init(config.krewPersonalAddress);
-  KrewCommunalContract.init(config.krewCommunalAddress);
+  WalletConnectManager.init(config.walletConnectProjectId, [
+    fantom,
+    fantomTestnet,
+    fantomSonicTestnet,
+  ]);
 
   await SplashLoader.load(el("img", { src: "/images/logo-transparent.png" }), [
-    KrewSignedUserManager.fetchUserOnInit(),
-    BlockTimeManager.init(),
+    ESFSignedUserManager.fetchUserOnInit(),
+    BlockTimeManager.init(0.3),
   ]);
 
-  Router.route("**", Layout, ["test/**"]);
+  Router.route("**", FSESFLayout);
 
-  Router.route("", PostsView);
-  Router.route("post/{postId}", PostView);
+  Router.route(["", "about"], AboutView);
 
-  Router.route(["chats", "chat/{topic}", "{t}/{krewId}"], ChatsView, [
-    "post/{postId}",
-    "{xUsername}/holding",
-    "{xUsername}/following",
-    "{xUsername}/followers",
-  ]);
-  Router.route(["chats", "chat/{topic}"], TopicChatRoomView);
-  Router.route("{t}/{krewId}", KrewChatRoomView, [
-    "chat/{topic}",
-    "post/{postId}",
-    "{xUsername}/holding",
-    "{xUsername}/following",
-    "{xUsername}/followers",
-  ]);
+  Router.route([
+    "creators",
+    "creator/{creatorAddress}",
+    "creators/trending",
+    "creators/top",
+    "creators/new",
+  ], CreatorsView);
+  Router.route(["creators", "creator/{creatorAddress}"], MyCreatorsView);
+  Router.route(["creators", "creator/{creatorAddress}"], CreatorChatRoomView);
+  Router.route("creators/trending", TrendingCreatorsView);
+  Router.route("creators/top", TopCreatorsView);
+  Router.route("creators/new", NewCreatorsView);
 
-  Router.route("explore", ExploreView);
-  Router.route("search", SearchView);
-  Router.route("activity", ActivityView);
-  Router.route("notifications", NotificationsView);
-  Router.route("profile", ProfileView);
-  Router.route("settings", SettingsView);
-  Router.route("my-krews", MyKrewsView);
-
-  Router.route("{xUsername}", UserView, [
-    "chats",
-    "explore",
-    "search",
-    "activity",
-    "notifications",
-    "profile",
-    "settings",
-    "my-krews",
-  ]);
   Router.route(
     [
-      "{xUsername}/holding",
-      "{xUsername}/holders",
-      "{xUsername}/following",
-      "{xUsername}/followers",
+      "groups",
+      "group/{groupId}",
+      "groups/trending",
+      "groups/top",
+      "groups/new",
     ],
-    UserConnectionsView,
+    GroupsView,
   );
+  Router.route(["groups", "group/{groupId}"], MyGroupsView);
+  Router.route(["groups", "group/{groupId}"], GroupChatRoomView);
+  Router.route("groups/trending", TrendingGroupsView);
+  Router.route("groups/top", TopGroupsView);
+  Router.route("groups/new", NewGroupsView);
+
+  Router.route(["hashtags", "hashtag/{hashtag}"], HashtagsView);
+  Router.route(["hashtags", "hashtag/{hashtag}"], HashtagChatRoomView);
+
+  Router.route(["points", "points/leaderboard"], PointsView);
+  Router.route("points", TDMyPointsView);
+  Router.route("points/leaderboard", PointLeaderboardView);
+
+  Router.route("settings", SettingsView);
 
   AuthUtil.checkEmailAccess();
 
-  const welcomeStore = new Store("welcome");
-  if (
-    !welcomeStore.get("skip") && KrewSignedUserManager.signed &&
-    await KrewService.checkOwnedKrewsExist() !== true
-  ) {
-    new WelcomeToKrewPopup();
-  }
+  FaceWalletManager.init(
+    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD-mCDG60gguwgoqPDhzxWfNFOsY0DDSytnxp2QH0cNrwUHFeL6dq2cOAFHiUR_92ja0MUs1t-7Jvu02Yfx7lCEBfaxniCusVOPWhCH8VSvVvIQSX18f6TaaldlMIy4H_CjEXn2aPhdRHoZLWfno7uZ67E3rSkv-S0oBzCGT6VYPwIDAQAB",
+  );
+  console.log(await FaceWalletManager.signMessage("test"));
 }

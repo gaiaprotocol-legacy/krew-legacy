@@ -4,14 +4,6 @@ export default interface Config {
   supabaseUrl: string;
   supabaseAnonKey: string;
 
+  blockchain: { chainId: number; name: string; rpc: string };
   walletConnectProjectId: string;
-  messageForWalletLinking: string;
-
-  kromaRpc: string;
-  kromaChainId: number;
-
-  krewPersonalAddress: string;
-  krewCommunalAddress: string;
-
-  faceWalletApiKey: string;
 }

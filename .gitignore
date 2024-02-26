@@ -38,4 +38,4 @@ typechain*
 .openzeppelin
 
 # supabase
-./storage_backup/*
+storage_backup
