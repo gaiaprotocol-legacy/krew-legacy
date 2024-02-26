@@ -36,3 +36,6 @@ cache
 artifacts
 typechain*
 .openzeppelin
+
+# supabase
+./storage_backup/*
