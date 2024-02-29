@@ -1,7 +1,8 @@
 import { Face, Network } from "@haechi-labs/face-sdk";
 import { ethers } from "ethers";
+import { WalletManager } from "fsesf";
 
-class FaceWalletManager {
+class FaceWalletManager implements WalletManager {
   private face!: Face;
   private provider!: ethers.BrowserProvider;
 
@@ -15,13 +16,17 @@ class FaceWalletManager {
     );
   }
 
-  public async connected(): Promise<boolean> {
-    return await this.face.auth.isLoggedIn();
+  public open() {
+    this.face.wallet.home();
   }
 
   public async connect(): Promise<boolean> {
     const result = await this.face.auth.login();
     return result?.wallet !== undefined;
+  }
+
+  public async connected(): Promise<boolean> {
+    return await this.face.auth.isLoggedIn();
   }
 
   public async getAddress(): Promise<string | undefined> {
@@ -42,8 +47,8 @@ class FaceWalletManager {
     return await (await this.provider.getSigner()).signMessage(message);
   }
 
-  public async switchToKroma(): Promise<void> {
-    await this.face.switchNetwork(Network.KROMA_SEPOLIA);
+  public async switchChain(chainId: number): Promise<void> {
+    await this.face.switchNetwork(chainId);
   }
 
   public async getSigner(): Promise<ethers.JsonRpcSigner> {
