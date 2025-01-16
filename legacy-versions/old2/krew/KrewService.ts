@@ -26,7 +26,7 @@ class KrewService extends SupabaseService<Krew> {
       },
     };
     if (krewImage) {
-      data.image = await UploadManager.uploadFile(
+      data.image = await UploadManager.uploadPublicFile(
         "krew_images",
         krewId,
         krewImage,

@@ -71,11 +71,10 @@
     "node_modules",
     ".vscode",
     "test-src",
-    "old",
-    "old2",
     "ethers-v6-supported",
     "test",
     "typechain-types",
     "scripts",
+    "legacy-versions",
   ]
 }

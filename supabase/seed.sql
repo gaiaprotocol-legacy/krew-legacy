@@ -1569,7 +1569,7 @@ ALTER TABLE "public"."krew_key_holders" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."krews" (
     "id" "text" NOT NULL,
-    "last_fetched_key_price" numeric DEFAULT '68750000000000'::numeric NOT NULL,
+    "last_fetched_key_price" numeric DEFAULT '62500000000000'::numeric NOT NULL,
     "total_trading_key_volume" numeric DEFAULT '0'::numeric NOT NULL,
     "is_key_price_up" boolean,
     "last_message" "text",
